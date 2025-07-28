@@ -69,25 +69,25 @@ export const OrdersScreen: React.FC = () => {
 
   const renderOrderCard = ({ item }: { item: any }) => (
     <Card style={[styles.orderCard, isLargeScreen && styles.gridCard]}>
-      <TouchableOpacity
-        style={styles.selectButton}
-        onPress={() => toggleOrderSelection(item.id)}
-      >
-        <Ionicons
-          name={item.selected ? "checkbox" : "checkbox-outline"}
-          size={24}
-          color={item.selected ? theme.colors.primary : theme.colors.text.secondary}
-        />
-      </TouchableOpacity>
-      <View style={styles.orderHeader}>
-        <View style={styles.orderInfo}>
-          <Text style={styles.orderNumber}>{item.orderNumber}</Text>
-          <Text style={styles.customerName}>{item.customerName}</Text>
-          <Text style={styles.orderDetails}>
-            {item.items} items • {item.timeAgo}
-          </Text>
+      <View style={styles.orderContent}>
+        <View style={styles.orderHeader}>
+          <TouchableOpacity
+            style={styles.selectButton}
+            onPress={() => toggleOrderSelection(item.id)}
+          >
+            <Ionicons
+              name={item.selected ? "checkbox" : "checkbox-outline"}
+              size={20}
+              color={item.selected ? theme.colors.primary : theme.colors.text.secondary}
+            />
+          </TouchableOpacity>
+          <StatusBadge status={item.status} />
         </View>
-        <StatusBadge status={item.status} />
+        <Text style={styles.orderNumber}>{item.orderNumber}</Text>
+        <Text style={styles.customerName}>{item.customerName}</Text>
+        <Text style={styles.orderDetails}>
+          {item.items} items • {item.timeAgo}
+        </Text>
       </View>
     </Card>
   );
@@ -164,41 +164,37 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.lg,
   },
   orderCard: {
-    marginBottom: theme.spacing.md,
-    position: 'relative',
+    marginBottom: theme.spacing.sm,
   },
   gridCard: {
     flex: 1,
-    marginHorizontal: 6,
+    marginHorizontal: theme.spacing.xs,
   },
-  selectButton: {
-    position: 'absolute',
-    top: theme.spacing.md,
-    right: theme.spacing.md,
-    zIndex: 1,
+  orderContent: {
+    flex: 1,
   },
   orderHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingRight: 40,
+    alignItems: 'center',
+    marginBottom: theme.spacing.xs,
   },
-  orderInfo: {
-    flex: 1,
+  selectButton: {
+    padding: theme.spacing.xs,
   },
   orderNumber: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: theme.colors.text.primary,
+    marginBottom: theme.spacing.xs,
   },
   customerName: {
-    fontSize: 14,
+    fontSize: 12,
     color: theme.colors.text.secondary,
-    marginTop: 4,
+    marginBottom: theme.spacing.xs,
   },
   orderDetails: {
-    fontSize: 12,
+    fontSize: 11,
     color: theme.colors.text.tertiary,
-    marginTop: 4,
   },
 });

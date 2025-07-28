@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
 import { theme } from '../../constants/theme';
@@ -15,8 +14,8 @@ export const Card: React.FC<CardProps> = ({ children, style }) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.sm,
+    padding: theme.spacing.md,
     borderWidth: 1,
     borderColor: theme.colors.border,
   },

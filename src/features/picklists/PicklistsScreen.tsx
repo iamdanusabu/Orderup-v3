@@ -66,28 +66,26 @@ export const PicklistsScreen: React.FC = () => {
 
   const renderPicklistCard = ({ item }: { item: any }) => (
     <Card style={[styles.picklistCard, isLargeScreen && styles.gridCard]}>
-      <View style={styles.picklistHeader}>
-        <View>
+      <View style={styles.picklistContent}>
+        <View style={styles.picklistHeader}>
           <Text style={styles.picklistName}>{item.name}</Text>
-          <Text style={styles.assignedTo}>Assigned to {item.assignedTo}</Text>
-          <Text style={styles.orderCount}>
-            {item.orders} orders • Created {item.createdAt}
-          </Text>
-          <View style={styles.progressContainer}>
-            <View style={styles.progressBar}>
-              <View
-                style={[
-                  styles.progressFill,
-                  { width: `${item.progress}%` }
-                ]}
-              />
-            </View>
-            <Text style={styles.progressText}>{item.progress}%</Text>
-          </View>
+          <StatusBadge status={item.status} />
         </View>
-        <StatusBadge status={item.status} />
-      </View>
-      <View style={styles.actions}>
+        <Text style={styles.assignedTo}>Assigned to {item.assignedTo}</Text>
+        <Text style={styles.orderCount}>
+          {item.orders} orders • Created {item.createdAt}
+        </Text>
+        <View style={styles.progressContainer}>
+          <View style={styles.progressBar}>
+            <View 
+              style={[
+                styles.progressFill, 
+                { width: `${item.progress}%` }
+              ]} 
+            />
+          </View>
+          <Text style={styles.progressText}>{item.progress}%</Text>
+        </View>
         <Button
           title={item.status === 'Completed' ? 'View Details' : 'Continue'}
           onPress={() => console.log('Action on picklist', item.id)}
@@ -190,44 +188,47 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.lg,
   },
   picklistCard: {
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
   },
   gridCard: {
     flex: 1,
-    marginHorizontal: 6,
+    marginHorizontal: theme.spacing.xs,
+  },
+  picklistContent: {
+    flex: 1,
   },
   picklistHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.xs,
   },
   picklistName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: theme.colors.text.primary,
   },
   assignedTo: {
-    fontSize: 14,
+    fontSize: 12,
     color: theme.colors.text.secondary,
-    marginTop: 4,
+    marginBottom: theme.spacing.xs,
   },
   orderCount: {
-    fontSize: 12,
+    fontSize: 11,
     color: theme.colors.text.tertiary,
-    marginTop: 4,
+    marginBottom: theme.spacing.sm,
   },
   progressContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
     gap: theme.spacing.sm,
   },
   progressBar: {
     flex: 1,
-    height: 8,
+    height: 6,
     backgroundColor: theme.colors.border,
-    borderRadius: 4,
+    borderRadius: 3,
     overflow: 'hidden',
   },
   progressFill: {
@@ -235,9 +236,12 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.success,
   },
   progressText: {
-    fontSize: 12,
+    fontSize: 11,
     color: theme.colors.text.secondary,
     fontWeight: '600',
+  },
+  actionButton: {
+    marginTop: theme.spacing.xs,
   },
   actions: {
     marginTop: theme.spacing.sm,

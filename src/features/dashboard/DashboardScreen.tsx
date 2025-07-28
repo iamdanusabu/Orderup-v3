@@ -90,7 +90,7 @@ export const DashboardScreen: React.FC = () => {
   const renderOrderCard = ({ item }: { item: any }) => (
     <Card style={[styles.orderCard, isLargeScreen && styles.gridCard]}>
       <View style={styles.orderHeader}>
-        <View>
+        <View style={styles.orderContent}>
           <Text style={styles.orderNumber}>{item.orderNumber}</Text>
           <Text style={styles.customerName}>{item.customerName}</Text>
           <Text style={styles.orderDetails}>
@@ -109,8 +109,8 @@ export const DashboardScreen: React.FC = () => {
 
   const renderPicklistCard = ({ item }: { item: any }) => (
     <Card style={[styles.picklistCard, isLargeScreen && styles.gridCard]}>
-      <View style={styles.picklistHeader}>
-        <View>
+      <View style={styles.orderHeader}>
+        <View style={styles.orderContent}>
           <Text style={styles.orderNumber}>{item.name}</Text>
           <Text style={styles.customerName}>Assigned to {item.assignedTo}</Text>
           <Text style={styles.progress}>{item.progress}% complete</Text>
@@ -128,12 +128,13 @@ export const DashboardScreen: React.FC = () => {
   const renderReadyCard = ({ item }: { item: any }) => (
     <Card style={[styles.readyCard, isLargeScreen && styles.gridCard]}>
       <View style={styles.orderHeader}>
-        <View>
+        <View style={styles.orderContent}>
           <Text style={styles.orderNumber}>{item.orderNumber}</Text>
           <Text style={styles.customerName}>{item.customerName}</Text>
-          <Text style={styles.pickupTime}>
-            <Ionicons name="time-outline" size={16} color={theme.colors.text.secondary} /> Pickup at {item.pickupTime}
-          </Text>
+          <View style={styles.pickupTimeContainer}>
+            <Ionicons name="time-outline" size={16} color={theme.colors.text.secondary} />
+            <Text style={styles.pickupTime}>Pickup at {item.pickupTime}</Text>
+          </View>
         </View>
         <StatusBadge status={item.status} />
       </View>
@@ -234,64 +235,64 @@ const styles = StyleSheet.create({
     marginVertical: theme.spacing.md,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text.primary,
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
   },
   orderCard: {
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
   },
   picklistCard: {
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
   },
   readyCard: {
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
   },
   gridCard: {
     flex: 1,
-    marginHorizontal: 6,
+    marginHorizontal: theme.spacing.xs,
+  },
+  orderContent: {
+    flex: 1,
   },
   orderHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: theme.spacing.md,
-  },
-  picklistHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: theme.spacing.sm,
+    marginBottom: theme.spacing.xs,
   },
   orderNumber: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: theme.colors.text.primary,
   },
   customerName: {
-    fontSize: 14,
+    fontSize: 12,
     color: theme.colors.text.secondary,
-    marginTop: 4,
+    marginBottom: theme.spacing.xs,
   },
   orderDetails: {
-    fontSize: 12,
+    fontSize: 11,
     color: theme.colors.text.tertiary,
-    marginTop: 4,
+    marginBottom: theme.spacing.sm,
   },
   progress: {
-    fontSize: 12,
-    color: theme.colors.text.tertiary,
-    marginTop: 4,
-  },
-  pickupTime: {
-    fontSize: 12,
+    fontSize: 11,
     color: theme.colors.text.secondary,
-    marginTop: 4,
+    marginBottom: theme.spacing.sm,
+  },
+  pickupTimeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+  pickupTime: {
+    fontSize: 11,
+    color: theme.colors.text.secondary,
+    marginLeft: theme.spacing.xs,
   },
   actionButton: {
-    marginTop: theme.spacing.sm,
+    marginTop: theme.spacing.xs,
   },
 });

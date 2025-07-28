@@ -88,42 +88,42 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   primary: {
-    backgroundColor: theme.colors.primary,
-    borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
   },
   secondary: {
     backgroundColor: 'transparent',
     borderColor: theme.colors.border,
   },
   success: {
-    backgroundColor: theme.colors.success,
-    borderColor: theme.colors.success,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
   },
   danger: {
-    backgroundColor: theme.colors.error,
-    borderColor: theme.colors.error,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
   },
   disabled: {
     backgroundColor: theme.colors.text.tertiary,
     borderColor: theme.colors.text.tertiary,
   },
   small: {
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+  },
+  medium: {
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
   },
-  medium: {
+  large: {
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.md,
-  },
-  large: {
-    paddingHorizontal: theme.spacing.xl,
-    paddingVertical: theme.spacing.lg,
   },
   text: {
     fontWeight: '600',
   },
   primaryText: {
-    color: '#FFFFFF',
+    color: theme.colors.text.primary,
   },
   secondaryText: {
     color: theme.colors.text.primary,
@@ -132,12 +132,12 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   smallText: {
-    fontSize: 14,
+    fontSize: 12,
   },
   mediumText: {
-    fontSize: 16,
+    fontSize: 14,
   },
   largeText: {
-    fontSize: 18,
+    fontSize: 16,
   },
 });
