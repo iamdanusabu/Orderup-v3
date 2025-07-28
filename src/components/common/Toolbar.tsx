@@ -19,7 +19,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.toolbar}>
-        <Text style={styles.title}>{title}</Text>
+        <View style={styles.leftSection}>
+          <Text style={styles.title}>{title}</Text>
+        </View>
         <View style={styles.actions}>
           {showNotification && (
             <TouchableOpacity style={styles.iconButton}>
@@ -56,6 +58,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    minHeight: 56,
+  },
+  leftSection: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
     fontSize: 18,
