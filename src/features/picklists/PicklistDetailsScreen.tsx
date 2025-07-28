@@ -155,37 +155,37 @@ export const PicklistDetailsScreen: React.FC = () => {
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemSku}>SKU: {item.sku}</Text>
                 <Text style={styles.itemAvailability}>
-                  Available: {item.available}  QOH: {item.qoh}
+                  Available: {item.available} | QOH: {item.qoh}
                 </Text>
               </View>
 
-              <View style={styles.quantitySection}>
-                <View style={styles.quantityControls}>
+              {item.status === 'picked' ? (
+                <View style={styles.quantityDisplayPicked}>
+                  <Text style={styles.quantityDisplayText}>
+                    {item.picked}/{item.needed}
+                  </Text>
+                </View>
+              ) : (
+                <View style={styles.quantityDisplay}>
                   <TouchableOpacity
-                    style={styles.quantityButton}
+                    style={styles.decrementButton}
                     onPress={() => handleQuantityChange(item.id, -1)}
                     disabled={item.picked <= 0}
                   >
                     <Ionicons name="remove" size={16} color="#FFFFFF" />
                   </TouchableOpacity>
-                  <Text style={styles.quantityText}>
+                  <Text style={styles.quantityDisplayText}>
                     {item.picked}/{item.needed}
                   </Text>
                   <TouchableOpacity
-                    style={styles.quantityButton}
+                    style={styles.incrementButton}
                     onPress={() => handleQuantityChange(item.id, 1)}
                     disabled={item.picked >= item.needed}
                   >
                     <Ionicons name="add" size={16} color="#FFFFFF" />
                   </TouchableOpacity>
                 </View>
-
-                <View style={styles.itemActions}>
-                <View style={styles.pickedBadge}>
-                  <Text style={styles.pickedText}>Picked</Text>
-                </View>
-              </View>
-              </View>
+              )}
             </View>
           </Card>
         ))}
@@ -273,12 +273,13 @@ const styles = StyleSheet.create({
   },
   itemCard: {
     marginBottom: theme.spacing.sm,
-    padding: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
   },
   itemContent: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   itemInfo: {
     flex: 1,
@@ -287,53 +288,60 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text.primary,
-    marginBottom: theme.spacing.xs,
+    marginBottom: 2,
   },
   itemSku: {
     fontSize: 14,
     color: theme.colors.text.secondary,
-    marginBottom: theme.spacing.xs,
+    marginBottom: 2,
   },
   itemAvailability: {
     fontSize: 12,
     color: theme.colors.text.tertiary,
   },
-  quantitySection: {
-    alignItems: 'flex-end',
-    gap: theme.spacing.sm,
-  },
-  quantityControls: {
+  quantityDisplay: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.sm,
+    backgroundColor: '#4F63D2',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+    minWidth: 80,
   },
-  quantityButton: {
-    width: 24,
-    height: 24,
-    backgroundColor: theme.colors.primary,
-    borderRadius: 4,
+  quantityDisplayPicked: {
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: theme.colors.success,
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    minWidth: 80,
     justifyContent: 'center',
   },
-  quantityText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: theme.colors.text.primary,
-    minWidth: 40,
-    textAlign: 'center',
-  },
-  pickedBadge: {
-    backgroundColor: theme.colors.success,
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
-    borderRadius: theme.borderRadius.md,
-    minWidth: 80,
+  decrementButton: {
+    width: 28,
+    height: 28,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 14,
     alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
   },
-  pickedText: {
+  incrementButton: {
+    width: 28,
+    height: 28,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
+  },
+  quantityDisplayText: {
     color: '#FFFFFF',
     fontWeight: '600',
     fontSize: 16,
+    flex: 1,
+    textAlign: 'center',
   },
   bottomActions: {
     flexDirection: 'row',
