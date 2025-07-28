@@ -7,46 +7,56 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  useWindowDimensions,
+  FlatList,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { Sidebar } from '../../components/common/Sidebar';
 
 // Mock data
 const mockNewOrders = [
   {
     id: '1',
     orderNumber: 'Order #12345',
-    customerName: 'John Smith',
+    customerName: 'John Doe',
     items: 3,
-    timeAgo: '10 min ago',
+    timeAgo: '5 min ago',
     status: 'New' as const,
   },
   {
     id: '2',
     orderNumber: 'Order #12346',
-    customerName: 'Emma Wilson',
+    customerName: 'Jane Smith',
+    items: 2,
+    timeAgo: '10 min ago',
+    status: 'New' as const,
+  },
+  {
+    id: '3',
+    orderNumber: 'Order #12347',
+    customerName: 'Bob Johnson',
     items: 5,
-    timeAgo: '25 min ago',
+    timeAgo: '15 min ago',
     status: 'New' as const,
   },
 ];
 
-const mockAssignedPicklists = [
+const mockActivePicklists = [
   {
     id: '1',
-    name: 'Picklist #789',
-    itemsPicked: 5,
-    totalItems: 12,
-    progress: 42,
+    name: 'Picklist #001',
+    progress: 75,
+    assignedTo: 'Alice Brown',
     status: 'In Progress' as const,
   },
   {
     id: '2',
-    name: 'Picklist #789',
-    itemsPicked: 5,
-    totalItems: 12,
-    progress: 42,
+    name: 'Picklist #002',
+    progress: 50,
+    assignedTo: 'Charlie Davis',
     status: 'In Progress' as const,
   },
 ];
@@ -69,99 +79,148 @@ const mockReadyOrders = [
 ];
 
 export const DashboardScreen: React.FC = () => {
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Orderup</Text>
-        <TouchableOpacity style={styles.notificationIcon}>
-          <Text style={styles.bell}>🔔</Text>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>1</Text>
-          </View>
-        </TouchableOpacity>
+  const { width } = useWindowDimensions();
+  const isLargeScreen = width >= 768;
+  const numColumns = isLargeScreen ? 2 : 1;
+
+  const renderOrderCard = ({ item }: { item: any }) => (
+    <Card style={[styles.orderCard, isLargeScreen && styles.gridCard]}>
+      <View style={styles.orderHeader}>
+        <View>
+          <Text style={styles.orderNumber}>{item.orderNumber}</Text>
+          <Text style={styles.customerName}>{item.customerName}</Text>
+          <Text style={styles.orderDetails}>
+            {item.items} items • {item.timeAgo}
+          </Text>
+        </View>
+        <StatusBadge status={item.status} />
       </View>
+      <Button
+        title="Accept Order"
+        onPress={() => console.log('Accept order', item.id)}
+        style={styles.actionButton}
+      />
+    </Card>
+  );
+
+  const renderPicklistCard = ({ item }: { item: any }) => (
+    <Card style={[styles.picklistCard, isLargeScreen && styles.gridCard]}>
+      <View style={styles.picklistHeader}>
+        <View>
+          <Text style={styles.orderNumber}>{item.name}</Text>
+          <Text style={styles.customerName}>Assigned to {item.assignedTo}</Text>
+          <Text style={styles.progress}>{item.progress}% complete</Text>
+        </View>
+        <StatusBadge status={item.status} />
+      </View>
+      <Button
+        title="Continue Picking"
+        onPress={() => console.log('Continue picking', item.id)}
+        style={styles.actionButton}
+      />
+    </Card>
+  );
+
+  const renderReadyCard = ({ item }: { item: any }) => (
+    <Card style={[styles.readyCard, isLargeScreen && styles.gridCard]}>
+      <View style={styles.orderHeader}>
+        <View>
+          <Text style={styles.orderNumber}>{item.orderNumber}</Text>
+          <Text style={styles.customerName}>{item.customerName}</Text>
+          <Text style={styles.pickupTime}>
+            <Ionicons name="time-outline" size={16} color="#6B7280" /> Pickup at {item.pickupTime}
+          </Text>
+        </View>
+        <StatusBadge status={item.status} />
+      </View>
+      <Button
+        title="Mark as Collected"
+        onPress={() => console.log('Mark collected', item.id)}
+        variant="success"
+        style={styles.actionButton}
+      />
+    </Card>
+  );
+
+  const content = (
+    <SafeAreaView style={styles.container}>
+      {!isLargeScreen && (
+        <View style={styles.header}>
+          <Text style={styles.title}>Orderup</Text>
+          <TouchableOpacity style={styles.notificationIcon}>
+            <Ionicons name="notifications-outline" size={24} color="#1F2937" />
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>1</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* New Orders Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>New Orders ({mockNewOrders.length})</Text>
-          {mockNewOrders.map((order) => (
-            <Card key={order.id} style={styles.orderCard}>
-              <View style={styles.orderHeader}>
-                <View>
-                  <Text style={styles.orderNumber}>{order.orderNumber}</Text>
-                  <Text style={styles.customerName}>{order.customerName}</Text>
-                  <Text style={styles.orderDetails}>
-                    {order.items} items • {order.timeAgo}
-                  </Text>
-                </View>
-                <StatusBadge status={order.status} />
+          {isLargeScreen ? (
+            <FlatList
+              data={mockNewOrders}
+              renderItem={renderOrderCard}
+              numColumns={numColumns}
+              key={numColumns}
+              scrollEnabled={false}
+            />
+          ) : (
+            mockNewOrders.map((order) => (
+              <View key={order.id}>
+                {renderOrderCard({ item: order })}
               </View>
-              <Button
-                title="Accept Order"
-                onPress={() => console.log('Accept order', order.id)}
-                style={styles.actionButton}
-              />
-            </Card>
-          ))}
+            ))
+          )}
         </View>
 
-        {/* My Assigned Picklists Section */}
+        {/* Active Picklists Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>My Assigned Picklists ({mockAssignedPicklists.length})</Text>
-          {mockAssignedPicklists.map((picklist) => (
-            <Card key={picklist.id} style={styles.picklistCard}>
-              <View style={styles.picklistHeader}>
-                <View>
-                  <Text style={styles.picklistName}>{picklist.name}</Text>
-                  <Text style={styles.picklistProgress}>
-                    {picklist.itemsPicked}/{picklist.totalItems} items picked • {picklist.progress}%
-                  </Text>
-                </View>
-                <StatusBadge status={picklist.status} variant="picklist" />
+          <Text style={styles.sectionTitle}>Active Picklists ({mockActivePicklists.length})</Text>
+          {isLargeScreen ? (
+            <FlatList
+              data={mockActivePicklists}
+              renderItem={renderPicklistCard}
+              numColumns={numColumns}
+              key={`picklist-${numColumns}`}
+              scrollEnabled={false}
+            />
+          ) : (
+            mockActivePicklists.map((picklist) => (
+              <View key={picklist.id}>
+                {renderPicklistCard({ item: picklist })}
               </View>
-              <View style={styles.progressBar}>
-                <View
-                  style={[
-                    styles.progressFill,
-                    { width: `${picklist.progress}%` },
-                  ]}
-                />
-              </View>
-              <Button
-                title="Continue Picking"
-                onPress={() => console.log('Continue picking', picklist.id)}
-                style={styles.actionButton}
-              />
-            </Card>
-          ))}
+            ))
+          )}
         </View>
 
         {/* Ready for Pickup Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Ready for Pickup ({mockReadyOrders.length})</Text>
-          {mockReadyOrders.map((order) => (
-            <Card key={order.id} style={styles.readyCard}>
-              <View style={styles.orderHeader}>
-                <View>
-                  <Text style={styles.orderNumber}>{order.orderNumber}</Text>
-                  <Text style={styles.customerName}>{order.customerName}</Text>
-                  <Text style={styles.pickupTime}>📅 Pickup at {order.pickupTime}</Text>
-                </View>
-                <StatusBadge status={order.status} />
+          {isLargeScreen ? (
+            <FlatList
+              data={mockReadyOrders}
+              renderItem={renderReadyCard}
+              numColumns={numColumns}
+              key={`ready-${numColumns}`}
+              scrollEnabled={false}
+            />
+          ) : (
+            mockReadyOrders.map((order) => (
+              <View key={order.id}>
+                {renderReadyCard({ item: order })}
               </View>
-              <Button
-                title="Mark as Collected"
-                onPress={() => console.log('Mark collected', order.id)}
-                variant="success"
-                style={styles.actionButton}
-              />
-            </Card>
-          ))}
+            ))
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
   );
+
+  return <Sidebar>{content}</Sidebar>;
 };
 
 const styles = StyleSheet.create({
@@ -186,9 +245,6 @@ const styles = StyleSheet.create({
   },
   notificationIcon: {
     position: 'relative',
-  },
-  bell: {
-    fontSize: 24,
   },
   badge: {
     position: 'absolute',
@@ -228,6 +284,10 @@ const styles = StyleSheet.create({
   readyCard: {
     marginBottom: 12,
   },
+  gridCard: {
+    flex: 1,
+    marginHorizontal: 6,
+  },
   orderHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -248,38 +308,24 @@ const styles = StyleSheet.create({
   customerName: {
     fontSize: 14,
     color: '#6B7280',
-    marginTop: 2,
+    marginTop: 4,
   },
   orderDetails: {
     fontSize: 12,
     color: '#9CA3AF',
     marginTop: 4,
   },
-  picklistName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1F2937',
-  },
-  picklistProgress: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginTop: 2,
+  progress: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    marginTop: 4,
   },
   pickupTime: {
     fontSize: 12,
     color: '#6B7280',
     marginTop: 4,
-  },
-  progressBar: {
-    height: 4,
-    backgroundColor: '#E5E7EB',
-    borderRadius: 2,
-    marginBottom: 12,
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#3B82F6',
-    borderRadius: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   actionButton: {
     marginTop: 8,

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   View,
@@ -8,100 +7,108 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  useWindowDimensions,
+  FlatList,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { Sidebar } from '../../components/common/Sidebar';
 
 // Mock data
 const mockPicklists = [
   {
     id: '1',
-    name: 'PL-1234',
-    createdDate: 'Sep 15, 2023',
-    itemsPicked: 12,
-    totalItems: 20,
-    progress: 60,
-    assignedTo: 'John Smith',
-    status: 'Open' as const,
+    name: 'Picklist #001',
+    progress: 75,
+    assignedTo: 'Alice Brown',
+    status: 'In Progress' as const,
+    items: 12,
+    timeRemaining: '15 min',
   },
   {
     id: '2',
-    name: 'PL-1235',
-    createdDate: 'Sep 14, 2023',
-    itemsPicked: 15,
-    totalItems: 15,
-    progress: 100,
-    assignedTo: 'Sarah Johnson',
-    status: 'Completed' as const,
+    name: 'Picklist #002',
+    progress: 50,
+    assignedTo: 'Charlie Davis',
+    status: 'In Progress' as const,
+    items: 8,
+    timeRemaining: '25 min',
   },
   {
     id: '3',
-    name: 'PL-1236',
-    createdDate: 'Sep 14, 2023',
-    itemsPicked: 8,
-    totalItems: 15,
-    progress: 53,
-    assignedTo: 'Mike Wilson',
-    status: 'Open' as const,
-  },
-  {
-    id: '4',
-    name: 'PL-1237',
-    createdDate: 'Sep 13, 2023',
-    itemsPicked: 20,
-    totalItems: 20,
+    name: 'Picklist #003',
     progress: 100,
-    assignedTo: 'Emily Brown',
+    assignedTo: 'Diana Wilson',
     status: 'Completed' as const,
-  },
-  {
-    id: '5',
-    name: 'PL-1238',
-    createdDate: 'Sep 13, 2023',
-    itemsPicked: 5,
-    totalItems: 10,
-    progress: 50,
-    assignedTo: 'David Lee',
-    status: 'Open' as const,
-  },
-  {
-    id: '6',
-    name: 'PL-1239',
-    createdDate: 'Sep 12, 2023',
-    itemsPicked: 3,
-    totalItems: 8,
-    progress: 38,
-    assignedTo: 'Lisa Anderson',
-    status: 'Open' as const,
+    items: 6,
+    timeRemaining: 'Complete',
   },
 ];
 
 export const PicklistsScreen: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const { width } = useWindowDimensions();
+  const isLargeScreen = width >= 768;
+  const numColumns = isLargeScreen && viewMode === 'grid' ? 2 : 1;
 
   const filteredPicklists = mockPicklists.filter(picklist =>
     picklist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     picklist.assignedTo.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Orderup</Text>
-        <TouchableOpacity style={styles.notificationIcon}>
-          <Text style={styles.bell}>🔔</Text>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>1</Text>
+  const renderPicklistCard = ({ item }: { item: any }) => (
+    <Card style={[styles.picklistCard, isLargeScreen && viewMode === 'grid' && styles.gridCard]}>
+      <View style={styles.picklistHeader}>
+        <View style={styles.picklistInfo}>
+          <Text style={styles.picklistName}>{item.name}</Text>
+          <Text style={styles.assignedTo}>Assigned to {item.assignedTo}</Text>
+          <View style={styles.picklistDetails}>
+            <Text style={styles.detailText}>
+              <Ionicons name="cube-outline" size={14} color="#6B7280" /> {item.items} items
+            </Text>
+            <Text style={styles.detailText}>
+              <Ionicons name="time-outline" size={14} color="#6B7280" /> {item.timeRemaining}
+            </Text>
           </View>
-        </TouchableOpacity>
+        </View>
+        <StatusBadge status={item.status} />
       </View>
+      <View style={styles.progressContainer}>
+        <View style={styles.progressBar}>
+          <View style={[styles.progressFill, { width: `${item.progress}%` }]} />
+        </View>
+        <Text style={styles.progressText}>{item.progress}%</Text>
+      </View>
+      <Button
+        title={item.status === 'Completed' ? 'View Details' : 'Continue Picking'}
+        onPress={() => console.log('Action on picklist', item.id)}
+        style={styles.actionButton}
+        variant={item.status === 'Completed' ? 'success' : 'primary'}
+      />
+    </Card>
+  );
+
+  const content = (
+    <SafeAreaView style={styles.container}>
+      {!isLargeScreen && (
+        <View style={styles.header}>
+          <Text style={styles.title}>Orderup</Text>
+          <TouchableOpacity style={styles.notificationIcon}>
+            <Ionicons name="notifications-outline" size={24} color="#1F2937" />
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>1</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* Search and Controls */}
       <View style={styles.controls}>
         <View style={styles.searchContainer}>
-          <Text style={styles.searchIcon}>🔍</Text>
+          <Ionicons name="search-outline" size={16} color="#6B7280" style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
             placeholder="Search picklists..."
@@ -109,76 +116,45 @@ export const PicklistsScreen: React.FC = () => {
             onChangeText={setSearchQuery}
           />
         </View>
-
-        <View style={styles.viewControls}>
-          <TouchableOpacity
-            style={[styles.viewButton, viewMode === 'grid' && styles.activeViewButton]}
-            onPress={() => setViewMode('grid')}
-          >
-            <Text style={styles.viewIcon}>⊞</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.viewButton, viewMode === 'list' && styles.activeViewButton]}
-            onPress={() => setViewMode('list')}
-          >
-            <Text style={styles.viewIcon}>☰</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.filterButton}>
-            <Text style={styles.filterText}>Filters</Text>
-            <Text style={styles.filterIcon}>⚙️</Text>
-          </TouchableOpacity>
-        </View>
+        {isLargeScreen && (
+          <View style={styles.viewControls}>
+            <TouchableOpacity
+              style={[styles.viewButton, viewMode === 'list' && styles.activeViewButton]}
+              onPress={() => setViewMode('list')}
+            >
+              <Ionicons name="list-outline" size={20} color={viewMode === 'list' ? '#1B365D' : '#6B7280'} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.viewButton, viewMode === 'grid' && styles.activeViewButton]}
+              onPress={() => setViewMode('grid')}
+            >
+              <Ionicons name="grid-outline" size={20} color={viewMode === 'grid' ? '#1B365D' : '#6B7280'} />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={viewMode === 'grid' ? styles.gridContainer : styles.listContainer}>
-          {filteredPicklists.map((picklist) => (
-            <Card key={picklist.id} style={viewMode === 'grid' ? styles.gridCard : styles.listCard}>
-              <View style={styles.cardHeader}>
-                <Text style={styles.picklistName}>{picklist.name}</Text>
-                <StatusBadge status={picklist.status} variant="picklist" />
-              </View>
-
-              <Text style={styles.createdDate}>Created {picklist.createdDate}</Text>
-
-              <Text style={styles.progressText}>
-                {picklist.itemsPicked}/{picklist.totalItems} items picked
-              </Text>
-
-              <View style={styles.progressContainer}>
-                <View style={styles.progressBar}>
-                  <View
-                    style={[
-                      styles.progressFill,
-                      { width: `${picklist.progress}%` },
-                    ]}
-                  />
-                </View>
-                <Text style={styles.progressPercentage}>{picklist.progress}%</Text>
-              </View>
-
-              <View style={styles.assigneeContainer}>
-                <View style={styles.avatar}>
-                  <Text style={styles.avatarText}>
-                    {picklist.assignedTo.split(' ').map(n => n[0]).join('')}
-                  </Text>
-                </View>
-                <Text style={styles.assigneeName}>{picklist.assignedTo}</Text>
-              </View>
-
-              <Button
-                title="View Details"
-                onPress={() => console.log('View details', picklist.id)}
-                variant="outline"
-                size="small"
-                style={styles.detailsButton}
-              />
-            </Card>
-          ))}
-        </View>
+        {isLargeScreen && viewMode === 'grid' ? (
+          <FlatList
+            data={filteredPicklists}
+            renderItem={renderPicklistCard}
+            numColumns={numColumns}
+            key={numColumns}
+            scrollEnabled={false}
+          />
+        ) : (
+          filteredPicklists.map((picklist) => (
+            <View key={picklist.id}>
+              {renderPicklistCard({ item: picklist })}
+            </View>
+          ))
+        )}
       </ScrollView>
     </SafeAreaView>
   );
+
+  return <Sidebar>{content}</Sidebar>;
 };
 
 const styles = StyleSheet.create({
@@ -203,9 +179,6 @@ const styles = StyleSheet.create({
   },
   notificationIcon: {
     position: 'relative',
-  },
-  bell: {
-    fontSize: 24,
   },
   badge: {
     position: 'absolute',
@@ -243,7 +216,6 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   searchIcon: {
-    fontSize: 16,
     marginRight: 8,
   },
   searchInput: {
@@ -257,73 +229,53 @@ const styles = StyleSheet.create({
   },
   viewButton: {
     padding: 8,
-    marginRight: 8,
+    marginLeft: 8,
     borderRadius: 6,
-    backgroundColor: '#F3F4F6',
   },
   activeViewButton: {
-    backgroundColor: '#3B82F6',
-  },
-  viewIcon: {
-    fontSize: 16,
-    color: '#6B7280',
-  },
-  filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
     backgroundColor: '#F3F4F6',
-    borderRadius: 6,
-  },
-  filterText: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginRight: 4,
-  },
-  filterIcon: {
-    fontSize: 14,
   },
   content: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingTop: 16,
   },
-  gridContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    paddingVertical: 16,
-  },
-  listContainer: {
-    paddingVertical: 16,
-  },
-  gridCard: {
-    width: '48%',
-    marginBottom: 16,
-  },
-  listCard: {
+  picklistCard: {
     marginBottom: 12,
   },
-  cardHeader: {
+  gridCard: {
+    flex: 1,
+    marginHorizontal: 6,
+  },
+  picklistHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
+    alignItems: 'flex-start',
+    marginBottom: 12,
+  },
+  picklistInfo: {
+    flex: 1,
   },
   picklistName: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1F2937',
   },
-  createdDate: {
+  assignedTo: {
+    fontSize: 14,
+    color: '#6B7280',
+    marginTop: 4,
+  },
+  picklistDetails: {
+    flexDirection: 'row',
+    marginTop: 8,
+    gap: 16,
+  },
+  detailText: {
     fontSize: 12,
     color: '#6B7280',
-    marginBottom: 12,
-  },
-  progressText: {
-    fontSize: 14,
-    color: '#374151',
-    marginBottom: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   progressContainer: {
     flexDirection: 'row',
@@ -335,43 +287,20 @@ const styles = StyleSheet.create({
     height: 6,
     backgroundColor: '#E5E7EB',
     borderRadius: 3,
-    marginRight: 8,
+    marginRight: 12,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#10B981',
     borderRadius: 3,
   },
-  progressPercentage: {
+  progressText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#374151',
-    minWidth: 30,
+    color: '#1F2937',
+    minWidth: 32,
   },
-  assigneeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  avatar: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#3B82F6',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 8,
-  },
-  avatarText: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  assigneeName: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
-  detailsButton: {
-    marginTop: 4,
+  actionButton: {
+    marginTop: 8,
   },
 });

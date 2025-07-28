@@ -1,14 +1,16 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../src/components/common/Button';
+import { Sidebar } from '../../src/components/common/Sidebar';
 
 export default function ScanScreen() {
-  return (
+  const content = (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.scanArea}>
-          <Text style={styles.scanIcon}>📱</Text>
+          <Ionicons name="qr-code-outline" size={80} color="#6B7280" />
           <Text style={styles.title}>QR Code Scanner</Text>
           <Text style={styles.subtitle}>
             Scan customer QR codes to retrieve order details for quick fulfillment
@@ -23,6 +25,8 @@ export default function ScanScreen() {
       </View>
     </SafeAreaView>
   );
+
+  return <Sidebar>{content}</Sidebar>;
 }
 
 const styles = StyleSheet.create({
@@ -40,14 +44,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 48,
   },
-  scanIcon: {
-    fontSize: 80,
-    marginBottom: 24,
-  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#1F2937',
+    marginTop: 24,
     marginBottom: 16,
     textAlign: 'center',
   },

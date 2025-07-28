@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../components/common/Button';
 import { env } from '../../config/env';
 
@@ -62,7 +63,11 @@ export const LoginScreen: React.FC = () => {
                 style={styles.eyeIcon}
                 onPress={() => setShowPassword(!showPassword)}
               >
-                <Text style={styles.eyeText}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
+                <Ionicons 
+                  name={showPassword ? 'eye-outline' : 'eye-off-outline'} 
+                  size={20} 
+                  color="#6B7280" 
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -94,14 +99,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 32,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 8,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   inputGroup: {
     marginBottom: 24,
@@ -132,9 +131,7 @@ const styles = StyleSheet.create({
     right: 16,
     top: 12,
   },
-  eyeText: {
-    fontSize: 20,
-  },
+  
   signInButton: {
     marginTop: 8,
   },

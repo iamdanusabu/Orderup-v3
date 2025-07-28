@@ -1,8 +1,30 @@
 
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { useWindowDimensions } from 'react-native';
 
 export default function TabLayout() {
+  const { width } = useWindowDimensions();
+  const isLargeScreen = width >= 768;
+
+  if (isLargeScreen) {
+    // For larger screens, we'll handle the sidebar in the individual screen components
+    return (
+      <Tabs
+        screenOptions={{
+          tabBarStyle: { display: 'none' },
+          headerShown: false,
+        }}
+      >
+        <Tabs.Screen name="dashboard" />
+        <Tabs.Screen name="orders" />
+        <Tabs.Screen name="picklists" />
+        <Tabs.Screen name="scan" />
+      </Tabs>
+    );
+  }
+
   return (
     <Tabs
       screenOptions={{
@@ -21,8 +43,8 @@ export default function TabLayout() {
         name="dashboard"
         options={{
           title: 'Dashboard',
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="home" color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" size={size} color={color} />
           ),
         }}
       />
@@ -30,8 +52,8 @@ export default function TabLayout() {
         name="orders"
         options={{
           title: 'Orders',
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="list" color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="list-outline" size={size} color={color} />
           ),
         }}
       />
@@ -39,8 +61,8 @@ export default function TabLayout() {
         name="picklists"
         options={{
           title: 'Picklists',
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="checkmark-circle" color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="checkmark-circle-outline" size={size} color={color} />
           ),
         }}
       />
@@ -48,24 +70,11 @@ export default function TabLayout() {
         name="scan"
         options={{
           title: 'Scan',
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="qr-code" color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="qr-code-outline" size={size} color={color} />
           ),
         }}
       />
     </Tabs>
-  );
-}
-
-function TabBarIcon({ name, color }: { name: string; color: string }) {
-  const icons: Record<string, string> = {
-    home: '🏠',
-    list: '📋',
-    'checkmark-circle': '✅',
-    'qr-code': '📱',
-  };
-  
-  return (
-    <span style={{ fontSize: 24, color }}>{icons[name] || '❓'}</span>
   );
 }

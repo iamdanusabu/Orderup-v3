@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
 
@@ -20,14 +19,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-    marginVertical: 4,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
 });

@@ -7,42 +7,41 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  TextInput,
+  useWindowDimensions,
+  FlatList,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { Sidebar } from '../../components/common/Sidebar';
 
 // Mock data
 const mockOrders = [
   {
     id: '1',
-    orderNumber: '#139526937622371924',
-    date: '7/17/2025 10:32 AM',
-    customerName: 'Unknown Customer',
-    items: 1,
-    amount: 0.00,
-    status: 'Ready' as const,
+    orderNumber: 'Order #12345',
+    customerName: 'John Doe',
+    items: 3,
+    timeAgo: '5 min ago',
+    status: 'New' as const,
     selected: false,
   },
   {
     id: '2',
-    orderNumber: '#139526937622371925',
-    date: '7/17/2025 10:32 AM',
-    customerName: 'Unknown Customer',
-    items: 1,
-    amount: 0.00,
-    status: 'New' as const,
+    orderNumber: 'Order #12346',
+    customerName: 'Jane Smith',
+    items: 2,
+    timeAgo: '10 min ago',
+    status: 'Processing' as const,
     selected: false,
   },
   {
     id: '3',
-    orderNumber: '#139526937622371926',
-    date: '7/17/2025 10:32 AM',
-    customerName: 'Unknown Customer',
-    items: 1,
-    amount: 0.00,
-    status: 'New' as const,
+    orderNumber: 'Order #12347',
+    customerName: 'Bob Johnson',
+    items: 5,
+    timeAgo: '15 min ago',
+    status: 'Ready' as const,
     selected: false,
   },
 ];
@@ -53,6 +52,9 @@ export const OrdersScreen: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('All');
   const [orders, setOrders] = useState(mockOrders);
   const [selectAll, setSelectAll] = useState(false);
+  const { width } = useWindowDimensions();
+  const isLargeScreen = width >= 768;
+  const numColumns = isLargeScreen ? 2 : 1;
 
   const handleSelectAll = () => {
     const newSelectAll = !selectAll;
@@ -68,96 +70,102 @@ export const OrdersScreen: React.FC = () => {
 
   const selectedCount = orders.filter(order => order.selected).length;
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Orderup</Text>
-        <TouchableOpacity style={styles.notificationIcon}>
-          <Text style={styles.bell}>🔔</Text>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>1</Text>
-          </View>
+  const renderOrderCard = ({ item }: { item: any }) => (
+    <Card style={[styles.orderCard, isLargeScreen && styles.gridCard]}>
+      <View style={styles.orderHeader}>
+        <TouchableOpacity
+          style={styles.checkbox}
+          onPress={() => handleOrderSelect(item.id)}
+        >
+          <Ionicons 
+            name={item.selected ? 'checkmark-circle' : 'ellipse-outline'} 
+            size={24} 
+            color={item.selected ? '#10B981' : '#D1D5DB'} 
+          />
         </TouchableOpacity>
+        <View style={styles.orderInfo}>
+          <Text style={styles.orderNumber}>{item.orderNumber}</Text>
+          <Text style={styles.customerName}>{item.customerName}</Text>
+          <Text style={styles.orderDetails}>
+            {item.items} items • {item.timeAgo}
+          </Text>
+        </View>
+        <StatusBadge status={item.status} />
       </View>
+    </Card>
+  );
+
+  const content = (
+    <SafeAreaView style={styles.container}>
+      {!isLargeScreen && (
+        <View style={styles.header}>
+          <Text style={styles.title}>Orderup</Text>
+          <TouchableOpacity style={styles.notificationIcon}>
+            <Ionicons name="notifications-outline" size={24} color="#1F2937" />
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>1</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* Tabs */}
       <View style={styles.tabContainer}>
         {tabs.map((tab) => (
           <TouchableOpacity
             key={tab}
-            style={[
-              styles.tab,
-              selectedTab === tab && styles.activeTab,
-            ]}
+            style={[styles.tab, selectedTab === tab && styles.activeTab]}
             onPress={() => setSelectedTab(tab)}
           >
-            <Text
-              style={[
-                styles.tabText,
-                selectedTab === tab && styles.activeTabText,
-              ]}
-            >
+            <Text style={[styles.tabText, selectedTab === tab && styles.activeTabText]}>
               {tab}
             </Text>
           </TouchableOpacity>
         ))}
         <View style={styles.filterContainer}>
           <Text style={styles.filterText}>Filter</Text>
-          <Text style={styles.filterIcon}>⚙️</Text>
+          <Ionicons name="funnel-outline" size={16} color="#6B7280" />
         </View>
       </View>
 
       {/* Controls */}
       <View style={styles.controls}>
-        <TouchableOpacity
-          style={styles.selectAllContainer}
-          onPress={handleSelectAll}
-        >
-          <View style={[styles.checkbox, selectAll && styles.checkedCheckbox]}>
-            {selectAll && <Text style={styles.checkmark}>✓</Text>}
-          </View>
-          <Text style={styles.selectAllText}>Select All</Text>
-        </TouchableOpacity>
-
-        <Button
-          title="Create Picklist"
-          onPress={() => console.log('Create picklist')}
-          disabled={selectedCount === 0}
-          style={styles.createButton}
-        />
+        <View style={styles.selectAllContainer}>
+          <TouchableOpacity style={styles.selectAll} onPress={handleSelectAll}>
+            <Ionicons 
+              name={selectAll ? 'checkmark-circle' : 'ellipse-outline'} 
+              size={20} 
+              color={selectAll ? '#10B981' : '#D1D5DB'} 
+            />
+            <Text style={styles.selectAllText}>Select All</Text>
+          </TouchableOpacity>
+          {selectedCount > 0 && (
+            <Text style={styles.selectedCount}>{selectedCount} selected</Text>
+          )}
+        </View>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {orders.map((order) => (
-          <Card key={order.id} style={styles.orderCard}>
-            <View style={styles.orderRow}>
-              <TouchableOpacity
-                style={styles.selectContainer}
-                onPress={() => handleOrderSelect(order.id)}
-              >
-                <View style={[styles.checkbox, order.selected && styles.checkedCheckbox]}>
-                  {order.selected && <Text style={styles.checkmark}>✓</Text>}
-                </View>
-              </TouchableOpacity>
-
-              <View style={styles.orderInfo}>
-                <Text style={styles.orderNumber}>{order.orderNumber}</Text>
-                <Text style={styles.orderDate}>{order.date}</Text>
-                <Text style={styles.customerName}>{order.customerName}</Text>
-                <Text style={styles.orderItems}>{order.items} item in order</Text>
-                <View style={styles.amountContainer}>
-                  <Text style={styles.currency}>🛍️</Text>
-                  <Text style={styles.amount}>${order.amount.toFixed(2)}</Text>
-                </View>
-              </View>
-
-              <StatusBadge status={order.status} />
+        {isLargeScreen ? (
+          <FlatList
+            data={orders}
+            renderItem={renderOrderCard}
+            numColumns={numColumns}
+            key={numColumns}
+            scrollEnabled={false}
+          />
+        ) : (
+          orders.map((order) => (
+            <View key={order.id}>
+              {renderOrderCard({ item: order })}
             </View>
-          </Card>
-        ))}
+          ))
+        )}
       </ScrollView>
     </SafeAreaView>
   );
+
+  return <Sidebar>{content}</Sidebar>;
 };
 
 const styles = StyleSheet.create({
@@ -182,9 +190,6 @@ const styles = StyleSheet.create({
   },
   notificationIcon: {
     position: 'relative',
-  },
-  bell: {
-    fontSize: 24,
   },
   badge: {
     position: 'absolute',
@@ -236,9 +241,6 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     marginRight: 8,
   },
-  filterIcon: {
-    fontSize: 16,
-  },
   controls: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -253,83 +255,55 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 2,
-    borderColor: '#D1D5DB',
-    borderRadius: 4,
+  selectAll: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  checkedCheckbox: {
-    backgroundColor: '#3B82F6',
-    borderColor: '#3B82F6',
-  },
-  checkmark: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: 'bold',
   },
   selectAllText: {
     marginLeft: 8,
     fontSize: 16,
     color: '#374151',
   },
-  createButton: {
-    paddingHorizontal: 20,
+  selectedCount: {
+    marginLeft: 16,
+    fontSize: 14,
+    color: '#6B7280',
   },
   content: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingTop: 16,
   },
   orderCard: {
-    marginVertical: 4,
+    marginBottom: 12,
   },
-  orderRow: {
+  gridCard: {
+    flex: 1,
+    marginHorizontal: 6,
+  },
+  orderHeader: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
-  selectContainer: {
+  checkbox: {
     marginRight: 12,
-    marginTop: 4,
   },
   orderInfo: {
     flex: 1,
-    marginRight: 12,
   },
   orderNumber: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1F2937',
-    marginBottom: 4,
-  },
-  orderDate: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginBottom: 4,
   },
   customerName: {
     fontSize: 14,
-    color: '#374151',
-    marginBottom: 4,
+    color: '#6B7280',
+    marginTop: 4,
   },
-  orderItems: {
+  orderDetails: {
     fontSize: 12,
     color: '#9CA3AF',
-    marginBottom: 8,
-  },
-  amountContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  currency: {
-    fontSize: 16,
-    marginRight: 4,
-  },
-  amount: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1F2937',
+    marginTop: 4,
   },
 });
