@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   View,
@@ -15,32 +16,45 @@ import { Sidebar } from '../../components/common/Sidebar';
 import { Toolbar } from '../../components/common/Toolbar';
 import { theme } from '../../constants/theme';
 
-// Mock data
+// Mock data with updated structure to match design
 const mockOrders = [
   {
     id: '1',
     orderNumber: 'Order #12345',
-    customerName: 'John Doe',
-    items: 3,
-    timeAgo: '5 min ago',
+    customerName: 'John Smith',
+    datetime: '7/28/2025 4:34 PM',
+    items: 1,
+    price: '$25.99',
     status: 'New' as const,
     selected: false,
   },
   {
     id: '2',
     orderNumber: 'Order #12346',
-    customerName: 'Jane Smith',
-    items: 2,
-    timeAgo: '10 min ago',
-    status: 'Processing' as const,
+    customerName: 'Emma Wilson',
+    datetime: '7/28/2025 4:19 PM',
+    items: 3,
+    price: '$45.99',
+    status: 'Ready' as const,
     selected: false,
   },
   {
     id: '3',
     orderNumber: 'Order #12347',
-    customerName: 'Bob Johnson',
-    items: 5,
-    timeAgo: '15 min ago',
+    customerName: 'Michael Brown',
+    datetime: '7/28/2025 4:39 PM',
+    items: 1,
+    price: '$75.50',
+    status: 'New' as const,
+    selected: false,
+  },
+  {
+    id: '4',
+    orderNumber: 'Order #12348',
+    customerName: 'Sarah Davis',
+    datetime: '7/28/2025 3:59 PM',
+    items: 2,
+    price: '$120.99',
     status: 'Ready' as const,
     selected: false,
   },
@@ -49,9 +63,9 @@ const mockOrders = [
 export const OrdersScreen: React.FC = () => {
   const { width } = useWindowDimensions();
   const isLargeScreen = width >= 768;
-  const numColumns = isLargeScreen ? 2 : 1;
   const [orders, setOrders] = useState(mockOrders);
   const [selectedCount, setSelectedCount] = useState(0);
+  const [activeFilter, setActiveFilter] = useState('All');
 
   const handleScan = () => {
     console.log('Open camera scanner');
@@ -67,28 +81,32 @@ export const OrdersScreen: React.FC = () => {
     });
   };
 
+  const filteredOrders = orders.filter(order => {
+    if (activeFilter === 'All') return true;
+    if (activeFilter === 'Initiated') return order.status === 'New';
+    if (activeFilter === 'Processing') return order.status === 'Processing';
+    return true;
+  });
+
   const renderOrderCard = ({ item }: { item: any }) => (
-    <Card style={[styles.orderCard, isLargeScreen && styles.gridCard]}>
-      <View style={styles.orderContent}>
+    <Card style={styles.orderCard}>
+      <TouchableOpacity
+        style={styles.orderContent}
+        onPress={() => toggleOrderSelection(item.id)}
+      >
         <View style={styles.orderHeader}>
-          <TouchableOpacity
-            style={styles.selectButton}
-            onPress={() => toggleOrderSelection(item.id)}
-          >
-            <Ionicons
-              name={item.selected ? "checkbox" : "checkbox-outline"}
-              size={20}
-              color={item.selected ? theme.colors.primary : theme.colors.text.secondary}
-            />
-          </TouchableOpacity>
-          <StatusBadge status={item.status} />
+          <View style={styles.orderInfo}>
+            <Text style={styles.orderNumber}>{item.orderNumber}</Text>
+            <Text style={styles.customerName}>{item.customerName}</Text>
+            <Text style={styles.datetime}>{item.datetime}</Text>
+            <Text style={styles.itemCount}>{item.items} items</Text>
+          </View>
+          <View style={styles.rightSection}>
+            <StatusBadge status={item.status} />
+            <Text style={styles.price}>{item.price}</Text>
+          </View>
         </View>
-        <Text style={styles.orderNumber}>{item.orderNumber}</Text>
-        <Text style={styles.customerName}>{item.customerName}</Text>
-        <Text style={styles.orderDetails}>
-          {item.items} items • {item.timeAgo}
-        </Text>
-      </View>
+      </TouchableOpacity>
     </Card>
   );
 
@@ -98,6 +116,40 @@ export const OrdersScreen: React.FC = () => {
         title="Orders" 
         onScanPress={handleScan}
       />
+      
+      {/* Top Actions Bar */}
+      <View style={styles.actionsBar}>
+        <TouchableOpacity style={styles.selectOrdersButton}>
+          <Text style={styles.selectOrdersText}>Select Orders</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.filterButton}>
+          <Ionicons name="filter-outline" size={16} color={theme.colors.text.secondary} />
+          <Text style={styles.filterText}>Filter</Text>
+          <Ionicons name="chevron-down-outline" size={16} color={theme.colors.text.secondary} />
+        </TouchableOpacity>
+      </View>
+
+      {/* Filter Tabs */}
+      <View style={styles.filterTabs}>
+        {['All', 'Initiated', 'Processing'].map((filter) => (
+          <TouchableOpacity
+            key={filter}
+            style={[
+              styles.filterTab,
+              activeFilter === filter && styles.activeFilterTab
+            ]}
+            onPress={() => setActiveFilter(filter)}
+          >
+            <Text style={[
+              styles.filterTabText,
+              activeFilter === filter && styles.activeFilterTabText
+            ]}>
+              {filter}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
       {selectedCount > 0 && (
         <View style={styles.selectionBar}>
           <Text style={styles.selectionText}>{selectedCount} orders selected</Text>
@@ -106,22 +158,13 @@ export const OrdersScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       )}
+
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {isLargeScreen ? (
-          <FlatList
-            data={orders}
-            renderItem={renderOrderCard}
-            numColumns={numColumns}
-            key={numColumns}
-            scrollEnabled={false}
-          />
-        ) : (
-          orders.map((order) => (
-            <View key={order.id}>
-              {renderOrderCard({ item: order })}
-            </View>
-          ))
-        )}
+        {filteredOrders.map((order) => (
+          <View key={order.id}>
+            {renderOrderCard({ item: order })}
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
@@ -133,6 +176,67 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
+  },
+  actionsBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    backgroundColor: theme.colors.background,
+  },
+  selectOrdersButton: {
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.borderRadius.lg,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    backgroundColor: theme.colors.surface,
+  },
+  selectOrdersText: {
+    fontSize: 14,
+    color: theme.colors.text.primary,
+    fontWeight: '500',
+  },
+  filterButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.borderRadius.lg,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+    backgroundColor: theme.colors.surface,
+    gap: theme.spacing.xs,
+  },
+  filterText: {
+    fontSize: 14,
+    color: theme.colors.text.secondary,
+    fontWeight: '500',
+  },
+  filterTabs: {
+    flexDirection: 'row',
+    paddingHorizontal: theme.spacing.lg,
+    paddingBottom: theme.spacing.md,
+    gap: theme.spacing.xs,
+  },
+  filterTab: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: theme.borderRadius.full,
+    backgroundColor: 'transparent',
+  },
+  activeFilterTab: {
+    backgroundColor: theme.colors.primary,
+  },
+  filterTabText: {
+    fontSize: 14,
+    color: theme.colors.text.secondary,
+    fontWeight: '500',
+  },
+  activeFilterTabText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
   selectionBar: {
     flexDirection: 'row',
@@ -164,11 +268,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.lg,
   },
   orderCard: {
-    marginBottom: theme.spacing.sm,
-  },
-  gridCard: {
-    flex: 1,
-    marginHorizontal: theme.spacing.xs,
+    marginBottom: theme.spacing.md,
+    padding: theme.spacing.lg,
   },
   orderContent: {
     flex: 1,
@@ -176,25 +277,38 @@ const styles = StyleSheet.create({
   orderHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing.xs,
+    alignItems: 'flex-start',
   },
-  selectButton: {
-    padding: theme.spacing.xs,
+  orderInfo: {
+    flex: 1,
   },
   orderNumber: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.xs,
   },
   customerName: {
-    fontSize: 12,
+    fontSize: 14,
     color: theme.colors.text.secondary,
     marginBottom: theme.spacing.xs,
   },
-  orderDetails: {
-    fontSize: 11,
+  datetime: {
+    fontSize: 12,
     color: theme.colors.text.tertiary,
+    marginBottom: theme.spacing.xs,
+  },
+  itemCount: {
+    fontSize: 12,
+    color: theme.colors.text.tertiary,
+  },
+  rightSection: {
+    alignItems: 'flex-end',
+    gap: theme.spacing.sm,
+  },
+  price: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: theme.colors.text.primary,
   },
 });
