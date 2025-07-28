@@ -66,6 +66,7 @@ export const OrdersScreen: React.FC = () => {
   const [orders, setOrders] = useState(mockOrders);
   const [selectedCount, setSelectedCount] = useState(0);
   const [activeFilter, setActiveFilter] = useState('All');
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
 
   const handleScan = () => {
     console.log('Open camera scanner');
@@ -85,6 +86,7 @@ export const OrdersScreen: React.FC = () => {
     if (activeFilter === 'All') return true;
     if (activeFilter === 'Initiated') return order.status === 'New';
     if (activeFilter === 'Processing') return order.status === 'Processing';
+    if (activeFilter === 'Ready') return order.status === 'Ready';
     return true;
   });
 
@@ -122,11 +124,69 @@ export const OrdersScreen: React.FC = () => {
         <TouchableOpacity style={styles.selectOrdersButton}>
           <Text style={styles.selectOrdersText}>Select Orders</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.filterButton}>
-          <Ionicons name="filter-outline" size={16} color={theme.colors.text.secondary} />
-          <Text style={styles.filterText}>Filter</Text>
-          <Ionicons name="chevron-down-outline" size={16} color={theme.colors.text.secondary} />
-        </TouchableOpacity>
+        <View style={styles.filterContainer}>
+          <TouchableOpacity 
+            style={styles.filterButton}
+            onPress={() => setShowFilterDropdown(!showFilterDropdown)}
+          >
+            <Ionicons name="filter-outline" size={16} color={theme.colors.text.secondary} />
+            <Text style={styles.filterText}>Filter</Text>
+            <Ionicons 
+              name={showFilterDropdown ? "chevron-up-outline" : "chevron-down-outline"} 
+              size={16} 
+              color={theme.colors.text.secondary} 
+            />
+          </TouchableOpacity>
+          
+          {showFilterDropdown && (
+            <View style={styles.filterDropdown}>
+              <TouchableOpacity 
+                style={styles.filterOption}
+                onPress={() => {
+                  setActiveFilter('All');
+                  setShowFilterDropdown(false);
+                }}
+              >
+                <Text style={[styles.filterOptionText, activeFilter === 'All' && styles.activeFilterOptionText]}>
+                  All Orders
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.filterOption}
+                onPress={() => {
+                  setActiveFilter('Initiated');
+                  setShowFilterDropdown(false);
+                }}
+              >
+                <Text style={[styles.filterOptionText, activeFilter === 'Initiated' && styles.activeFilterOptionText]}>
+                  Initiated
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.filterOption}
+                onPress={() => {
+                  setActiveFilter('Processing');
+                  setShowFilterDropdown(false);
+                }}
+              >
+                <Text style={[styles.filterOptionText, activeFilter === 'Processing' && styles.activeFilterOptionText]}>
+                  Processing
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.filterOption}
+                onPress={() => {
+                  setActiveFilter('Ready');
+                  setShowFilterDropdown(false);
+                }}
+              >
+                <Text style={[styles.filterOptionText, activeFilter === 'Ready' && styles.activeFilterOptionText]}>
+                  Ready
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
       </View>
 
       {/* Filter Tabs */}
@@ -198,6 +258,9 @@ const styles = StyleSheet.create({
     color: theme.colors.text.primary,
     fontWeight: '500',
   },
+  filterContainer: {
+    position: 'relative',
+  },
   filterButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -208,6 +271,41 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.sm,
     backgroundColor: theme.colors.surface,
     gap: theme.spacing.xs,
+  },
+  filterDropdown: {
+    position: 'absolute',
+    top: '100%',
+    right: 0,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.borderRadius.lg,
+    marginTop: theme.spacing.xs,
+    minWidth: 150,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    zIndex: 1000,
+  },
+  filterOption: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+  },
+  filterOptionText: {
+    fontSize: 14,
+    color: theme.colors.text.primary,
+    fontWeight: '500',
+  },
+  activeFilterOptionText: {
+    color: theme.colors.primary,
+    fontWeight: '600',
   },
   filterText: {
     fontSize: 14,
