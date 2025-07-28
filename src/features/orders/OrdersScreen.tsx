@@ -162,69 +162,97 @@ export const OrdersScreen: React.FC = () => {
             {isSelectionMode ? 'Cancel Selection' : 'Select Orders'}
           </Text>
         </TouchableOpacity>
-        <View style={styles.filterContainer}>
-          <TouchableOpacity 
-            style={styles.filterButton}
-            onPress={() => setShowFilterDropdown(!showFilterDropdown)}
-          >
-            <Ionicons name="filter-outline" size={16} color={theme.colors.text.secondary} />
-            <Text style={styles.filterText}>Filter</Text>
-            <Ionicons 
-              name={showFilterDropdown ? "chevron-up-outline" : "chevron-down-outline"} 
-              size={16} 
-              color={theme.colors.text.secondary} 
-            />
-          </TouchableOpacity>
-          
-          {showFilterDropdown && (
-            <View style={styles.filterDropdown}>
-              <TouchableOpacity 
-                style={styles.filterOption}
-                onPress={() => {
-                  setActiveFilter('All');
-                  setShowFilterDropdown(false);
-                }}
-              >
-                <Text style={[styles.filterOptionText, activeFilter === 'All' && styles.activeFilterOptionText]}>
-                  All Orders
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                style={styles.filterOption}
-                onPress={() => {
-                  setActiveFilter('Initiated');
-                  setShowFilterDropdown(false);
-                }}
-              >
-                <Text style={[styles.filterOptionText, activeFilter === 'Initiated' && styles.activeFilterOptionText]}>
-                  Initiated
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                style={styles.filterOption}
-                onPress={() => {
-                  setActiveFilter('Processing');
-                  setShowFilterDropdown(false);
-                }}
-              >
-                <Text style={[styles.filterOptionText, activeFilter === 'Processing' && styles.activeFilterOptionText]}>
-                  Processing
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                style={styles.filterOption}
-                onPress={() => {
-                  setActiveFilter('Ready');
-                  setShowFilterDropdown(false);
-                }}
-              >
-                <Text style={[styles.filterOptionText, activeFilter === 'Ready' && styles.activeFilterOptionText]}>
-                  Ready
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
+
+        {/* Selection Info and Action - shown when orders are selected */}
+        {isSelectionMode && selectedCount > 0 && (
+          <View style={styles.selectionInfo}>
+            <Text style={styles.selectionCountText}>{selectedCount} selected</Text>
+            <TouchableOpacity 
+              style={styles.createPicklistButton}
+              onPress={() => {
+                const selectedOrders = orders.filter(o => o.selected);
+                console.log('Create picklist with selected orders:', selectedOrders);
+                // Navigate to location selection screen
+                router.push('/location-selection');
+                // Reset selection mode after creating picklist
+                setIsSelectionMode(false);
+                setOrders(prevOrders => 
+                  prevOrders.map(order => ({ ...order, selected: false }))
+                );
+                setSelectedCount(0);
+              }}
+            >
+              <Text style={styles.createPicklistText}>Create Picklist</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* Filter - only shown when not in selection mode with selections */}
+        {!(isSelectionMode && selectedCount > 0) && (
+          <View style={styles.filterContainer}>
+            <TouchableOpacity 
+              style={styles.filterButton}
+              onPress={() => setShowFilterDropdown(!showFilterDropdown)}
+            >
+              <Ionicons name="filter-outline" size={16} color={theme.colors.text.secondary} />
+              <Text style={styles.filterText}>Filter</Text>
+              <Ionicons 
+                name={showFilterDropdown ? "chevron-up-outline" : "chevron-down-outline"} 
+                size={16} 
+                color={theme.colors.text.secondary} 
+              />
+            </TouchableOpacity>
+            
+            {showFilterDropdown && (
+              <View style={styles.filterDropdown}>
+                <TouchableOpacity 
+                  style={styles.filterOption}
+                  onPress={() => {
+                    setActiveFilter('All');
+                    setShowFilterDropdown(false);
+                  }}
+                >
+                  <Text style={[styles.filterOptionText, activeFilter === 'All' && styles.activeFilterOptionText]}>
+                    All Orders
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={styles.filterOption}
+                  onPress={() => {
+                    setActiveFilter('Initiated');
+                    setShowFilterDropdown(false);
+                  }}
+                >
+                  <Text style={[styles.filterOptionText, activeFilter === 'Initiated' && styles.activeFilterOptionText]}>
+                    Initiated
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={styles.filterOption}
+                  onPress={() => {
+                    setActiveFilter('Processing');
+                    setShowFilterDropdown(false);
+                  }}
+                >
+                  <Text style={[styles.filterOptionText, activeFilter === 'Processing' && styles.activeFilterOptionText]}>
+                    Processing
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={styles.filterOption}
+                  onPress={() => {
+                    setActiveFilter('Ready');
+                    setShowFilterDropdown(false);
+                  }}
+                >
+                  <Text style={[styles.filterOptionText, activeFilter === 'Ready' && styles.activeFilterOptionText]}>
+                    Ready
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        )}
       </View>
 
       {/* Filter Tabs */}
@@ -248,34 +276,8 @@ export const OrdersScreen: React.FC = () => {
         ))}
       </View>
 
-      {isSelectionMode && selectedCount > 0 && (
-        <View style={styles.selectionBar}>
-          <Text style={styles.selectionText}>{selectedCount} orders selected</Text>
-          <TouchableOpacity 
-            style={styles.bulkActionButton}
-            onPress={() => {
-              const selectedOrders = orders.filter(o => o.selected);
-              console.log('Create picklist with selected orders:', selectedOrders);
-              // Navigate to location selection screen
-              router.push('/location-selection');
-              // Reset selection mode after creating picklist
-              setIsSelectionMode(false);
-              setOrders(prevOrders => 
-                prevOrders.map(order => ({ ...order, selected: false }))
-              );
-              setSelectedCount(0);
-            }}
-          >
-            <Text style={styles.bulkActionText}>Create Picklist</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
       <ScrollView 
-        style={[
-          styles.content,
-          isSelectionMode && selectedCount > 0 && styles.contentWithSelection
-        ]} 
+        style={styles.content} 
         showsVerticalScrollIndicator={false}
       >
         {filteredOrders.map((order) => (
@@ -424,37 +426,30 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '600',
   },
-  selectionBar: {
+  selectionInfo: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
-    backgroundColor: theme.colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
+    gap: theme.spacing.md,
   },
-  selectionText: {
-    fontSize: 16,
+  selectionCountText: {
+    fontSize: 14,
     color: theme.colors.text.primary,
     fontWeight: '600',
   },
-  bulkActionButton: {
+  createPicklistButton: {
     backgroundColor: theme.colors.primary,
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.sm,
     borderRadius: theme.borderRadius.md,
   },
-  bulkActionText: {
+  createPicklistText: {
     color: '#FFFFFF',
     fontWeight: '600',
+    fontSize: 14,
   },
   content: {
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
-  },
-  contentWithSelection: {
-    marginTop: theme.spacing.md,
   },
   orderCard: {
     marginBottom: theme.spacing.md,
