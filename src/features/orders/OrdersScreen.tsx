@@ -317,6 +317,7 @@ const styles = StyleSheet.create({
   filterTabs: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
     paddingBottom: theme.spacing.md,
     gap: theme.spacing.xs,
   },
