@@ -11,6 +11,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../components/common/Button';
 import { env } from '../../config/env';
+import { theme } from '../../constants/theme';
 
 export const LoginScreen: React.FC = () => {
   const [domain, setDomain] = useState('');
@@ -35,6 +36,7 @@ export const LoginScreen: React.FC = () => {
               value={domain}
               onChangeText={setDomain}
               autoCapitalize="none"
+              placeholderTextColor={theme.colors.text.tertiary}
             />
           </View>
 
@@ -46,6 +48,7 @@ export const LoginScreen: React.FC = () => {
               value={username}
               onChangeText={setUsername}
               autoCapitalize="none"
+              placeholderTextColor={theme.colors.text.tertiary}
             />
           </View>
 
@@ -58,6 +61,7 @@ export const LoginScreen: React.FC = () => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
+                placeholderTextColor={theme.colors.text.tertiary}
               />
               <TouchableOpacity
                 style={styles.eyeIcon}
@@ -66,7 +70,7 @@ export const LoginScreen: React.FC = () => {
                 <Ionicons 
                   name={showPassword ? 'eye-outline' : 'eye-off-outline'} 
                   size={20} 
-                  color="#6B7280" 
+                  color={theme.colors.text.secondary} 
                 />
               </TouchableOpacity>
             </View>
@@ -88,37 +92,38 @@ export const LoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: theme.colors.background,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: theme.spacing.lg,
   },
   form: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 32,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.xl,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: theme.colors.border,
   },
   inputGroup: {
-    marginBottom: 24,
+    marginBottom: theme.spacing.lg,
   },
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
-    marginBottom: 8,
+    color: theme.colors.text.primary,
+    marginBottom: theme.spacing.sm,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    borderColor: theme.colors.border,
+    borderRadius: theme.borderRadius.md,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
     fontSize: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.surface,
+    color: theme.colors.text.primary,
   },
   passwordContainer: {
     position: 'relative',
@@ -128,17 +133,16 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     position: 'absolute',
-    right: 16,
-    top: 12,
+    right: theme.spacing.md,
+    top: theme.spacing.md,
   },
-  
   signInButton: {
-    marginTop: 8,
+    marginTop: theme.spacing.sm,
   },
   version: {
     textAlign: 'center',
-    color: '#6B7280',
+    color: theme.colors.text.secondary,
     fontSize: 14,
-    marginTop: 32,
+    marginTop: theme.spacing.xl,
   },
 });

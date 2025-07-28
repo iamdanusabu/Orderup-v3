@@ -1,16 +1,26 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../src/components/common/Button';
 import { Sidebar } from '../../src/components/common/Sidebar';
+import { Toolbar } from '../../src/components/common/Toolbar';
+import { theme } from '../../src/constants/theme';
 
 export default function ScanScreen() {
+  const handleScan = () => {
+    console.log('Open camera scanner');
+  };
+
   const content = (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <Toolbar 
+        title="Scan" 
+        onScanPress={handleScan}
+      />
       <View style={styles.content}>
         <View style={styles.scanArea}>
-          <Ionicons name="qr-code-outline" size={80} color="#6B7280" />
+          <Ionicons name="qr-code-outline" size={80} color={theme.colors.text.secondary} />
           <Text style={styles.title}>QR Code Scanner</Text>
           <Text style={styles.subtitle}>
             Scan customer QR codes to retrieve order details for quick fulfillment
@@ -19,11 +29,11 @@ export default function ScanScreen() {
         
         <Button
           title="Open Camera"
-          onPress={() => console.log('Open camera scanner')}
+          onPress={handleScan}
           style={styles.scanButton}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -32,33 +42,32 @@ export default function ScanScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: theme.colors.background,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 32,
+    paddingHorizontal: theme.spacing.lg,
   },
   scanArea: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: theme.spacing.xl * 2,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1F2937',
-    marginTop: 24,
-    marginBottom: 16,
-    textAlign: 'center',
+    color: theme.colors.text.primary,
+    marginTop: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
   },
   subtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: theme.colors.text.secondary,
     textAlign: 'center',
     lineHeight: 24,
   },
   scanButton: {
-    width: '100%',
+    minWidth: 200,
   },
 });

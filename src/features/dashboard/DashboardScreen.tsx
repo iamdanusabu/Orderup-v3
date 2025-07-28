@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   View,
@@ -6,7 +5,6 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
-  TouchableOpacity,
   useWindowDimensions,
   FlatList,
 } from 'react-native';
@@ -15,6 +13,8 @@ import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { Sidebar } from '../../components/common/Sidebar';
+import { Toolbar } from '../../components/common/Toolbar';
+import { theme } from '../../constants/theme';
 
 // Mock data
 const mockNewOrders = [
@@ -83,6 +83,10 @@ export const DashboardScreen: React.FC = () => {
   const isLargeScreen = width >= 768;
   const numColumns = isLargeScreen ? 2 : 1;
 
+  const handleScan = () => {
+    console.log('Open camera scanner');
+  };
+
   const renderOrderCard = ({ item }: { item: any }) => (
     <Card style={[styles.orderCard, isLargeScreen && styles.gridCard]}>
       <View style={styles.orderHeader}>
@@ -128,7 +132,7 @@ export const DashboardScreen: React.FC = () => {
           <Text style={styles.orderNumber}>{item.orderNumber}</Text>
           <Text style={styles.customerName}>{item.customerName}</Text>
           <Text style={styles.pickupTime}>
-            <Ionicons name="time-outline" size={16} color="#6B7280" /> Pickup at {item.pickupTime}
+            <Ionicons name="time-outline" size={16} color={theme.colors.text.secondary} /> Pickup at {item.pickupTime}
           </Text>
         </View>
         <StatusBadge status={item.status} />
@@ -143,19 +147,13 @@ export const DashboardScreen: React.FC = () => {
   );
 
   const content = (
-    <SafeAreaView style={styles.container}>
-      {!isLargeScreen && (
-        <View style={styles.header}>
-          <Text style={styles.title}>Orderup</Text>
-          <TouchableOpacity style={styles.notificationIcon}>
-            <Ionicons name="notifications-outline" size={24} color="#1F2937" />
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>1</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      )}
-
+    <View style={styles.container}>
+      <Toolbar 
+        title="Dashboard" 
+        onScanPress={handleScan}
+        showNotification={true}
+        notificationCount={1}
+      />
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* New Orders Section */}
         <View style={styles.section}>
@@ -217,7 +215,7 @@ export const DashboardScreen: React.FC = () => {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -226,63 +224,29 @@ export const DashboardScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1F2937',
-  },
-  notificationIcon: {
-    position: 'relative',
-  },
-  badge: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    backgroundColor: '#EF4444',
-    borderRadius: 10,
-    minWidth: 20,
-    height: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  badgeText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: 'bold',
+    backgroundColor: theme.colors.background,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: theme.spacing.lg,
   },
   section: {
-    marginVertical: 16,
+    marginVertical: theme.spacing.md,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 12,
+    color: theme.colors.text.primary,
+    marginBottom: theme.spacing.md,
   },
   orderCard: {
-    marginBottom: 12,
+    marginBottom: theme.spacing.md,
   },
   picklistCard: {
-    marginBottom: 12,
+    marginBottom: theme.spacing.md,
   },
   readyCard: {
-    marginBottom: 12,
+    marginBottom: theme.spacing.md,
   },
   gridCard: {
     flex: 1,
@@ -292,42 +256,42 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 12,
+    marginBottom: theme.spacing.md,
   },
   picklistHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 8,
+    marginBottom: theme.spacing.sm,
   },
   orderNumber: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: theme.colors.text.primary,
   },
   customerName: {
     fontSize: 14,
-    color: '#6B7280',
+    color: theme.colors.text.secondary,
     marginTop: 4,
   },
   orderDetails: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: theme.colors.text.tertiary,
     marginTop: 4,
   },
   progress: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: theme.colors.text.tertiary,
     marginTop: 4,
   },
   pickupTime: {
     fontSize: 12,
-    color: '#6B7280',
+    color: theme.colors.text.secondary,
     marginTop: 4,
     flexDirection: 'row',
     alignItems: 'center',
   },
   actionButton: {
-    marginTop: 8,
+    marginTop: theme.spacing.sm,
   },
 });

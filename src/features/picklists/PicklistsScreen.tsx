@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   TextInput,
@@ -15,6 +14,8 @@ import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { Sidebar } from '../../components/common/Sidebar';
+import { Toolbar } from '../../components/common/Toolbar';
+import { theme } from '../../constants/theme';
 
 // Mock data
 const mockPicklists = [
@@ -24,8 +25,8 @@ const mockPicklists = [
     progress: 75,
     assignedTo: 'Alice Brown',
     status: 'In Progress' as const,
-    items: 12,
-    timeRemaining: '15 min',
+    orders: 5,
+    createdAt: '2 hours ago',
   },
   {
     id: '2',
@@ -33,109 +34,94 @@ const mockPicklists = [
     progress: 50,
     assignedTo: 'Charlie Davis',
     status: 'In Progress' as const,
-    items: 8,
-    timeRemaining: '25 min',
+    orders: 3,
+    createdAt: '1 hour ago',
   },
   {
     id: '3',
     name: 'Picklist #003',
     progress: 100,
-    assignedTo: 'Diana Wilson',
+    assignedTo: 'Bob Wilson',
     status: 'Completed' as const,
-    items: 6,
-    timeRemaining: 'Complete',
+    orders: 8,
+    createdAt: '30 min ago',
   },
 ];
 
 export const PicklistsScreen: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const { width } = useWindowDimensions();
   const isLargeScreen = width >= 768;
-  const numColumns = isLargeScreen && viewMode === 'grid' ? 2 : 1;
+  const numColumns = isLargeScreen ? 2 : 1;
+  const [searchQuery, setSearchQuery] = useState('');
+  const [picklists] = useState(mockPicklists);
 
-  const filteredPicklists = mockPicklists.filter(picklist =>
+  const handleScan = () => {
+    console.log('Open camera scanner');
+  };
+
+  const filteredPicklists = picklists.filter(picklist =>
     picklist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     picklist.assignedTo.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const renderPicklistCard = ({ item }: { item: any }) => (
-    <Card style={[styles.picklistCard, isLargeScreen && viewMode === 'grid' && styles.gridCard]}>
+    <Card style={[styles.picklistCard, isLargeScreen && styles.gridCard]}>
       <View style={styles.picklistHeader}>
-        <View style={styles.picklistInfo}>
+        <View>
           <Text style={styles.picklistName}>{item.name}</Text>
           <Text style={styles.assignedTo}>Assigned to {item.assignedTo}</Text>
-          <View style={styles.picklistDetails}>
-            <Text style={styles.detailText}>
-              <Ionicons name="cube-outline" size={14} color="#6B7280" /> {item.items} items
-            </Text>
-            <Text style={styles.detailText}>
-              <Ionicons name="time-outline" size={14} color="#6B7280" /> {item.timeRemaining}
-            </Text>
+          <Text style={styles.orderCount}>
+            {item.orders} orders • Created {item.createdAt}
+          </Text>
+          <View style={styles.progressContainer}>
+            <View style={styles.progressBar}>
+              <View
+                style={[
+                  styles.progressFill,
+                  { width: `${item.progress}%` }
+                ]}
+              />
+            </View>
+            <Text style={styles.progressText}>{item.progress}%</Text>
           </View>
         </View>
         <StatusBadge status={item.status} />
       </View>
-      <View style={styles.progressContainer}>
-        <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${item.progress}%` }]} />
-        </View>
-        <Text style={styles.progressText}>{item.progress}%</Text>
+      <View style={styles.actions}>
+        <Button
+          title={item.status === 'Completed' ? 'View Details' : 'Continue'}
+          onPress={() => console.log('Action on picklist', item.id)}
+          variant={item.status === 'Completed' ? 'secondary' : 'primary'}
+          size="small"
+        />
       </View>
-      <Button
-        title={item.status === 'Completed' ? 'View Details' : 'Continue Picking'}
-        onPress={() => console.log('Action on picklist', item.id)}
-        style={styles.actionButton}
-        variant={item.status === 'Completed' ? 'success' : 'primary'}
-      />
     </Card>
   );
 
   const content = (
-    <SafeAreaView style={styles.container}>
-      {!isLargeScreen && (
-        <View style={styles.header}>
-          <Text style={styles.title}>Orderup</Text>
-          <TouchableOpacity style={styles.notificationIcon}>
-            <Ionicons name="notifications-outline" size={24} color="#1F2937" />
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>1</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Search and Controls */}
-      <View style={styles.controls}>
-        <View style={styles.searchContainer}>
-          <Ionicons name="search-outline" size={16} color="#6B7280" style={styles.searchIcon} />
+    <View style={styles.container}>
+      <Toolbar 
+        title="Picklists" 
+        onScanPress={handleScan}
+      />
+      <View style={styles.searchContainer}>
+        <View style={styles.searchInputContainer}>
+          <Ionicons name="search-outline" size={20} color={theme.colors.text.secondary} />
           <TextInput
             style={styles.searchInput}
             placeholder="Search picklists..."
             value={searchQuery}
             onChangeText={setSearchQuery}
+            placeholderTextColor={theme.colors.text.tertiary}
           />
         </View>
-        {isLargeScreen && (
-          <View style={styles.viewControls}>
-            <TouchableOpacity
-              style={[styles.viewButton, viewMode === 'list' && styles.activeViewButton]}
-              onPress={() => setViewMode('list')}
-            >
-              <Ionicons name="list-outline" size={20} color={viewMode === 'list' ? '#1B365D' : '#6B7280'} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.viewButton, viewMode === 'grid' && styles.activeViewButton]}
-              onPress={() => setViewMode('grid')}
-            >
-              <Ionicons name="grid-outline" size={20} color={viewMode === 'grid' ? '#1B365D' : '#6B7280'} />
-            </TouchableOpacity>
-          </View>
-        )}
+        <TouchableOpacity style={styles.createButton}>
+          <Ionicons name="add-outline" size={24} color="#FFFFFF" />
+          <Text style={styles.createButtonText}>Create</Text>
+        </TouchableOpacity>
       </View>
-
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {isLargeScreen && viewMode === 'grid' ? (
+        {isLargeScreen ? (
           <FlatList
             data={filteredPicklists}
             renderItem={renderPicklistCard}
@@ -151,7 +137,7 @@ export const PicklistsScreen: React.FC = () => {
           ))
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -160,88 +146,51 @@ export const PicklistsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1F2937',
-  },
-  notificationIcon: {
-    position: 'relative',
-  },
-  badge: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    backgroundColor: '#EF4444',
-    borderRadius: 10,
-    minWidth: 20,
-    height: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  badgeText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  controls: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    backgroundColor: theme.colors.background,
   },
   searchContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    marginRight: 16,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    gap: theme.spacing.md,
   },
-  searchIcon: {
-    marginRight: 8,
+  searchInputContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.md,
+    paddingHorizontal: theme.spacing.md,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   searchInput: {
     flex: 1,
-    paddingVertical: 8,
+    marginLeft: theme.spacing.sm,
+    paddingVertical: theme.spacing.md,
     fontSize: 16,
+    color: theme.colors.text.primary,
   },
-  viewControls: {
+  createButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: theme.colors.primary,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
+    gap: theme.spacing.sm,
   },
-  viewButton: {
-    padding: 8,
-    marginLeft: 8,
-    borderRadius: 6,
-  },
-  activeViewButton: {
-    backgroundColor: '#F3F4F6',
+  createButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 16,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 16,
+    paddingHorizontal: theme.spacing.lg,
   },
   picklistCard: {
-    marginBottom: 12,
+    marginBottom: theme.spacing.md,
   },
   gridCard: {
     flex: 1,
@@ -251,56 +200,46 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 12,
-  },
-  picklistInfo: {
-    flex: 1,
+    marginBottom: theme.spacing.md,
   },
   picklistName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: theme.colors.text.primary,
   },
   assignedTo: {
     fontSize: 14,
-    color: '#6B7280',
+    color: theme.colors.text.secondary,
     marginTop: 4,
   },
-  picklistDetails: {
-    flexDirection: 'row',
-    marginTop: 8,
-    gap: 16,
-  },
-  detailText: {
+  orderCount: {
     fontSize: 12,
-    color: '#6B7280',
-    flexDirection: 'row',
-    alignItems: 'center',
+    color: theme.colors.text.tertiary,
+    marginTop: 4,
   },
   progressContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginTop: theme.spacing.sm,
+    gap: theme.spacing.sm,
   },
   progressBar: {
     flex: 1,
-    height: 6,
-    backgroundColor: '#E5E7EB',
-    borderRadius: 3,
-    marginRight: 12,
+    height: 8,
+    backgroundColor: theme.colors.border,
+    borderRadius: 4,
+    overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#10B981',
-    borderRadius: 3,
+    backgroundColor: theme.colors.success,
   },
   progressText: {
     fontSize: 12,
+    color: theme.colors.text.secondary,
     fontWeight: '600',
-    color: '#1F2937',
-    minWidth: 32,
   },
-  actionButton: {
-    marginTop: 8,
+  actions: {
+    marginTop: theme.spacing.sm,
   },
 });

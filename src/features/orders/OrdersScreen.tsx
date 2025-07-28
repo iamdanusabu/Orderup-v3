@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   useWindowDimensions,
@@ -14,6 +12,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { Sidebar } from '../../components/common/Sidebar';
+import { Toolbar } from '../../components/common/Toolbar';
+import { theme } from '../../constants/theme';
 
 // Mock data
 const mockOrders = [
@@ -46,43 +46,40 @@ const mockOrders = [
   },
 ];
 
-const tabs = ['All', 'Initiated', 'Processing'];
-
 export const OrdersScreen: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('All');
-  const [orders, setOrders] = useState(mockOrders);
-  const [selectAll, setSelectAll] = useState(false);
   const { width } = useWindowDimensions();
   const isLargeScreen = width >= 768;
   const numColumns = isLargeScreen ? 2 : 1;
+  const [orders, setOrders] = useState(mockOrders);
+  const [selectedCount, setSelectedCount] = useState(0);
 
-  const handleSelectAll = () => {
-    const newSelectAll = !selectAll;
-    setSelectAll(newSelectAll);
-    setOrders(orders.map(order => ({ ...order, selected: newSelectAll })));
+  const handleScan = () => {
+    console.log('Open camera scanner');
   };
 
-  const handleOrderSelect = (orderId: string) => {
-    setOrders(orders.map(order => 
-      order.id === orderId ? { ...order, selected: !order.selected } : order
-    ));
+  const toggleOrderSelection = (orderId: string) => {
+    setOrders(prevOrders => {
+      const newOrders = prevOrders.map(order => 
+        order.id === orderId ? { ...order, selected: !order.selected } : order
+      );
+      setSelectedCount(newOrders.filter(order => order.selected).length);
+      return newOrders;
+    });
   };
-
-  const selectedCount = orders.filter(order => order.selected).length;
 
   const renderOrderCard = ({ item }: { item: any }) => (
     <Card style={[styles.orderCard, isLargeScreen && styles.gridCard]}>
+      <TouchableOpacity
+        style={styles.selectButton}
+        onPress={() => toggleOrderSelection(item.id)}
+      >
+        <Ionicons
+          name={item.selected ? "checkbox" : "checkbox-outline"}
+          size={24}
+          color={item.selected ? theme.colors.primary : theme.colors.text.secondary}
+        />
+      </TouchableOpacity>
       <View style={styles.orderHeader}>
-        <TouchableOpacity
-          style={styles.checkbox}
-          onPress={() => handleOrderSelect(item.id)}
-        >
-          <Ionicons 
-            name={item.selected ? 'checkmark-circle' : 'ellipse-outline'} 
-            size={24} 
-            color={item.selected ? '#10B981' : '#D1D5DB'} 
-          />
-        </TouchableOpacity>
         <View style={styles.orderInfo}>
           <Text style={styles.orderNumber}>{item.orderNumber}</Text>
           <Text style={styles.customerName}>{item.customerName}</Text>
@@ -96,55 +93,19 @@ export const OrdersScreen: React.FC = () => {
   );
 
   const content = (
-    <SafeAreaView style={styles.container}>
-      {!isLargeScreen && (
-        <View style={styles.header}>
-          <Text style={styles.title}>Orderup</Text>
-          <TouchableOpacity style={styles.notificationIcon}>
-            <Ionicons name="notifications-outline" size={24} color="#1F2937" />
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>1</Text>
-            </View>
+    <View style={styles.container}>
+      <Toolbar 
+        title="Orders" 
+        onScanPress={handleScan}
+      />
+      {selectedCount > 0 && (
+        <View style={styles.selectionBar}>
+          <Text style={styles.selectionText}>{selectedCount} orders selected</Text>
+          <TouchableOpacity style={styles.bulkActionButton}>
+            <Text style={styles.bulkActionText}>Create Picklist</Text>
           </TouchableOpacity>
         </View>
       )}
-
-      {/* Tabs */}
-      <View style={styles.tabContainer}>
-        {tabs.map((tab) => (
-          <TouchableOpacity
-            key={tab}
-            style={[styles.tab, selectedTab === tab && styles.activeTab]}
-            onPress={() => setSelectedTab(tab)}
-          >
-            <Text style={[styles.tabText, selectedTab === tab && styles.activeTabText]}>
-              {tab}
-            </Text>
-          </TouchableOpacity>
-        ))}
-        <View style={styles.filterContainer}>
-          <Text style={styles.filterText}>Filter</Text>
-          <Ionicons name="funnel-outline" size={16} color="#6B7280" />
-        </View>
-      </View>
-
-      {/* Controls */}
-      <View style={styles.controls}>
-        <View style={styles.selectAllContainer}>
-          <TouchableOpacity style={styles.selectAll} onPress={handleSelectAll}>
-            <Ionicons 
-              name={selectAll ? 'checkmark-circle' : 'ellipse-outline'} 
-              size={20} 
-              color={selectAll ? '#10B981' : '#D1D5DB'} 
-            />
-            <Text style={styles.selectAllText}>Select All</Text>
-          </TouchableOpacity>
-          {selectedCount > 0 && (
-            <Text style={styles.selectedCount}>{selectedCount} selected</Text>
-          )}
-        </View>
-      </View>
-
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {isLargeScreen ? (
           <FlatList
@@ -162,7 +123,7 @@ export const OrdersScreen: React.FC = () => {
           ))
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -171,122 +132,56 @@ export const OrdersScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: theme.colors.background,
   },
-  header: {
+  selectionBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: theme.colors.border,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1F2937',
-  },
-  notificationIcon: {
-    position: 'relative',
-  },
-  badge: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    backgroundColor: '#EF4444',
-    borderRadius: 10,
-    minWidth: 20,
-    height: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  badgeText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
-  tab: {
-    marginRight: 24,
-    paddingBottom: 8,
-  },
-  activeTab: {
-    borderBottomWidth: 2,
-    borderBottomColor: '#3B82F6',
-  },
-  tabText: {
+  selectionText: {
     fontSize: 16,
-    color: '#6B7280',
-  },
-  activeTabText: {
-    color: '#3B82F6',
+    color: theme.colors.text.primary,
     fontWeight: '600',
   },
-  filterContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 'auto',
+  bulkActionButton: {
+    backgroundColor: theme.colors.primary,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
   },
-  filterText: {
-    fontSize: 16,
-    color: '#6B7280',
-    marginRight: 8,
-  },
-  controls: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
-  selectAllContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  selectAll: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  selectAllText: {
-    marginLeft: 8,
-    fontSize: 16,
-    color: '#374151',
-  },
-  selectedCount: {
-    marginLeft: 16,
-    fontSize: 14,
-    color: '#6B7280',
+  bulkActionText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 16,
+    paddingHorizontal: theme.spacing.lg,
   },
   orderCard: {
-    marginBottom: 12,
+    marginBottom: theme.spacing.md,
+    position: 'relative',
   },
   gridCard: {
     flex: 1,
     marginHorizontal: 6,
   },
+  selectButton: {
+    position: 'absolute',
+    top: theme.spacing.md,
+    right: theme.spacing.md,
+    zIndex: 1,
+  },
   orderHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
-  checkbox: {
-    marginRight: 12,
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingRight: 40,
   },
   orderInfo: {
     flex: 1,
@@ -294,16 +189,16 @@ const styles = StyleSheet.create({
   orderNumber: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: theme.colors.text.primary,
   },
   customerName: {
     fontSize: 14,
-    color: '#6B7280',
+    color: theme.colors.text.secondary,
     marginTop: 4,
   },
   orderDetails: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: theme.colors.text.tertiary,
     marginTop: 4,
   },
 });

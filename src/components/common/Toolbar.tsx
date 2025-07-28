@@ -1,0 +1,91 @@
+
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { theme } from '../../constants/theme';
+
+interface ToolbarProps {
+  title: string;
+  onScanPress?: () => void;
+  showNotification?: boolean;
+  notificationCount?: number;
+}
+
+export const Toolbar: React.FC<ToolbarProps> = ({ 
+  title, 
+  onScanPress, 
+  showNotification = false, 
+  notificationCount = 0 
+}) => {
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.toolbar}>
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.actions}>
+          {showNotification && (
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="notifications-outline" size={24} color={theme.colors.toolbar.text} />
+              {notificationCount > 0 && (
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{notificationCount}</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity style={styles.iconButton} onPress={onScanPress}>
+            <Ionicons name="qr-code-outline" size={24} color={theme.colors.toolbar.text} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconButton}>
+            <Ionicons name="exit-outline" size={24} color={theme.colors.toolbar.text} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  safeArea: {
+    backgroundColor: theme.colors.toolbar.background,
+  },
+  toolbar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    backgroundColor: theme.colors.toolbar.background,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.toolbar.border,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: theme.colors.toolbar.text,
+  },
+  actions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconButton: {
+    position: 'relative',
+    padding: theme.spacing.sm,
+    marginLeft: theme.spacing.sm,
+  },
+  badge: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: theme.colors.error,
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badgeText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+});

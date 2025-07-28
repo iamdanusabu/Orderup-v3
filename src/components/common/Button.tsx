@@ -1,10 +1,18 @@
+
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
+import { theme } from '../../constants/theme';
 
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'success' | 'outline';
+  variant?: 'primary' | 'secondary' | 'success' | 'danger';
   size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
   style?: ViewStyle;
@@ -20,74 +28,116 @@ export const Button: React.FC<ButtonProps> = ({
   style,
   textStyle,
 }) => {
+  const getButtonStyle = () => {
+    const baseStyle = [styles.button, styles[size]];
+    
+    switch (variant) {
+      case 'secondary':
+        baseStyle.push(styles.secondary);
+        break;
+      case 'success':
+        baseStyle.push(styles.success);
+        break;
+      case 'danger':
+        baseStyle.push(styles.danger);
+        break;
+      default:
+        baseStyle.push(styles.primary);
+    }
+    
+    if (disabled) {
+      baseStyle.push(styles.disabled);
+    }
+    
+    return baseStyle;
+  };
+
+  const getTextStyle = () => {
+    const baseStyle = [styles.text, styles[`${size}Text`]];
+    
+    if (variant === 'secondary') {
+      baseStyle.push(styles.secondaryText);
+    } else {
+      baseStyle.push(styles.primaryText);
+    }
+    
+    if (disabled) {
+      baseStyle.push(styles.disabledText);
+    }
+    
+    return baseStyle;
+  };
+
   return (
     <TouchableOpacity
-      style={[
-        styles.base,
-        styles[variant],
-        styles[size],
-        disabled && styles.disabled,
-        style,
-      ]}
+      style={[...getButtonStyle(), style]}
       onPress={onPress}
       disabled={disabled}
+      activeOpacity={0.8}
     >
-      <Text style={[styles.text, styles[`${variant}Text`], textStyle]}>
-        {title}
-      </Text>
+      <Text style={[...getTextStyle(), textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  base: {
-    borderRadius: 8,
+  button: {
+    borderRadius: theme.borderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
   },
   primary: {
-    backgroundColor: '#1B365D',
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
   },
   secondary: {
-    backgroundColor: '#6B7280',
+    backgroundColor: 'transparent',
+    borderColor: theme.colors.border,
   },
   success: {
-    backgroundColor: '#10B981',
+    backgroundColor: theme.colors.success,
+    borderColor: theme.colors.success,
   },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#1B365D',
-  },
-  small: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  medium: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-  },
-  large: {
-    paddingVertical: 16,
-    paddingHorizontal: 32,
+  danger: {
+    backgroundColor: theme.colors.error,
+    borderColor: theme.colors.error,
   },
   disabled: {
-    opacity: 0.5,
+    backgroundColor: theme.colors.text.tertiary,
+    borderColor: theme.colors.text.tertiary,
+  },
+  small: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+  },
+  medium: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+  },
+  large: {
+    paddingHorizontal: theme.spacing.xl,
+    paddingVertical: theme.spacing.lg,
   },
   text: {
     fontWeight: '600',
-    fontSize: 16,
   },
   primaryText: {
     color: '#FFFFFF',
   },
   secondaryText: {
+    color: theme.colors.text.primary,
+  },
+  disabledText: {
     color: '#FFFFFF',
   },
-  successText: {
-    color: '#FFFFFF',
+  smallText: {
+    fontSize: 14,
   },
-  outlineText: {
-    color: '#1B365D',
+  mediumText: {
+    fontSize: 16,
+  },
+  largeText: {
+    fontSize: 18,
   },
 });
