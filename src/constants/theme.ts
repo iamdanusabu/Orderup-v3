@@ -65,9 +65,9 @@ export const lightTheme: Theme = {
       border: '#4A5568',
     },
     toolbar: {
-      background: '#2D3748',
-      text: '#FFFFFF',
-      border: '#4A5568',
+      background: '#FFFFFF',
+      text: '#1F2937',
+      border: '#E5E7EB',
     },
   },
   spacing: {
@@ -108,9 +108,9 @@ export const darkTheme: Theme = {
       border: '#374151',
     },
     toolbar: {
-      background: '#1F2937',
-      text: '#FFFFFF',
-      border: '#374151',
+      background: '#FFFFFF',
+      text: '#1F2937',
+      border: '#E5E7EB',
     },
   },
   spacing: {
