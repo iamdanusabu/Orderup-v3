@@ -15,6 +15,7 @@ import { StatusBadge } from '../../components/common/StatusBadge';
 import { Sidebar } from '../../components/common/Sidebar';
 import { Toolbar } from '../../components/common/Toolbar';
 import { theme } from '../../constants/theme';
+import { useRouter } from 'expo-router';
 
 // Mock data with updated structure to match design
 const mockOrders = [
@@ -63,6 +64,7 @@ const mockOrders = [
 export const OrdersScreen: React.FC = () => {
   const { width } = useWindowDimensions();
   const isLargeScreen = width >= 768;
+  const router = useRouter();
   const [orders, setOrders] = useState(mockOrders);
   const [selectedCount, setSelectedCount] = useState(0);
   const [activeFilter, setActiveFilter] = useState('All');
@@ -252,7 +254,10 @@ export const OrdersScreen: React.FC = () => {
           <TouchableOpacity 
             style={styles.bulkActionButton}
             onPress={() => {
-              console.log('Create picklist with selected orders:', orders.filter(o => o.selected));
+              const selectedOrders = orders.filter(o => o.selected);
+              console.log('Create picklist with selected orders:', selectedOrders);
+              // Navigate to location selection screen
+              router.push('/location-selection');
               // Reset selection mode after creating picklist
               setIsSelectionMode(false);
               setOrders(prevOrders => 

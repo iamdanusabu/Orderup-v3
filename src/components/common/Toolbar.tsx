@@ -10,6 +10,8 @@ interface ToolbarProps {
   notificationCount?: number;
   onMenuPress?: () => void;
   showMenuButton?: boolean;
+  showBack?: boolean;
+  onBackPress?: () => void;
 }
 
 export const Toolbar: React.FC<ToolbarProps> = ({ 
@@ -18,12 +20,19 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   showNotification = false, 
   notificationCount = 0,
   onMenuPress,
-  showMenuButton = false
+  showMenuButton = false,
+  showBack = false,
+  onBackPress,
 }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.toolbar}>
         <View style={styles.leftSection}>
+          {showBack && (
+            <TouchableOpacity style={styles.backButton} onPress={onBackPress}>
+              <Ionicons name="chevron-back-outline" size={24} color={theme.colors.toolbar.text} />
+            </TouchableOpacity>
+          )}
           {showMenuButton && (
             <TouchableOpacity style={styles.menuButton} onPress={onMenuPress}>
               <Ionicons name="menu-outline" size={24} color={theme.colors.toolbar.text} />
@@ -77,6 +86,10 @@ const styles = StyleSheet.create({
   menuButton: {
     padding: theme.spacing.sm,
     marginRight: theme.spacing.md,
+  },
+  backButton: {
+    marginRight: theme.spacing.md,
+    padding: theme.spacing.sm,
   },
   title: {
     fontSize: 18,
