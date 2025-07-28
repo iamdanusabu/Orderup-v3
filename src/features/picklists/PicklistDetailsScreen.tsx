@@ -71,8 +71,8 @@ const mockPicklistItems = [
 export const PicklistDetailsScreen: React.FC = () => {
   const router = useRouter();
   const [items, setItems] = useState(mockPicklistItems);
-  const totalItems = items.length;
-  const pickedItems = items.filter(item => item.status === 'picked').length;
+  const totalItems = items.reduce((sum, item) => sum + item.needed, 0);
+  const pickedItems = items.reduce((sum, item) => sum + item.picked, 0);
 
   const handleItemPick = (itemId: string) => {
     setItems(prevItems =>
@@ -86,14 +86,17 @@ export const PicklistDetailsScreen: React.FC = () => {
 
   const handleQuantityChange = (itemId: string, change: number) => {
     setItems(prevItems =>
-      prevItems.map(item =>
-        item.id === itemId
-          ? { 
-              ...item, 
-              picked: Math.max(0, Math.min(item.needed, item.picked + change))
-            }
-          : item
-      )
+      prevItems.map(item => {
+        if (item.id === itemId) {
+          const newPicked = Math.max(0, Math.min(item.needed, item.picked + change));
+          return { 
+            ...item, 
+            picked: newPicked,
+            status: newPicked === item.needed ? 'picked' : 'pending'
+          };
+        }
+        return item;
+      })
     );
   };
 
