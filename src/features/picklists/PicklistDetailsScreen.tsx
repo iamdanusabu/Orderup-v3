@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   quantityDisplay: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#4F63D2',
+    backgroundColor: theme.colors.primary,
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 4,
