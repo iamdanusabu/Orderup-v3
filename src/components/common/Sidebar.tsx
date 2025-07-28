@@ -1,9 +1,10 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 import { theme } from '../../constants/theme';
+import { useSidebar } from '../../contexts/SidebarContext';
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
   const isLargeScreen = width >= 768;
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { isCollapsed, setIsCollapsed } = useSidebar();
 
   if (!isLargeScreen) {
     return <>{children}</>;
