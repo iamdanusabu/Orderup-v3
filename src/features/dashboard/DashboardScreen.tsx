@@ -154,8 +154,6 @@ export const DashboardScreen: React.FC = () => {
         onScanPress={handleScan}
         showNotification={true}
         notificationCount={1}
-        showMenuButton={isLargeScreen}
-        onMenuPress={() => console.log('Toggle sidebar')}
       />
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* New Orders Section */}

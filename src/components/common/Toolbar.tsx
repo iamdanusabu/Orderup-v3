@@ -8,27 +8,18 @@ interface ToolbarProps {
   onScanPress?: () => void;
   showNotification?: boolean;
   notificationCount?: number;
-  onMenuPress?: () => void;
-  showMenuButton?: boolean;
 }
 
 export const Toolbar: React.FC<ToolbarProps> = ({ 
   title, 
   onScanPress, 
   showNotification = false, 
-  notificationCount = 0,
-  onMenuPress,
-  showMenuButton = false
+  notificationCount = 0 
 }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.toolbar}>
         <View style={styles.leftSection}>
-          {showMenuButton && (
-            <TouchableOpacity style={styles.menuButton} onPress={onMenuPress}>
-              <Ionicons name="menu-outline" size={24} color={theme.colors.toolbar.text} />
-            </TouchableOpacity>
-          )}
           <Text style={styles.title}>{title}</Text>
         </View>
         <View style={styles.actions}>
@@ -73,10 +64,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  menuButton: {
-    padding: theme.spacing.sm,
-    marginRight: theme.spacing.md,
   },
   title: {
     fontSize: 18,
