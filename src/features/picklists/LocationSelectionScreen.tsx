@@ -86,7 +86,7 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
       <Toolbar 
         title="Location Selection" 
         showBack={true}
-        onBackPress={() => router.push('/picklists')}
+        onBackPress={() => router.push('/orders')}
       />
 
       {/* Tab Navigation */}
