@@ -116,7 +116,7 @@ export const PicklistDetailsScreen: React.FC = () => {
       <Toolbar 
         title="Picklist" 
         showBack={true}
-        onBackPress={() => router.back()}
+        onBackPress={() => router.push('/location-selection')}
       />
 
       {/* Header Info */}
