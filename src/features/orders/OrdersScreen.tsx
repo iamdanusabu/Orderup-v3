@@ -266,7 +266,13 @@ export const OrdersScreen: React.FC = () => {
         </View>
       )}
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={[
+          styles.content,
+          isSelectionMode && selectedCount > 0 && styles.contentWithSelection
+        ]} 
+        showsVerticalScrollIndicator={false}
+      >
         {filteredOrders.map((order) => (
           <View key={order.id}>
             {renderOrderCard({ item: order })}
@@ -441,6 +447,9 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
+  },
+  contentWithSelection: {
+    marginTop: theme.spacing.md,
   },
   orderCard: {
     marginBottom: theme.spacing.md,
