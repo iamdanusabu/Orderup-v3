@@ -1,0 +1,65 @@
+OrderUp
+
+User Workflow & Core Features
+The application is built around a real-time, collaborative workflow that begins when an order is received and ends with a happy customer.
+Feature: Real-Time Order Notifications
+The workflow begins the moment an order is placed.
+User Story:
+As a store associate, I want to receive an immediate notification on my device when a new order is created, so I can act on it without delay.
+Requirements:
+Push Notifications: The application must send a push notification to all logged-in associates at a specific store location when a new order is received.
+Notification Content: The notification should contain the Order ID and source (e.g., "New Fanvista Order #1055 received").
+In-App Notification Center: A bell icon or similar UI element will show a list of recent, unread notifications.
+Feature: Main Dashboard (Associate View)
+This is the home screen for the store associate, designed for quick action.
+User Story:
+As a store associate, I want a clear, simple dashboard that shows me the orders I need to work on right now, including new unassigned orders and picklists assigned directly to me.
+Requirements:
+Display: The dashboard will be organized into clear sections:
+New Orders: A list of all incoming orders that have not yet been added to a picklist.
+My Assigned Picklists: A list of picklists that a manager has assigned specifically to the logged-in user.
+Ready for Pickup: A list of orders that have been picked and packed, awaiting customer arrival.
+Interactivity:
+Associates can select multiple "New Orders" to create a picklist.
+Tapping on an assigned picklist takes the user directly to the Picking View.
+The associate view does not show a history of past fulfilled orders, keeping the focus on active tasks.
+Feature: Picklist Management & Assignment
+This feature allows for the efficient batching and delegation of work.
+User Stories:
+As a store manager, I want to group multiple orders into a single, saved picklist and assign it to a specific associate to ensure clear ownership and accountability.
+As a store associate, I want to see a consolidated list of all items I need to pick for my assigned batch, sorted by location, to make my trip through the store as efficient as possible.
+Requirements:
+Picklist Creation:
+Users (manager or associate) can select multiple orders from the "New Orders" list.
+The system generates a consolidated list of items.
+The picklist is saved with a unique ID and can be managed from the Manager's Console.
+User Assignment:
+Upon creating a picklist, a user can choose to "Assign to User".
+This will open a dialog showing a list of available associates at that store.
+Once assigned, the picklist appears in the associate's "My Assigned Picklists" section on their dashboard, and they receive a notification.
+Feature: Picking & Packing Workflow
+This two-stage process ensures both efficient collection and accurate sorting of items.
+Picking View
+User Story: As a picker, I want to follow a simple, location-sorted checklist on my device to collect all the items for my assigned batch in one go.
+Requirements:
+This is the active screen for the picker, showing the consolidated, location-sorted list of all items and total quantities.
+Each item has a checkbox or "Pick" button to mark it as collected.
+A "Proceed to Packing" button becomes active only when all items are marked as picked.
+Packing Screen
+User Story: As a packer, after I've gathered all the items in bulk, I need the app to guide me on how to sort these items correctly into their original orders.
+Requirements:
+After picking is complete, the app transitions to this screen.
+It displays the individual orders that were part of the picklist as separate cards or sections.
+Each order card shows an itemized list of products and quantities for that specific order.
+The user sorts the bulk items into separate bags/bins based on this view.
+Each order card has a "Mark as Ready for Pickup" button. Clicking it updates the order's status and removes it from this screen.
+Feature: QR Code Fulfillment
+This feature creates a fast and error-proof pickup experience for the customer.
+User Stories:
+As a customer, I want to receive a QR code with my "order is ready" notification so I can have a quick and easy pickup experience at the store.
+As a store associate, I want to scan a customer's QR code to instantly pull up their correct order, avoiding the need to ask for names or order numbers.
+Requirements:
+QR Code Generation: When an order is marked as "Ready for Pickup," the system (fanvista, suitespot etc) generates a unique QR code for the customer.
+In-App Scanner: A prominent "Scan QR Code" button on the dashboard opens the device's camera in a scanning mode.
+Order Retrieval: A successful scan immediately opens the corresponding Order Detail View.
+Final Fulfillment: The associate verifies the order with the customer. A "Complete Hand-off" button on this screen marks the order as Ful...
