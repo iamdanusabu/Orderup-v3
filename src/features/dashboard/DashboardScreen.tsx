@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   View,
@@ -104,14 +103,19 @@ export const DashboardScreen: React.FC = () => {
         </View>
         <StatusBadge status={item.status} />
       </View>
-      
+
       <View style={styles.progressContainer}>
         <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${item.progress}%` }]} />
+          <View 
+            style={[
+              styles.progressFill, 
+              { width: `${Math.max(5, (item.picked / item.total) * 100)}%` }
+            ]} 
+          />
         </View>
         <Text style={styles.progressText}>{item.progress}%</Text>
       </View>
-      
+
       <Button
         title="Continue Picking"
         onPress={() => console.log('Continue picking', item.id)}
