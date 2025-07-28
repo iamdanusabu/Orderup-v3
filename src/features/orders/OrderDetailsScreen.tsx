@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.md,
   },
   updateButtonText: {
-    color: '#FFFFFF',
+    color: theme.colors.text.primary,
     fontWeight: '600',
     fontSize: 14,
   },
