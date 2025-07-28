@@ -66,7 +66,7 @@ export const lightTheme: Theme = {
     },
     toolbar: {
       background: '#FFFFFF',
-      text: '#1F2937',
+      text: '#111827',
       border: '#E5E7EB',
     },
   },
