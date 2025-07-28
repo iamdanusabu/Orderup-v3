@@ -123,10 +123,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   primaryText: {
-    color: theme.colors.text.primary,
+    color: '#FFFFFF',
   },
   secondaryText: {
-    color: theme.colors.text.primary,
+    color: '#FFFFFF',
   },
   disabledText: {
     color: '#FFFFFF',
