@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   selectOrdersButton: {
     borderWidth: 1,
     borderColor: theme.colors.border,
-    borderRadius: theme.borderRadius.lg,
+    borderRadius: 4,
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.sm,
     backgroundColor: theme.colors.surface,

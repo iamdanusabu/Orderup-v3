@@ -291,13 +291,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   locationName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.xs,
   },
   locationId: {
-    fontSize: 14,
+    fontSize: 12,
     color: theme.colors.text.secondary,
     fontWeight: '500',
   },
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     borderTopColor: theme.colors.border,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.lg,
