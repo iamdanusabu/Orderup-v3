@@ -57,10 +57,18 @@ export const PicklistsScreen: React.FC = () => {
   const { width } = useWindowDimensions();
   const isLargeScreen = width >= 768;
   const [picklists] = useState(mockPicklists);
+  const [activeFilter, setActiveFilter] = useState('All');
 
   const handleScan = () => {
     console.log('Open camera scanner');
   };
+
+  const filteredPicklists = picklists.filter(picklist => {
+    if (activeFilter === 'All') return true;
+    if (activeFilter === 'Assigned to me') return picklist.assignedTo === 'John Doe'; // Mock current user
+    if (activeFilter === 'Not assigned to me') return picklist.assignedTo !== 'John Doe'; // Mock current user
+    return true;
+  });
 
   const renderPicklistCard = ({ item }: { item: any }) => (
     <Card style={styles.picklistCard}>
@@ -109,8 +117,35 @@ export const PicklistsScreen: React.FC = () => {
         onScanPress={handleScan}
       />
 
+      <View style={styles.filterContainer}>
+        <TouchableOpacity
+          style={[styles.filterButton, activeFilter === 'All' && styles.activeFilterButton]}
+          onPress={() => setActiveFilter('All')}
+        >
+          <Text style={[styles.filterButtonText, activeFilter === 'All' && styles.activeFilterButtonText]}>
+            All
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.filterButton, activeFilter === 'Assigned to me' && styles.activeFilterButton]}
+          onPress={() => setActiveFilter('Assigned to me')}
+        >
+          <Text style={[styles.filterButtonText, activeFilter === 'Assigned to me' && styles.activeFilterButtonText]}>
+            Assigned to me
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.filterButton, activeFilter === 'Not assigned to me' && styles.activeFilterButton]}
+          onPress={() => setActiveFilter('Not assigned to me')}
+        >
+          <Text style={[styles.filterButtonText, activeFilter === 'Not assigned to me' && styles.activeFilterButtonText]}>
+            Not assigned to me
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {picklists.map((picklist) => (
+        {filteredPicklists.map((picklist) => (
           <View key={picklist.id}>
             {renderPicklistCard({ item: picklist })}
           </View>
@@ -201,5 +236,31 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     marginTop: theme.spacing.sm,
+  },
+  filterContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
+  filterButton: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  activeFilterButton: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+  },
+  filterButtonText: {
+    fontSize: 14,
+    color: theme.colors.text.secondary,
+    fontWeight: '500',
+  },
+  activeFilterButtonText: {
+    color: '#FFFFFF',
   },
 });
