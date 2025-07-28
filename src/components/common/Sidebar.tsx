@@ -94,8 +94,6 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: theme.spacing.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.sidebar.border,
   },
   headerContent: {
     flexDirection: 'row',
