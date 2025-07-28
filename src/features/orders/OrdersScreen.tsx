@@ -402,20 +402,20 @@ const styles = StyleSheet.create({
   filterTabs: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
-    gap: theme.spacing.xs,
+    paddingVertical: theme.spacing.md,
+    gap: theme.spacing.sm,
   },
   filterTab: {
-    paddingHorizontal: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
-    borderRadius: 20,
-    backgroundColor: 'transparent',
-    minWidth: 60,
-    alignItems: 'center',
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   activeFilterTab: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
   },
   filterTabText: {
     fontSize: 14,
@@ -424,7 +424,6 @@ const styles = StyleSheet.create({
   },
   activeFilterTabText: {
     color: '#FFFFFF',
-    fontWeight: '600',
   },
   selectionInfo: {
     flexDirection: 'row',
