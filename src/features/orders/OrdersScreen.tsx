@@ -97,7 +97,7 @@ export const OrdersScreen: React.FC = () => {
     <Card style={styles.orderCard}>
       <TouchableOpacity
         style={styles.orderContent}
-        onPress={() => isSelectionMode ? toggleOrderSelection(item.id) : null}
+        onPress={() => isSelectionMode ? toggleOrderSelection(item.id) : router.push(`/order-details?orderId=${item.id}`)}
       >
         <View style={styles.orderHeader}>
           {isSelectionMode && (
