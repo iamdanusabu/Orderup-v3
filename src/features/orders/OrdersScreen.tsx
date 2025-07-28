@@ -67,6 +67,7 @@ export const OrdersScreen: React.FC = () => {
   const [selectedCount, setSelectedCount] = useState(0);
   const [activeFilter, setActiveFilter] = useState('All');
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
 
   const handleScan = () => {
     console.log('Open camera scanner');
@@ -94,9 +95,24 @@ export const OrdersScreen: React.FC = () => {
     <Card style={styles.orderCard}>
       <TouchableOpacity
         style={styles.orderContent}
-        onPress={() => toggleOrderSelection(item.id)}
+        onPress={() => isSelectionMode ? toggleOrderSelection(item.id) : null}
       >
         <View style={styles.orderHeader}>
+          {isSelectionMode && (
+            <TouchableOpacity
+              style={styles.checkboxContainer}
+              onPress={() => toggleOrderSelection(item.id)}
+            >
+              <View style={[
+                styles.checkbox,
+                item.selected && styles.checkboxSelected
+              ]}>
+                {item.selected && (
+                  <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+                )}
+              </View>
+            </TouchableOpacity>
+          )}
           <View style={styles.orderInfo}>
             <Text style={styles.orderNumber}>{item.orderNumber}</Text>
             <Text style={styles.customerName}>{item.customerName}</Text>
@@ -121,8 +137,28 @@ export const OrdersScreen: React.FC = () => {
       
       {/* Top Actions Bar */}
       <View style={styles.actionsBar}>
-        <TouchableOpacity style={styles.selectOrdersButton}>
-          <Text style={styles.selectOrdersText}>Select Orders</Text>
+        <TouchableOpacity 
+          style={[
+            styles.selectOrdersButton,
+            isSelectionMode && styles.selectOrdersButtonActive
+          ]}
+          onPress={() => {
+            setIsSelectionMode(!isSelectionMode);
+            if (isSelectionMode) {
+              // Clear all selections when exiting selection mode
+              setOrders(prevOrders => 
+                prevOrders.map(order => ({ ...order, selected: false }))
+              );
+              setSelectedCount(0);
+            }
+          }}
+        >
+          <Text style={[
+            styles.selectOrdersText,
+            isSelectionMode && styles.selectOrdersTextActive
+          ]}>
+            {isSelectionMode ? 'Cancel Selection' : 'Select Orders'}
+          </Text>
         </TouchableOpacity>
         <View style={styles.filterContainer}>
           <TouchableOpacity 
@@ -210,10 +246,21 @@ export const OrdersScreen: React.FC = () => {
         ))}
       </View>
 
-      {selectedCount > 0 && (
+      {isSelectionMode && selectedCount > 0 && (
         <View style={styles.selectionBar}>
           <Text style={styles.selectionText}>{selectedCount} orders selected</Text>
-          <TouchableOpacity style={styles.bulkActionButton}>
+          <TouchableOpacity 
+            style={styles.bulkActionButton}
+            onPress={() => {
+              console.log('Create picklist with selected orders:', orders.filter(o => o.selected));
+              // Reset selection mode after creating picklist
+              setIsSelectionMode(false);
+              setOrders(prevOrders => 
+                prevOrders.map(order => ({ ...order, selected: false }))
+              );
+              setSelectedCount(0);
+            }}
+          >
             <Text style={styles.bulkActionText}>Create Picklist</Text>
           </TouchableOpacity>
         </View>
@@ -259,6 +306,31 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.text.primary,
     fontWeight: '500',
+  },
+  selectOrdersButtonActive: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+  },
+  selectOrdersTextActive: {
+    color: '#FFFFFF',
+  },
+  checkboxContainer: {
+    marginRight: theme.spacing.md,
+    justifyContent: 'center',
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderWidth: 2,
+    borderColor: theme.colors.border,
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.colors.surface,
+  },
+  checkboxSelected: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
   },
   filterContainer: {
     position: 'relative',
