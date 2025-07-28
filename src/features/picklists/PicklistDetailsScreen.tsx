@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   View,
@@ -119,7 +118,7 @@ export const PicklistDetailsScreen: React.FC = () => {
         showBack={true}
         onBackPress={() => router.back()}
       />
-      
+
       {/* Header Info */}
       <View style={styles.headerInfo}>
         <Text style={styles.headerText}>
@@ -159,7 +158,7 @@ export const PicklistDetailsScreen: React.FC = () => {
                   Available: {item.available}  QOH: {item.qoh}
                 </Text>
               </View>
-              
+
               <View style={styles.quantitySection}>
                 <View style={styles.quantityControls}>
                   <TouchableOpacity
@@ -180,19 +179,12 @@ export const PicklistDetailsScreen: React.FC = () => {
                     <Ionicons name="add" size={16} color="#FFFFFF" />
                   </TouchableOpacity>
                 </View>
-                
-                {item.status === 'picked' ? (
-                  <View style={styles.pickedBadge}>
-                    <Text style={styles.pickedText}>Picked</Text>
-                  </View>
-                ) : (
-                  <TouchableOpacity
-                    style={styles.pickButton}
-                    onPress={() => handleItemPick(item.id)}
-                  >
-                    <Text style={styles.pickButtonText}>Pick</Text>
-                  </TouchableOpacity>
-                )}
+
+                <View style={styles.itemActions}>
+                <View style={styles.pickedBadge}>
+                  <Text style={styles.pickedText}>Picked</Text>
+                </View>
+              </View>
               </View>
             </View>
           </Card>
@@ -330,39 +322,30 @@ const styles = StyleSheet.create({
     minWidth: 40,
     textAlign: 'center',
   },
-  pickButton: {
-    backgroundColor: theme.colors.primary,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: theme.borderRadius.md,
-  },
-  pickButtonText: {
-    color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 14,
-  },
   pickedBadge: {
-    backgroundColor: theme.colors.surface,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
+    backgroundColor: theme.colors.success,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
     borderRadius: theme.borderRadius.md,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
+    minWidth: 80,
+    alignItems: 'center',
   },
   pickedText: {
-    color: theme.colors.text.secondary,
+    color: '#FFFFFF',
     fontWeight: '600',
-    fontSize: 14,
+    fontSize: 16,
   },
   bottomActions: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.lg,
+    paddingVertical: theme.spacing.xl,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
-    gap: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+    gap: theme.spacing.lg,
   },
   actionButton: {
     flex: 1,
+    minHeight: 56,
   },
 });
