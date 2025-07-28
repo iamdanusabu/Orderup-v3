@@ -139,45 +139,50 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
         {/* User Assignment Section */}
         <View style={styles.assignmentSection}>
           <Text style={styles.sectionTitle}>Assign Picklist (Optional)</Text>
-          <TouchableOpacity
-            style={styles.userDropdownButton}
-            onPress={() => setShowUserDropdown(!showUserDropdown)}
-          >
-            <Text style={styles.userDropdownText}>
-              {assignedUser ? mockUsers.find(u => u.id === assignedUser)?.name : 'Select User'}
-            </Text>
-            <Ionicons 
-              name={showUserDropdown ? "chevron-up-outline" : "chevron-down-outline"} 
-              size={20} 
-              color={theme.colors.text.secondary} 
-            />
-          </TouchableOpacity>
-          
-          {showUserDropdown && (
-            <View style={styles.userDropdown}>
-              <TouchableOpacity
-                style={styles.userOption}
-                onPress={() => {
-                  setAssignedUser(null);
-                  setShowUserDropdown(false);
-                }}
-              >
-                <Text style={styles.userOptionText}>Unassigned</Text>
-              </TouchableOpacity>
-              {mockUsers.map((user) => (
+          <View style={{ position: 'relative' }}>
+            <TouchableOpacity
+              style={styles.userDropdownButton}
+              onPress={() => setShowUserDropdown(!showUserDropdown)}
+            >
+              <Text style={styles.userDropdownText}>
+                {assignedUser ? mockUsers.find(u => u.id === assignedUser)?.name : 'Select User'}
+              </Text>
+              <Ionicons 
+                name={showUserDropdown ? "chevron-up-outline" : "chevron-down-outline"} 
+                size={20} 
+                color={theme.colors.text.secondary} 
+              />
+            </TouchableOpacity>
+            
+            {showUserDropdown && (
+              <View style={styles.userDropdown}>
                 <TouchableOpacity
-                  key={user.id}
-                  style={styles.userOption}
+                  style={[styles.userOption, { borderBottomWidth: 1 }]}
                   onPress={() => {
-                    setAssignedUser(user.id);
+                    setAssignedUser(null);
                     setShowUserDropdown(false);
                   }}
                 >
-                  <Text style={styles.userOptionText}>{user.name}</Text>
+                  <Text style={styles.userOptionText}>Unassigned</Text>
                 </TouchableOpacity>
-              ))}
-            </View>
-          )}
+                {mockUsers.map((user, index) => (
+                  <TouchableOpacity
+                    key={user.id}
+                    style={[
+                      styles.userOption,
+                      { borderBottomWidth: index === mockUsers.length - 1 ? 0 : 1 }
+                    ]}
+                    onPress={() => {
+                      setAssignedUser(user.id);
+                      setShowUserDropdown(false);
+                    }}
+                  >
+                    <Text style={styles.userOptionText}>{user.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+          </View>
         </View>
       </ScrollView>
 
@@ -210,15 +215,18 @@ const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.sm,
+    paddingVertical: theme.spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
+    backgroundColor: theme.colors.surface,
   },
   tab: {
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
     marginRight: theme.spacing.sm,
+    minWidth: 80,
+    alignItems: 'center',
   },
   activeTab: {
     backgroundColor: theme.colors.primary,
@@ -235,42 +243,56 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.md,
+    paddingTop: theme.spacing.lg,
   },
   locationCard: {
     marginBottom: theme.spacing.md,
     padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   locationContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   radioContainer: {
-    marginRight: theme.spacing.md,
+    marginRight: theme.spacing.lg,
   },
   radioButton: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
     borderWidth: 2,
     borderColor: theme.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: theme.colors.surface,
   },
   radioButtonSelected: {
     borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.surface,
   },
   radioButtonInner: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
     backgroundColor: theme.colors.primary,
   },
   locationInfo: {
     flex: 1,
   },
   locationName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.xs,
@@ -278,16 +300,20 @@ const styles = StyleSheet.create({
   locationId: {
     fontSize: 14,
     color: theme.colors.text.secondary,
+    fontWeight: '500',
   },
   assignmentSection: {
-    marginTop: theme.spacing.lg,
+    marginTop: theme.spacing.xl,
     marginBottom: theme.spacing.xl,
+    paddingTop: theme.spacing.lg,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
     color: theme.colors.text.primary,
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.lg,
   },
   userDropdownButton: {
     flexDirection: 'row',
@@ -296,15 +322,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.colors.border,
     borderRadius: theme.borderRadius.md,
-    paddingHorizontal: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.md,
     backgroundColor: theme.colors.surface,
+    minHeight: 48,
   },
   userDropdownText: {
     fontSize: 16,
     color: theme.colors.text.primary,
+    fontWeight: '500',
   },
   userDropdown: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    zIndex: 1000,
     marginTop: theme.spacing.xs,
     backgroundColor: theme.colors.surface,
     borderWidth: 1,
@@ -313,21 +346,24 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
   userOption: {
-    paddingHorizontal: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
+    minHeight: 44,
+    justifyContent: 'center',
   },
   userOptionText: {
     fontSize: 16,
     color: theme.colors.text.primary,
+    fontWeight: '500',
   },
   bottomActions: {
     flexDirection: 'row',
@@ -335,6 +371,7 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.lg,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
+    backgroundColor: theme.colors.surface,
     gap: theme.spacing.md,
   },
   actionButton: {
