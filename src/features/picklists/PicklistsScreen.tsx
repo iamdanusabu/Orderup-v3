@@ -105,7 +105,7 @@ export const PicklistsScreen: React.FC = () => {
     <View style={styles.container}>
       <Toolbar 
         title="Picklists" 
-        showBack={true}
+        showBack={false}
         onScanPress={handleScan}
       />
 
