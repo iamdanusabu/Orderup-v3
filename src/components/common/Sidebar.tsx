@@ -33,6 +33,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
       <View style={[styles.sidebar, { width: sidebarWidth }]}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
+            {!isCollapsed && <Text style={styles.logo}>Orderup</Text>}
             <TouchableOpacity
               style={styles.collapseButton}
               onPress={() => setIsCollapsed(!isCollapsed)}
