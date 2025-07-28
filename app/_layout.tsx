@@ -6,9 +6,14 @@ import {
 } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useColorScheme as useNativeColorScheme } from 'react-native';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { SidebarProvider } from '../src/contexts/SidebarContext';
+
+// Create a simple useColorScheme hook since the original is missing
+const useColorScheme = () => {
+  return useNativeColorScheme();
+};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
