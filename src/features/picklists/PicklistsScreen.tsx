@@ -6,11 +6,9 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   useWindowDimensions,
   FlatList,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -58,17 +56,11 @@ const mockPicklists = [
 export const PicklistsScreen: React.FC = () => {
   const { width } = useWindowDimensions();
   const isLargeScreen = width >= 768;
-  const [searchQuery, setSearchQuery] = useState('');
   const [picklists] = useState(mockPicklists);
 
   const handleScan = () => {
     console.log('Open camera scanner');
   };
-
-  const filteredPicklists = picklists.filter(picklist => {
-    return picklist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      picklist.assignedTo.toLowerCase().includes(searchQuery.toLowerCase());
-  });
 
   const renderPicklistCard = ({ item }: { item: any }) => (
     <Card style={styles.picklistCard}>
@@ -116,25 +108,9 @@ export const PicklistsScreen: React.FC = () => {
         showBack={true}
         onScanPress={handleScan}
       />
-      
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchInputContainer}>
-          <Ionicons name="search-outline" size={20} color={theme.colors.text.secondary} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search picklists..."
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            placeholderTextColor={theme.colors.text.tertiary}
-          />
-        </View>
-      </View>
-
-      
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {filteredPicklists.map((picklist) => (
+        {picklists.map((picklist) => (
           <View key={picklist.id}>
             {renderPicklistCard({ item: picklist })}
           </View>
@@ -151,30 +127,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  searchContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
-    gap: theme.spacing.md,
-  },
-  searchInputContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.md,
-    paddingHorizontal: theme.spacing.md,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-  },
-  searchInput: {
-    flex: 1,
-    marginLeft: theme.spacing.sm,
-    paddingVertical: theme.spacing.md,
-    fontSize: 16,
-    color: theme.colors.text.primary,
-  },
-  
   content: {
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
