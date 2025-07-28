@@ -334,9 +334,9 @@ const styles = StyleSheet.create({
     marginLeft: theme.spacing.xs,
   },
   primaryButton: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: '#FFFFFF',
   },
   successButton: {
-    backgroundColor: theme.colors.success,
+    backgroundColor: '#FFFFFF',
   },
 });
