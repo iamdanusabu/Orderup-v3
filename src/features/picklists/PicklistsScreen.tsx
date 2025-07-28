@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   View,
@@ -22,19 +23,23 @@ const mockPicklists = [
   {
     id: '1',
     name: 'Picklist #001',
-    progress: 75,
-    assignedTo: 'Alice Brown',
+    progress: 53,
+    assignedTo: 'John Doe',
     status: 'In Progress' as const,
-    orders: 5,
+    orders: ['#12345', '#12346'],
+    picked: 5,
+    total: 15,
     createdAt: '2 hours ago',
   },
   {
     id: '2',
     name: 'Picklist #002',
-    progress: 50,
-    assignedTo: 'Charlie Davis',
-    status: 'In Progress' as const,
-    orders: 3,
+    progress: 0,
+    assignedTo: 'Jane Smith',
+    status: 'Pending' as const,
+    orders: ['#12347'],
+    picked: 0,
+    total: 8,
     createdAt: '1 hour ago',
   },
   {
@@ -43,56 +48,79 @@ const mockPicklists = [
     progress: 100,
     assignedTo: 'Bob Wilson',
     status: 'Completed' as const,
-    orders: 8,
+    orders: ['#12348', '#12349', '#12350'],
+    picked: 12,
+    total: 12,
     createdAt: '30 min ago',
   },
+];
+
+const filterTabs = [
+  { id: 'all', label: 'All' },
+  { id: 'pending', label: 'Pending' },
+  { id: 'in-progress', label: 'In Progress' },
+  { id: 'completed', label: 'Completed' },
 ];
 
 export const PicklistsScreen: React.FC = () => {
   const { width } = useWindowDimensions();
   const isLargeScreen = width >= 768;
-  const numColumns = isLargeScreen ? 2 : 1;
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState('all');
   const [picklists] = useState(mockPicklists);
 
   const handleScan = () => {
     console.log('Open camera scanner');
   };
 
-  const filteredPicklists = picklists.filter(picklist =>
-    picklist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    picklist.assignedTo.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredPicklists = picklists.filter(picklist => {
+    const matchesSearch = picklist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      picklist.assignedTo.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    if (activeFilter === 'all') return matchesSearch;
+    if (activeFilter === 'pending') return matchesSearch && picklist.status === 'Pending';
+    if (activeFilter === 'in-progress') return matchesSearch && picklist.status === 'In Progress';
+    if (activeFilter === 'completed') return matchesSearch && picklist.status === 'Completed';
+    
+    return matchesSearch;
+  });
 
   const renderPicklistCard = ({ item }: { item: any }) => (
-    <Card style={[styles.picklistCard, isLargeScreen && styles.gridCard]}>
-      <View style={styles.picklistContent}>
-        <View style={styles.picklistHeader}>
+    <Card style={styles.picklistCard}>
+      <View style={styles.cardHeader}>
+        <View style={styles.picklistInfo}>
           <Text style={styles.picklistName}>{item.name}</Text>
+          <Text style={styles.assignedTo}>Assigned to {item.assignedTo}</Text>
+          <Text style={styles.itemsInfo}>{item.picked}/{item.total} items picked</Text>
+        </View>
+        <View style={styles.statusContainer}>
           <StatusBadge status={item.status} />
         </View>
-        <Text style={styles.assignedTo}>Assigned to {item.assignedTo}</Text>
-        <Text style={styles.orderCount}>
-          {item.orders} orders • Created {item.createdAt}
-        </Text>
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View 
-              style={[
-                styles.progressFill, 
-                { width: `${item.progress}%` }
-              ]} 
-            />
-          </View>
-          <Text style={styles.progressText}>{item.progress}%</Text>
-        </View>
-        <Button
-          title={item.status === 'Completed' ? 'View Details' : 'Continue'}
-          onPress={() => console.log('Action on picklist', item.id)}
-          variant={item.status === 'Completed' ? 'secondary' : 'primary'}
-          size="small"
-        />
       </View>
+
+      <View style={styles.progressSection}>
+        <View style={styles.progressBar}>
+          <View 
+            style={[
+              styles.progressFill, 
+              { width: `${item.progress}%` }
+            ]} 
+          />
+        </View>
+        <Text style={styles.progressPercentage}>{item.progress}%</Text>
+      </View>
+
+      <View style={styles.orderInfo}>
+        <Text style={styles.orderLabel}>Orders: </Text>
+        <Text style={styles.orderNumbers}>{item.orders.join(' ')}</Text>
+      </View>
+
+      <Button
+        title={item.status === 'Pending' ? 'Start Picking' : 'Continue Picking'}
+        onPress={() => console.log('Action on picklist', item.id)}
+        variant="primary"
+        style={styles.actionButton}
+      />
     </Card>
   );
 
@@ -100,8 +128,11 @@ export const PicklistsScreen: React.FC = () => {
     <View style={styles.container}>
       <Toolbar 
         title="Picklists" 
+        showBack={true}
         onScanPress={handleScan}
       />
+      
+      {/* Search Bar */}
       <View style={styles.searchContainer}>
         <View style={styles.searchInputContainer}>
           <Ionicons name="search-outline" size={20} color={theme.colors.text.secondary} />
@@ -113,27 +144,39 @@ export const PicklistsScreen: React.FC = () => {
             placeholderTextColor={theme.colors.text.tertiary}
           />
         </View>
-        <TouchableOpacity style={styles.createButton}>
-          <Ionicons name="add-outline" size={24} color="#FFFFFF" />
-          <Text style={styles.createButtonText}>Create</Text>
+        <TouchableOpacity style={styles.filterButton}>
+          <Ionicons name="filter-outline" size={20} color={theme.colors.text.primary} />
+          <Text style={styles.filterButtonText}>Filter</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Filter Tabs */}
+      <View style={styles.filterTabs}>
+        {filterTabs.map((tab) => (
+          <TouchableOpacity
+            key={tab.id}
+            style={[
+              styles.filterTab,
+              activeFilter === tab.id && styles.activeFilterTab
+            ]}
+            onPress={() => setActiveFilter(tab.id)}
+          >
+            <Text style={[
+              styles.filterTabText,
+              activeFilter === tab.id && styles.activeFilterTabText
+            ]}>
+              {tab.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {isLargeScreen ? (
-          <FlatList
-            data={filteredPicklists}
-            renderItem={renderPicklistCard}
-            numColumns={numColumns}
-            key={numColumns}
-            scrollEnabled={false}
-          />
-        ) : (
-          filteredPicklists.map((picklist) => (
-            <View key={picklist.id}>
-              {renderPicklistCard({ item: picklist })}
-            </View>
-          ))
-        )}
+        {filteredPicklists.map((picklist) => (
+          <View key={picklist.id}>
+            {renderPicklistCard({ item: picklist })}
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
@@ -169,81 +212,121 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.text.primary,
   },
-  createButton: {
+  filterButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.surface,
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.md,
     borderRadius: theme.borderRadius.md,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     gap: theme.spacing.sm,
   },
-  createButtonText: {
+  filterButtonText: {
+    color: theme.colors.text.primary,
+    fontWeight: '500',
+    fontSize: 14,
+  },
+  filterTabs: {
+    flexDirection: 'row',
+    paddingHorizontal: theme.spacing.lg,
+    paddingBottom: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
+  filterTab: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: 20,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  activeFilterTab: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+  },
+  filterTabText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: theme.colors.text.secondary,
+  },
+  activeFilterTabText: {
     color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 16,
   },
   content: {
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
   },
   picklistCard: {
-    marginBottom: theme.spacing.sm,
+    marginBottom: theme.spacing.lg,
+    padding: theme.spacing.lg,
   },
-  gridCard: {
-    flex: 1,
-    marginHorizontal: theme.spacing.xs,
-  },
-  picklistContent: {
-    flex: 1,
-  },
-  picklistHeader: {
+  cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: theme.spacing.xs,
+    marginBottom: theme.spacing.md,
+  },
+  picklistInfo: {
+    flex: 1,
   },
   picklistName: {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '600',
     color: theme.colors.text.primary,
+    marginBottom: theme.spacing.xs,
   },
   assignedTo: {
-    fontSize: 12,
+    fontSize: 14,
     color: theme.colors.text.secondary,
     marginBottom: theme.spacing.xs,
   },
-  orderCount: {
-    fontSize: 11,
-    color: theme.colors.text.tertiary,
-    marginBottom: theme.spacing.sm,
+  itemsInfo: {
+    fontSize: 14,
+    color: theme.colors.text.secondary,
   },
-  progressContainer: {
+  statusContainer: {
+    alignItems: 'flex-end',
+  },
+  progressSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
+    gap: theme.spacing.md,
   },
   progressBar: {
     flex: 1,
-    height: 6,
+    height: 8,
     backgroundColor: theme.colors.border,
-    borderRadius: 3,
+    borderRadius: 4,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: theme.colors.success,
+    backgroundColor: theme.colors.primary,
   },
-  progressText: {
-    fontSize: 11,
-    color: theme.colors.text.secondary,
+  progressPercentage: {
+    fontSize: 14,
     fontWeight: '600',
+    color: theme.colors.text.primary,
+    minWidth: 35,
+    textAlign: 'right',
+  },
+  orderInfo: {
+    flexDirection: 'row',
+    marginBottom: theme.spacing.md,
+  },
+  orderLabel: {
+    fontSize: 14,
+    color: theme.colors.text.secondary,
+  },
+  orderNumbers: {
+    fontSize: 14,
+    color: theme.colors.text.primary,
+    fontWeight: '500',
   },
   actionButton: {
-    marginTop: theme.spacing.xs,
-  },
-  actions: {
     marginTop: theme.spacing.sm,
   },
 });
