@@ -77,7 +77,7 @@ export const PackingScreen: React.FC = () => {
       <Toolbar 
         title="Packing" 
         showBack={true}
-        onBackPress={() => router.back()}
+        onBackPress={() => router.push('/picklist-details')}
       />
       
       {/* Header */}

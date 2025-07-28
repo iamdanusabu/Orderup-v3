@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   View,
@@ -73,7 +72,7 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
       location: selectedLocation,
       assignedUser,
     });
-    
+
     // Navigate to picklist screen
     router.push('/picklist-details');
   };
@@ -85,11 +84,11 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
   const content = (
     <View style={styles.container}>
       <Toolbar 
-        title="Select Location" 
+        title="Location Selection" 
         showBack={true}
-        onBackPress={() => router.back()}
+        onBackPress={() => router.push('/picklists')}
       />
-      
+
       {/* Tab Navigation */}
       <View style={styles.tabContainer}>
         <TouchableOpacity
@@ -153,7 +152,7 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
                 color={theme.colors.text.secondary} 
               />
             </TouchableOpacity>
-            
+
             {showUserDropdown && (
               <View style={styles.userDropdown}>
                 <TouchableOpacity
