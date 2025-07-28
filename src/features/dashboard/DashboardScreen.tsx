@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   View,
@@ -21,25 +22,17 @@ const mockNewOrders = [
   {
     id: '1',
     orderNumber: 'Order #12345',
-    customerName: 'John Doe',
-    items: 3,
-    timeAgo: '5 min ago',
+    customerName: 'John Smith',
+    items: 1,
+    timeAgo: '10 min ago',
     status: 'New' as const,
   },
   {
     id: '2',
     orderNumber: 'Order #12346',
-    customerName: 'Jane Smith',
-    items: 2,
-    timeAgo: '10 min ago',
-    status: 'New' as const,
-  },
-  {
-    id: '3',
-    orderNumber: 'Order #12347',
-    customerName: 'Bob Johnson',
+    customerName: 'Emma Wilson',
     items: 5,
-    timeAgo: '15 min ago',
+    timeAgo: '25 min ago',
     status: 'New' as const,
   },
 ];
@@ -47,16 +40,10 @@ const mockNewOrders = [
 const mockActivePicklists = [
   {
     id: '1',
-    name: 'Picklist #001',
-    progress: 75,
-    assignedTo: 'Alice Brown',
-    status: 'In Progress' as const,
-  },
-  {
-    id: '2',
-    name: 'Picklist #002',
-    progress: 50,
-    assignedTo: 'Charlie Davis',
+    name: 'Picklist #789',
+    progress: 42,
+    picked: 5,
+    total: 12,
     status: 'In Progress' as const,
   },
 ];
@@ -66,14 +53,14 @@ const mockReadyOrders = [
     id: '1',
     orderNumber: 'Order #45678',
     customerName: 'Sarah Johnson',
-    pickupTime: '2:30 PM',
+    pickupTime: '7:14 PM',
     status: 'Ready' as const,
   },
   {
     id: '2',
     orderNumber: 'Order #45679',
     customerName: 'Michael Brown',
-    pickupTime: '3:15 PM',
+    pickupTime: '7:59 PM',
     status: 'Ready' as const,
   },
 ];
@@ -81,16 +68,15 @@ const mockReadyOrders = [
 export const DashboardScreen: React.FC = () => {
   const { width } = useWindowDimensions();
   const isLargeScreen = width >= 768;
-  const numColumns = isLargeScreen ? 2 : 1;
 
   const handleScan = () => {
     console.log('Open camera scanner');
   };
 
-  const renderOrderCard = ({ item }: { item: any }) => (
-    <Card style={[styles.orderCard, isLargeScreen && styles.gridCard]}>
-      <View style={styles.orderHeader}>
-        <View style={styles.orderContent}>
+  const renderNewOrderCard = (item: any) => (
+    <Card style={styles.orderCard}>
+      <View style={styles.cardHeader}>
+        <View style={styles.orderInfo}>
           <Text style={styles.orderNumber}>{item.orderNumber}</Text>
           <Text style={styles.customerName}>{item.customerName}</Text>
           <Text style={styles.orderDetails}>
@@ -100,49 +86,58 @@ export const DashboardScreen: React.FC = () => {
         <StatusBadge status={item.status} />
       </View>
       <Button
-        title="Accept Order"
-        onPress={() => console.log('Accept order', item.id)}
-        style={styles.actionButton}
+        title="View Order"
+        onPress={() => console.log('View order', item.id)}
+        style={styles.primaryButton}
       />
     </Card>
   );
 
-  const renderPicklistCard = ({ item }: { item: any }) => (
-    <Card style={[styles.picklistCard, isLargeScreen && styles.gridCard]}>
-      <View style={styles.orderHeader}>
-        <View style={styles.orderContent}>
+  const renderPicklistCard = (item: any) => (
+    <Card style={[styles.picklistCard, isLargeScreen && styles.fullWidthCard]}>
+      <View style={styles.cardHeader}>
+        <View style={styles.orderInfo}>
           <Text style={styles.orderNumber}>{item.name}</Text>
-          <Text style={styles.customerName}>Assigned to {item.assignedTo}</Text>
-          <Text style={styles.progress}>{item.progress}% complete</Text>
+          <Text style={styles.picklistProgress}>
+            {item.picked}/{item.total} items picked
+          </Text>
         </View>
         <StatusBadge status={item.status} />
       </View>
+      
+      <View style={styles.progressContainer}>
+        <View style={styles.progressBar}>
+          <View style={[styles.progressFill, { width: `${item.progress}%` }]} />
+        </View>
+        <Text style={styles.progressText}>{item.progress}%</Text>
+      </View>
+      
       <Button
         title="Continue Picking"
         onPress={() => console.log('Continue picking', item.id)}
-        style={styles.actionButton}
+        style={styles.primaryButton}
       />
     </Card>
   );
 
-  const renderReadyCard = ({ item }: { item: any }) => (
-    <Card style={[styles.readyCard, isLargeScreen && styles.gridCard]}>
-      <View style={styles.orderHeader}>
-        <View style={styles.orderContent}>
+  const renderReadyCard = (item: any) => (
+    <Card style={styles.orderCard}>
+      <View style={styles.cardHeader}>
+        <View style={styles.orderInfo}>
           <Text style={styles.orderNumber}>{item.orderNumber}</Text>
           <Text style={styles.customerName}>{item.customerName}</Text>
-          <View style={styles.pickupTimeContainer}>
-            <Ionicons name="time-outline" size={16} color={theme.colors.text.secondary} />
+          <View style={styles.pickupContainer}>
+            <Ionicons name="time-outline" size={14} color={theme.colors.text.secondary} />
             <Text style={styles.pickupTime}>Pickup at {item.pickupTime}</Text>
           </View>
         </View>
         <StatusBadge status={item.status} />
       </View>
       <Button
-        title="Mark as Collected"
-        onPress={() => console.log('Mark collected', item.id)}
+        title="Mark as Delivered"
+        onPress={() => console.log('Mark delivered', item.id)}
         variant="success"
-        style={styles.actionButton}
+        style={styles.successButton}
       />
     </Card>
   );
@@ -156,65 +151,75 @@ export const DashboardScreen: React.FC = () => {
         notificationCount={1}
       />
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* New Orders Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>New Orders ({mockNewOrders.length})</Text>
-          {isLargeScreen ? (
-            <FlatList
-              data={mockNewOrders}
-              renderItem={renderOrderCard}
-              numColumns={numColumns}
-              key={numColumns}
-              scrollEnabled={false}
-            />
-          ) : (
-            mockNewOrders.map((order) => (
-              <View key={order.id}>
-                {renderOrderCard({ item: order })}
+        {isLargeScreen ? (
+          <View style={styles.gridContainer}>
+            {/* Left Column */}
+            <View style={styles.leftColumn}>
+              {/* New Orders Section */}
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>New Orders ({mockNewOrders.length})</Text>
+                {mockNewOrders.map((order) => (
+                  <View key={order.id}>
+                    {renderNewOrderCard(order)}
+                  </View>
+                ))}
               </View>
-            ))
-          )}
-        </View>
+            </View>
 
-        {/* Active Picklists Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Active Picklists ({mockActivePicklists.length})</Text>
-          {isLargeScreen ? (
-            <FlatList
-              data={mockActivePicklists}
-              renderItem={renderPicklistCard}
-              numColumns={numColumns}
-              key={`picklist-${numColumns}`}
-              scrollEnabled={false}
-            />
-          ) : (
-            mockActivePicklists.map((picklist) => (
-              <View key={picklist.id}>
-                {renderPicklistCard({ item: picklist })}
+            {/* Right Column */}
+            <View style={styles.rightColumn}>
+              {/* Ready for Pickup Section */}
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Ready for Pickup ({mockReadyOrders.length})</Text>
+                {mockReadyOrders.map((order) => (
+                  <View key={order.id}>
+                    {renderReadyCard(order)}
+                  </View>
+                ))}
               </View>
-            ))
-          )}
-        </View>
+            </View>
 
-        {/* Ready for Pickup Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Ready for Pickup ({mockReadyOrders.length})</Text>
-          {isLargeScreen ? (
-            <FlatList
-              data={mockReadyOrders}
-              renderItem={renderReadyCard}
-              numColumns={numColumns}
-              key={`ready-${numColumns}`}
-              scrollEnabled={false}
-            />
-          ) : (
-            mockReadyOrders.map((order) => (
-              <View key={order.id}>
-                {renderReadyCard({ item: order })}
-              </View>
-            ))
-          )}
-        </View>
+            {/* Full Width Bottom Section */}
+            <View style={styles.fullWidthSection}>
+              <Text style={styles.sectionTitle}>My Assigned Picklists ({mockActivePicklists.length})</Text>
+              {mockActivePicklists.map((picklist) => (
+                <View key={picklist.id}>
+                  {renderPicklistCard(picklist)}
+                </View>
+              ))}
+            </View>
+          </View>
+        ) : (
+          <View>
+            {/* Mobile Layout - Stack sections vertically */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>New Orders ({mockNewOrders.length})</Text>
+              {mockNewOrders.map((order) => (
+                <View key={order.id}>
+                  {renderNewOrderCard(order)}
+                </View>
+              ))}
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>My Assigned Picklists ({mockActivePicklists.length})</Text>
+              {mockActivePicklists.map((picklist) => (
+                <View key={picklist.id}>
+                  {renderPicklistCard(picklist)}
+                </View>
+              ))}
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Ready for Pickup ({mockReadyOrders.length})</Text>
+              {mockReadyOrders.map((order) => (
+                <View key={order.id}>
+                  {renderReadyCard(order)}
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -231,68 +236,107 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
   },
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  leftColumn: {
+    flex: 1,
+    paddingRight: theme.spacing.md,
+  },
+  rightColumn: {
+    flex: 1,
+    paddingLeft: theme.spacing.md,
+  },
+  fullWidthSection: {
+    width: '100%',
+    marginTop: theme.spacing.lg,
+  },
   section: {
     marginVertical: theme.spacing.md,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
     color: theme.colors.text.primary,
-    marginBottom: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
   },
   orderCard: {
-    marginBottom: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
+    padding: theme.spacing.lg,
   },
   picklistCard: {
-    marginBottom: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
+    padding: theme.spacing.lg,
   },
-  readyCard: {
-    marginBottom: theme.spacing.sm,
+  fullWidthCard: {
+    width: '100%',
   },
-  gridCard: {
-    flex: 1,
-    marginHorizontal: theme.spacing.xs,
-  },
-  orderContent: {
-    flex: 1,
-  },
-  orderHeader: {
+  cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: theme.spacing.xs,
+    marginBottom: theme.spacing.md,
+  },
+  orderInfo: {
+    flex: 1,
   },
   orderNumber: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text.primary,
+    marginBottom: theme.spacing.xs,
   },
   customerName: {
-    fontSize: 12,
+    fontSize: 14,
     color: theme.colors.text.secondary,
     marginBottom: theme.spacing.xs,
   },
   orderDetails: {
-    fontSize: 11,
+    fontSize: 12,
     color: theme.colors.text.tertiary,
-    marginBottom: theme.spacing.sm,
   },
-  progress: {
-    fontSize: 11,
+  picklistProgress: {
+    fontSize: 14,
     color: theme.colors.text.secondary,
     marginBottom: theme.spacing.sm,
   },
-  pickupTimeContainer: {
+  progressContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
+  },
+  progressBar: {
+    flex: 1,
+    height: 8,
+    backgroundColor: theme.colors.border,
+    borderRadius: 4,
+    marginRight: theme.spacing.sm,
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: theme.colors.primary,
+    borderRadius: 4,
+  },
+  progressText: {
+    fontSize: 12,
+    color: theme.colors.text.secondary,
+    fontWeight: '600',
+    minWidth: 35,
+  },
+  pickupContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   pickupTime: {
-    fontSize: 11,
+    fontSize: 12,
     color: theme.colors.text.secondary,
     marginLeft: theme.spacing.xs,
   },
-  actionButton: {
-    marginTop: theme.spacing.xs,
+  primaryButton: {
+    backgroundColor: theme.colors.primary,
+  },
+  successButton: {
+    backgroundColor: theme.colors.success,
   },
 });
