@@ -323,9 +323,11 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.sm,
     borderRadius: theme.borderRadius.full,
     backgroundColor: 'transparent',
+    minWidth: 60,
+    alignItems: 'center',
   },
   activeFilterTab: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: '#3B82F6',
   },
   filterTabText: {
     fontSize: 14,
