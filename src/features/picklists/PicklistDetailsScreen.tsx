@@ -159,17 +159,17 @@ export const PicklistDetailsScreen: React.FC = () => {
                 </Text>
               </View>
 
-              <View style={styles.quantityDisplay}>
+              <View style={styles.quantityContainer}>
                 {item.status !== 'picked' && (
                   <TouchableOpacity
                     style={styles.decrementButton}
                     onPress={() => handleQuantityChange(item.id, -1)}
                     disabled={item.picked <= 0}
                   >
-                    <Ionicons name="remove" size={16} color="#FFFFFF" />
+                    <Ionicons name="remove" size={16} color={theme.colors.text.secondary} />
                   </TouchableOpacity>
                 )}
-                <Text style={styles.quantityDisplayText}>
+                <Text style={styles.quantityText}>
                   {item.picked}/{item.needed}
                 </Text>
                 {item.status !== 'picked' && (
@@ -178,7 +178,7 @@ export const PicklistDetailsScreen: React.FC = () => {
                     onPress={() => handleQuantityChange(item.id, 1)}
                     disabled={item.picked >= item.needed}
                   >
-                    <Ionicons name="add" size={16} color="#FFFFFF" />
+                    <Ionicons name="add" size={16} color={theme.colors.text.secondary} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -295,36 +295,36 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.text.tertiary,
   },
-  quantityDisplay: {
+  quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.primary,
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 4,
     minWidth: 80,
   },
   
   decrementButton: {
     width: 28,
     height: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: theme.colors.surface,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 8,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   incrementButton: {
     width: 28,
     height: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: theme.colors.surface,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 8,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
-  quantityDisplayText: {
-    color: '#FFFFFF',
+  quantityText: {
+    color: theme.colors.text.primary,
     fontWeight: '600',
     fontSize: 16,
     flex: 1,
