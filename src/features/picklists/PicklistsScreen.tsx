@@ -55,18 +55,10 @@ const mockPicklists = [
   },
 ];
 
-const filterTabs = [
-  { id: 'all', label: 'All' },
-  { id: 'pending', label: 'Pending' },
-  { id: 'in-progress', label: 'In Progress' },
-  { id: 'completed', label: 'Completed' },
-];
-
 export const PicklistsScreen: React.FC = () => {
   const { width } = useWindowDimensions();
   const isLargeScreen = width >= 768;
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState('all');
   const [picklists] = useState(mockPicklists);
 
   const handleScan = () => {
@@ -74,15 +66,8 @@ export const PicklistsScreen: React.FC = () => {
   };
 
   const filteredPicklists = picklists.filter(picklist => {
-    const matchesSearch = picklist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    return picklist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       picklist.assignedTo.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    if (activeFilter === 'all') return matchesSearch;
-    if (activeFilter === 'pending') return matchesSearch && picklist.status === 'Pending';
-    if (activeFilter === 'in-progress') return matchesSearch && picklist.status === 'In Progress';
-    if (activeFilter === 'completed') return matchesSearch && picklist.status === 'Completed';
-    
-    return matchesSearch;
   });
 
   const renderPicklistCard = ({ item }: { item: any }) => (
@@ -144,32 +129,9 @@ export const PicklistsScreen: React.FC = () => {
             placeholderTextColor={theme.colors.text.tertiary}
           />
         </View>
-        <TouchableOpacity style={styles.filterButton}>
-          <Ionicons name="filter-outline" size={20} color={theme.colors.text.primary} />
-          <Text style={styles.filterButtonText}>Filter</Text>
-        </TouchableOpacity>
       </View>
 
-      {/* Filter Tabs */}
-      <View style={styles.filterTabs}>
-        {filterTabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.id}
-            style={[
-              styles.filterTab,
-              activeFilter === tab.id && styles.activeFilterTab
-            ]}
-            onPress={() => setActiveFilter(tab.id)}
-          >
-            <Text style={[
-              styles.filterTabText,
-              activeFilter === tab.id && styles.activeFilterTabText
-            ]}>
-              {tab.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {filteredPicklists.map((picklist) => (
@@ -212,48 +174,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.text.primary,
   },
-  filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: theme.colors.surface,
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
-    borderRadius: theme.borderRadius.md,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    gap: theme.spacing.sm,
-  },
-  filterButtonText: {
-    color: theme.colors.text.primary,
-    fontWeight: '500',
-    fontSize: 14,
-  },
-  filterTabs: {
-    flexDirection: 'row',
-    paddingHorizontal: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
-    gap: theme.spacing.sm,
-  },
-  filterTab: {
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: 20,
-    backgroundColor: theme.colors.surface,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-  },
-  activeFilterTab: {
-    backgroundColor: theme.colors.primary,
-    borderColor: theme.colors.primary,
-  },
-  filterTabText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: theme.colors.text.secondary,
-  },
-  activeFilterTabText: {
-    color: '#FFFFFF',
-  },
+  
   content: {
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
