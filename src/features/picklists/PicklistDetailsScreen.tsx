@@ -159,14 +159,8 @@ export const PicklistDetailsScreen: React.FC = () => {
                 </Text>
               </View>
 
-              {item.status === 'picked' ? (
-                <View style={styles.quantityDisplayPicked}>
-                  <Text style={styles.quantityDisplayText}>
-                    {item.picked}/{item.needed}
-                  </Text>
-                </View>
-              ) : (
-                <View style={styles.quantityDisplay}>
+              <View style={styles.quantityDisplay}>
+                {item.status !== 'picked' && (
                   <TouchableOpacity
                     style={styles.decrementButton}
                     onPress={() => handleQuantityChange(item.id, -1)}
@@ -174,9 +168,11 @@ export const PicklistDetailsScreen: React.FC = () => {
                   >
                     <Ionicons name="remove" size={16} color="#FFFFFF" />
                   </TouchableOpacity>
-                  <Text style={styles.quantityDisplayText}>
-                    {item.picked}/{item.needed}
-                  </Text>
+                )}
+                <Text style={styles.quantityDisplayText}>
+                  {item.picked}/{item.needed}
+                </Text>
+                {item.status !== 'picked' && (
                   <TouchableOpacity
                     style={styles.incrementButton}
                     onPress={() => handleQuantityChange(item.id, 1)}
@@ -184,8 +180,8 @@ export const PicklistDetailsScreen: React.FC = () => {
                   >
                     <Ionicons name="add" size={16} color="#FFFFFF" />
                   </TouchableOpacity>
-                </View>
-              )}
+                )}
+              </View>
             </View>
           </Card>
         ))}
@@ -308,16 +304,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     minWidth: 80,
   },
-  quantityDisplayPicked: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: theme.colors.success,
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    minWidth: 80,
-    justifyContent: 'center',
-  },
+  
   decrementButton: {
     width: 28,
     height: 28,
