@@ -244,6 +244,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.md,
     backgroundColor: theme.colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
   },
   selectOrdersButton: {
     borderWidth: 1,
@@ -321,7 +323,7 @@ const styles = StyleSheet.create({
   filterTab: {
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.sm,
-    borderRadius: theme.borderRadius.full,
+    borderRadius: 20,
     backgroundColor: 'transparent',
     minWidth: 60,
     alignItems: 'center',
