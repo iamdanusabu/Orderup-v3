@@ -1,3 +1,4 @@
+
 import { Dimensions } from 'react-native';
 import { theme } from '../constants/theme';
 
@@ -35,4 +36,8 @@ export const getResponsiveWidth = (percentage: number) => {
 export const getResponsiveHeight = (percentage: number) => {
   const { height } = Dimensions.get('window');
   return (height * percentage) / 100;
+};
+
+export const getResponsiveFontSize = () => {
+  return 16;
 };
