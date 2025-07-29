@@ -57,9 +57,7 @@ const orderSourceOptions = [
 const paymentStatusOptions = [
   { label: 'All', value: 'all' },
   { label: 'Paid', value: 'paid' },
-  { label: 'Pending', value: 'pending' },
-  { label: 'Failed', value: 'failed' },
-  { label: 'Refunded', value: 'refunded' },
+  { label: 'Unpaid', value: 'unpaid' },
 ];
 
 export const FilterModal: React.FC<FilterModalProps> = ({
