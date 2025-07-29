@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   View,
@@ -13,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../components/common/Button';
 import { env } from '../../config/env';
 import { theme } from '../../constants/theme';
+import { StatusBar } from 'expo-status-bar';
 
 export const LoginScreen: React.FC = () => {
   const [domain, setDomain] = useState('');
@@ -26,7 +26,9 @@ export const LoginScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={styles.container} edges={['left', 'right']}>
+      <StatusBar style="dark" backgroundColor={theme.colors.background} translucent={false} />
+      <View style={styles.statusBarSpacer} />
       <View style={styles.content}>
         <View style={styles.form}>
           <View style={styles.inputGroup}>
@@ -95,10 +97,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
+  statusBarSpacer: {
+    height: Platform.OS === 'android' ? theme.spacing.lg : 0,
+  },
   content: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: theme.spacing.lg,
+    paddingBottom: Platform.OS === 'android' ? theme.spacing.xl * 3 : theme.spacing.xl * 2,
+    paddingTop: Platform.OS === 'android' ? theme.spacing.md : 0,
   },
   form: {
     backgroundColor: theme.colors.surface,

@@ -26,8 +26,8 @@ export default function RootLayout() {
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar 
-          style={colorScheme === 'dark' ? 'light' : 'dark'} 
-          backgroundColor={colorScheme === 'dark' ? '#111827' : '#FFFFFF'}
+          style="dark"
+          backgroundColor="#FFFFFF"
           translucent={false}
         />
       </SidebarProvider>
