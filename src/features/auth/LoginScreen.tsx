@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../components/common/Button';
 import { env } from '../../config/env';
@@ -28,7 +27,6 @@ export const LoginScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="dark" backgroundColor={theme.colors.background} />
       <View style={styles.content}>
         <View style={styles.form}>
           <View style={styles.inputGroup}>
