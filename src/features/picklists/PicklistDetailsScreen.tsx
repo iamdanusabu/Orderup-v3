@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   View,
@@ -7,7 +8,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { ScreenWrapper } from '../../components/common/ScreenWrapper';
 import { Sidebar } from '../../components/common/Sidebar';
@@ -134,7 +134,7 @@ export const PicklistDetailsScreen: React.FC = () => {
               <View 
                 style={[
                   styles.progressFill, 
-                  { width: `${(pickedItems / totalItems) * 100}%` }
+                  { width: `${Math.max(2, (pickedItems / totalItems) * 100)}%` }
                 ]} 
               />
             </View>
@@ -152,9 +152,13 @@ export const PicklistDetailsScreen: React.FC = () => {
           </View>
         </View>
 
-        <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+        <ScrollView 
+          style={styles.content} 
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
           {items.map((item) => (
-            <Card key={item.id} style={styles.itemCard}>
+            <View key={item.id} style={styles.itemCard}>
               <View style={styles.itemContent}>
                 <View style={styles.itemInfo}>
                   <Text style={styles.itemName}>{item.name}</Text>
@@ -164,31 +168,45 @@ export const PicklistDetailsScreen: React.FC = () => {
                   </Text>
                 </View>
 
-                <View style={styles.quantityDisplay}>
+                <View style={styles.quantityControls}>
+                  <TouchableOpacity
+                    style={[
+                      styles.quantityButton,
+                      item.picked <= 0 && styles.quantityButtonDisabled
+                    ]}
+                    onPress={() => handleQuantityChange(item.id, -1)}
+                    disabled={item.picked <= 0}
+                  >
+                    <Ionicons 
+                      name="remove" 
+                      size={18} 
+                      color={item.picked <= 0 ? '#94A3B8' : '#FFFFFF'} 
+                    />
+                  </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={styles.decrementButton}
-                      onPress={() => handleQuantityChange(item.id, -1)}
-                      disabled={item.picked <= 0}
-                    >
-                      <Ionicons name="remove" size={16} color="#FFFFFF" />
-                    </TouchableOpacity>
+                  <View style={styles.quantityDisplay}>
+                    <Text style={styles.quantityText}>
+                      {item.picked}/{item.needed}
+                    </Text>
+                  </View>
 
-                  <Text style={styles.quantityDisplayText}>
-                    {item.picked}/{item.needed}
-                  </Text>
-
-                    <TouchableOpacity
-                      style={styles.incrementButton}
-                      onPress={() => handleQuantityChange(item.id, 1)}
-                      disabled={item.picked >= item.needed}
-                    >
-                      <Ionicons name="add" size={16} color="#FFFFFF" />
-                    </TouchableOpacity>
-
+                  <TouchableOpacity
+                    style={[
+                      styles.quantityButton,
+                      item.picked >= item.needed && styles.quantityButtonDisabled
+                    ]}
+                    onPress={() => handleQuantityChange(item.id, 1)}
+                    disabled={item.picked >= item.needed}
+                  >
+                    <Ionicons 
+                      name="add" 
+                      size={18} 
+                      color={item.picked >= item.needed ? '#94A3B8' : '#FFFFFF'} 
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
-            </Card>
+            </View>
           ))}
         </ScrollView>
 
@@ -224,6 +242,7 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
+    backgroundColor: '#FFFFFF',
   },
   headerText: {
     fontSize: 14,
@@ -237,24 +256,26 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     flex: 1,
-    height: 8,
-    backgroundColor: theme.colors.border,
-    borderRadius: 4,
+    height: 6,
+    backgroundColor: '#E2E8F0',
+    borderRadius: 3,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: theme.colors.success,
+    backgroundColor: '#10B981',
+    borderRadius: 3,
   },
   progressText: {
     fontSize: 12,
     color: theme.colors.text.secondary,
-    fontWeight: '600',
+    fontWeight: '500',
+    minWidth: 80,
   },
   binHeader: {
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.md,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: '#F8FAFC',
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
   },
@@ -270,16 +291,26 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.md,
+    backgroundColor: '#F8FAFC',
   },
   scrollContent: {
-    paddingBottom: theme.spacing.xl,
+    paddingVertical: theme.spacing.md,
   },
   itemCard: {
+    backgroundColor: '#FFFFFF',
+    marginHorizontal: theme.spacing.lg,
     marginBottom: theme.spacing.sm,
-    paddingVertical: theme.spacing.md,
+    borderRadius: 8,
+    paddingVertical: theme.spacing.lg,
     paddingHorizontal: theme.spacing.lg,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   itemContent: {
     flexDirection: 'row',
@@ -288,12 +319,13 @@ const styles = StyleSheet.create({
   },
   itemInfo: {
     flex: 1,
+    paddingRight: theme.spacing.md,
   },
   itemName: {
     fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text.primary,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   itemSku: {
     fontSize: 14,
@@ -302,57 +334,49 @@ const styles = StyleSheet.create({
   },
   itemAvailability: {
     fontSize: 12,
-    color: theme.colors.text.tertiary,
+    color: '#64748B',
   },
-  quantityDisplay: {
+  quantityControls: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.primary,
-    borderRadius: 20,
-    paddingVertical: 8,
+    backgroundColor: '#334155',
+    borderRadius: 24,
+    paddingVertical: 4,
     paddingHorizontal: 4,
-    minWidth: 80,
-    elevation: 2,
   },
-
-  decrementButton: {
-    width: 28,
-    height: 28,
+  quantityButton: {
+    width: 32,
+    height: 32,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 14,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
-    elevation: 1,
   },
-  incrementButton: {
-    width: 28,
-    height: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 8,
-    elevation: 1,
+  quantityButtonDisabled: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
-  quantityDisplayText: {
+  quantityDisplay: {
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+  },
+  quantityText: {
     color: '#FFFFFF',
     fontWeight: '600',
     fontSize: 16,
-    flex: 1,
     textAlign: 'center',
+    minWidth: 32,
   },
   bottomActions: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.xl,
+    paddingVertical: theme.spacing.lg,
+    backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
-    backgroundColor: theme.colors.surface,
-    gap: theme.spacing.lg,
+    gap: theme.spacing.md,
   },
   actionButton: {
     flex: 1,
-    minHeight: 56,
+    minHeight: 48,
   },
 });
