@@ -165,7 +165,7 @@ export const PicklistDetailsScreen: React.FC = () => {
                 </View>
 
                 <View style={styles.quantityDisplay}>
-                  
+
                     <TouchableOpacity
                       style={styles.decrementButton}
                       onPress={() => handleQuantityChange(item.id, -1)}
@@ -173,11 +173,11 @@ export const PicklistDetailsScreen: React.FC = () => {
                     >
                       <Ionicons name="remove" size={16} color="#FFFFFF" />
                     </TouchableOpacity>
-                  
+
                   <Text style={styles.quantityDisplayText}>
                     {item.picked}/{item.needed}
                   </Text>
-                  
+
                     <TouchableOpacity
                       style={styles.incrementButton}
                       onPress={() => handleQuantityChange(item.id, 1)}
@@ -185,7 +185,7 @@ export const PicklistDetailsScreen: React.FC = () => {
                     >
                       <Ionicons name="add" size={16} color="#FFFFFF" />
                     </TouchableOpacity>
-                  
+
                 </View>
               </View>
             </Card>
@@ -312,6 +312,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 4,
     minWidth: 80,
+    elevation: 2,
   },
 
   decrementButton: {
@@ -322,6 +323,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 8,
+    elevation: 1,
   },
   incrementButton: {
     width: 28,
@@ -331,6 +333,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 8,
+    elevation: 1,
   },
   quantityDisplayText: {
     color: '#FFFFFF',
