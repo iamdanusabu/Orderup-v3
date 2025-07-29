@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   useWindowDimensions,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -28,7 +29,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   if (!isLargeScreen) {
     return (
       <SafeAreaView style={styles.mobileContainer} edges={['top', 'bottom']}>
-        {children}
+        <ScrollView 
+          style={styles.mobileScrollView}
+          contentContainerStyle={styles.mobileScrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {children}
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -94,7 +101,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
       </View>
       <View style={styles.content}>
         <SafeAreaView style={styles.contentArea} edges={['top', 'bottom']}>
-          {children}
+          <ScrollView 
+            style={styles.contentScrollView}
+            contentContainerStyle={styles.contentScrollContainer}
+            showsVerticalScrollIndicator={false}
+          >
+            {children}
+          </ScrollView>
         </SafeAreaView>
       </View>
     </View>
@@ -109,6 +122,13 @@ const styles = StyleSheet.create({
   mobileContainer: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  mobileScrollView: {
+    flex: 1,
+  },
+  mobileScrollContent: {
+    flexGrow: 1,
+    paddingBottom: theme.spacing.xl, // Extra padding to prevent overlap with navigation
   },
   sidebar: {
     backgroundColor: theme.colors.sidebar.background,
@@ -172,5 +192,12 @@ const styles = StyleSheet.create({
   contentArea: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  contentScrollView: {
+    flex: 1,
+  },
+  contentScrollContainer: {
+    flexGrow: 1,
+    paddingBottom: theme.spacing.xl, // Ensure content doesn't get cut off by navigation
   },
 });
