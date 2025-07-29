@@ -26,9 +26,8 @@ export const LoginScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right']}>
+    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
       <StatusBar style="dark" backgroundColor={theme.colors.background} translucent={false} />
-      <View style={styles.statusBarSpacer} />
       <View style={styles.content}>
         <View style={styles.form}>
           <View style={styles.inputGroup}>
@@ -97,15 +96,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  statusBarSpacer: {
-    height: Platform.OS === 'android' ? theme.spacing.lg : 0,
-  },
   content: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom: Platform.OS === 'android' ? theme.spacing.xl * 3 : theme.spacing.xl * 2,
-    paddingTop: Platform.OS === 'android' ? theme.spacing.md : 0,
+    paddingBottom: theme.spacing.xl * 2,
   },
   form: {
     backgroundColor: theme.colors.surface,
