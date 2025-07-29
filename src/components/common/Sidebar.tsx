@@ -10,7 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 import { theme } from '../../constants/theme';
-import { getDeviceType, getResponsiveSpacing, getResponsiveFontSize } from '../../utils/responsive';
+import { getDeviceType, getResponsiveSpacing } from '../../utils/responsive';
 import { useSidebar } from '../../contexts/SidebarContext';
 
 interface SidebarProps {
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   },
   menuText: {
     marginLeft: theme.spacing.md,
-    fontSize: getResponsiveFontSize('body'),
+    fontSize: 16,
     color: theme.colors.sidebar.text,
   },
   activeMenuText: {
