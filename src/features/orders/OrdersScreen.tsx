@@ -15,6 +15,7 @@ import { StatusBadge } from '../../components/common/StatusBadge';
 import { Sidebar } from '../../components/common/Sidebar';
 import { Toolbar } from '../../components/common/Toolbar';
 import { theme } from '../../constants/theme';
+import { getDeviceType, getResponsiveSpacing, getResponsiveFontSize } from '../../utils/responsive';
 import { useRouter } from 'expo-router';
 
 // Mock data with updated structure to match design
@@ -62,8 +63,10 @@ const mockOrders = [
 ];
 
 export const OrdersScreen: React.FC = () => {
-  const { width } = useWindowDimensions();
-  const isLargeScreen = width >= 768;
+  const { width, height } = useWindowDimensions();
+  const deviceType = getDeviceType();
+  const isLargeScreen = width >= theme.breakpoints.tablet;
+  const isLandscape = width > height;
   const router = useRouter();
   const [orders, setOrders] = useState(mockOrders);
   const [selectedCount, setSelectedCount] = useState(0);
@@ -301,11 +304,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
+    paddingHorizontal: getResponsiveSpacing('lg'),
+    paddingVertical: getResponsiveSpacing('md'),
     backgroundColor: theme.colors.background,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
+    flexWrap: 'wrap',
+    gap: getResponsiveSpacing('sm'),
   },
   selectOrdersButton: {
     borderWidth: 1,
@@ -401,26 +406,29 @@ const styles = StyleSheet.create({
   },
   filterTabs: {
     flexDirection: 'row',
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
-    gap: theme.spacing.sm,
+    paddingHorizontal: getResponsiveSpacing('lg'),
+    paddingVertical: getResponsiveSpacing('md'),
+    gap: getResponsiveSpacing('sm'),
+    flexWrap: 'wrap',
   },
   filterTab: {
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: getResponsiveSpacing('md'),
+    paddingVertical: getResponsiveSpacing('sm'),
     borderRadius: theme.borderRadius.md,
     backgroundColor: theme.colors.surface,
     borderWidth: 1,
     borderColor: theme.colors.border,
+    minWidth: 80,
   },
   activeFilterTab: {
     backgroundColor: theme.colors.primary,
     borderColor: theme.colors.primary,
   },
   filterTabText: {
-    fontSize: 14,
+    fontSize: getResponsiveFontSize(14),
     color: theme.colors.text.secondary,
     fontWeight: '500',
+    textAlign: 'center',
   },
   activeFilterTabText: {
     color: '#FFFFFF',
@@ -448,11 +456,11 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: theme.spacing.lg,
+    paddingHorizontal: getResponsiveSpacing('lg'),
   },
   orderCard: {
-    marginBottom: theme.spacing.md,
-    padding: theme.spacing.lg,
+    marginBottom: getResponsiveSpacing('md'),
+    padding: getResponsiveSpacing('lg'),
   },
   orderContent: {
     flex: 1,
@@ -466,23 +474,23 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   orderNumber: {
-    fontSize: 16,
+    fontSize: getResponsiveFontSize(16),
     fontWeight: '600',
     color: theme.colors.text.primary,
-    marginBottom: theme.spacing.xs,
+    marginBottom: getResponsiveSpacing('xs'),
   },
   customerName: {
-    fontSize: 14,
+    fontSize: getResponsiveFontSize(14),
     color: theme.colors.text.secondary,
-    marginBottom: theme.spacing.xs,
+    marginBottom: getResponsiveSpacing('xs'),
   },
   datetime: {
-    fontSize: 12,
+    fontSize: getResponsiveFontSize(12),
     color: theme.colors.text.tertiary,
-    marginBottom: theme.spacing.xs,
+    marginBottom: getResponsiveSpacing('xs'),
   },
   itemCount: {
-    fontSize: 12,
+    fontSize: getResponsiveFontSize(12),
     color: theme.colors.text.tertiary,
   },
   rightSection: {
@@ -490,7 +498,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
   },
   price: {
-    fontSize: 16,
+    fontSize: getResponsiveFontSize(16),
     fontWeight: '600',
     color: theme.colors.text.primary,
   },

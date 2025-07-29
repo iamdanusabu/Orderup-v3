@@ -33,11 +33,17 @@ export interface Theme {
     md: number;
     lg: number;
     xl: number;
+    xxl: number;
   };
   borderRadius: {
     sm: number;
     md: number;
     lg: number;
+  };
+  breakpoints: {
+    mobile: number;
+    tablet: number;
+    desktop: number;
   };
 }
 
@@ -76,11 +82,17 @@ export const lightTheme: Theme = {
     md: 12,
     lg: 16,
     xl: 20,
+    xxl: 24,
   },
   borderRadius: {
     sm: 4,
     md: 8,
     lg: 16,
+  },
+  breakpoints: {
+    mobile: 480,
+    tablet: 768,
+    desktop: 1024,
   },
 };
 
@@ -119,11 +131,17 @@ export const darkTheme: Theme = {
     md: 12,
     lg: 16,
     xl: 20,
+    xxl: 24,
   },
   borderRadius: {
     sm: 4,
     md: 8,
     lg: 16,
+  },
+  breakpoints: {
+    mobile: 480,
+    tablet: 768,
+    desktop: 1024,
   },
 };
 

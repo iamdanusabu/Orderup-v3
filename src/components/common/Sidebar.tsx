@@ -1,9 +1,16 @@
-
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
+import React, { createContext, useContext } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  useWindowDimensions,
+  SafeAreaView,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 import { theme } from '../../constants/theme';
+import { getDeviceType, getResponsiveSpacing, getResponsiveFontSize } from '../../utils/responsive';
 import { useSidebar } from '../../contexts/SidebarContext';
 
 interface SidebarProps {
@@ -11,11 +18,13 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
+  const deviceType = getDeviceType();
+  const isLargeScreen = width >= theme.breakpoints.tablet;
+  const isLandscape = width > height;
+  const { isCollapsed, setIsCollapsed } = useSidebar();
   const router = useRouter();
   const pathname = usePathname();
-  const isLargeScreen = width >= 768;
-  const { isCollapsed, setIsCollapsed } = useSidebar();
 
   if (!isLargeScreen) {
     return <>{children}</>;

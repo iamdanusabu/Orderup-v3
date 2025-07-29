@@ -5,8 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { useWindowDimensions } from 'react-native';
 
 export default function TabLayout() {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const isLargeScreen = width >= 768;
+  const isLandscape = width > height;
 
   if (isLargeScreen) {
     // For larger screens, we'll handle the sidebar in the individual screen components
@@ -33,9 +34,9 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
           borderTopColor: '#E5E7EB',
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
+          height: isLandscape ? 50 : 60,
+          paddingBottom: isLandscape ? 4 : 8,
+          paddingTop: isLandscape ? 4 : 8,
         },
       }}
     >
