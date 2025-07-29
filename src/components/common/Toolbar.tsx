@@ -33,41 +33,39 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onBackPress,
 }) => {
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.toolbar}>
-        <View style={styles.leftSection}>
-          {showBack && (
-            <TouchableOpacity style={styles.backButton} onPress={onBackPress}>
-              <Ionicons name="chevron-back-outline" size={24} color={theme.colors.toolbar.text} />
-            </TouchableOpacity>
-          )}
-          {showMenuButton && (
-            <TouchableOpacity style={styles.menuButton} onPress={onMenuPress}>
-              <Ionicons name="menu-outline" size={24} color={theme.colors.toolbar.text} />
-            </TouchableOpacity>
-          )}
-          <Text style={styles.title}>{title}</Text>
-        </View>
-        <View style={styles.actions}>
-          {showNotification && (
-            <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="notifications-outline" size={24} color={theme.colors.toolbar.text} />
-              {notificationCount > 0 && (
-                <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{notificationCount}</Text>
-                </View>
-              )}
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity style={styles.iconButton} onPress={onScanPress}>
-            <Ionicons name="qr-code-outline" size={24} color={theme.colors.toolbar.text} />
+    <View style={styles.toolbar}>
+      <View style={styles.leftSection}>
+        {showBack && (
+          <TouchableOpacity style={styles.backButton} onPress={onBackPress}>
+            <Ionicons name="chevron-back-outline" size={24} color={theme.colors.toolbar.text} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
-            <Ionicons name="exit-outline" size={24} color={theme.colors.toolbar.text} />
+        )}
+        {showMenuButton && (
+          <TouchableOpacity style={styles.menuButton} onPress={onMenuPress}>
+            <Ionicons name="menu-outline" size={24} color={theme.colors.toolbar.text} />
           </TouchableOpacity>
-        </View>
+        )}
+        <Text style={styles.title}>{title}</Text>
       </View>
-    </SafeAreaView>
+      <View style={styles.actions}>
+        {showNotification && (
+          <TouchableOpacity style={styles.iconButton}>
+            <Ionicons name="notifications-outline" size={24} color={theme.colors.toolbar.text} />
+            {notificationCount > 0 && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{notificationCount}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity style={styles.iconButton} onPress={onScanPress}>
+          <Ionicons name="qr-code-outline" size={24} color={theme.colors.toolbar.text} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.iconButton}>
+          <Ionicons name="exit-outline" size={24} color={theme.colors.toolbar.text} />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 
