@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom: theme.spacing.xl, // Extra padding to prevent overlap with navigation
   },
   form: {
     backgroundColor: theme.colors.surface,
