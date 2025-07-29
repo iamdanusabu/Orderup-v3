@@ -5,11 +5,11 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../components/common/Button';
+import { ScreenWrapper } from '../../components/common/ScreenWrapper';
 import { env } from '../../config/env';
 import { theme } from '../../constants/theme';
 
@@ -25,7 +25,11 @@ export const LoginScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScreenWrapper 
+      scrollable={true}
+      keyboardAvoiding={true}
+      contentContainerStyle={styles.scrollContent}
+    >
       <View style={styles.content}>
         <View style={styles.form}>
           <View style={styles.inputGroup}>
@@ -85,19 +89,18 @@ export const LoginScreen: React.FC = () => {
 
         <Text style={styles.version}>Version {env.version}</Text>
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
+  scrollContent: {
+    justifyContent: 'center',
   },
   content: {
-    flex: 1,
     justifyContent: 'center',
     paddingHorizontal: theme.spacing.lg,
+    minHeight: '100%',
   },
   form: {
     backgroundColor: theme.colors.surface,
