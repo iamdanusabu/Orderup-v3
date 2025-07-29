@@ -10,8 +10,9 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 import { theme } from '../../constants/theme';
-import { getDeviceType, getResponsiveSpacing, getResponsiveFontSize } from '../../utils/responsive';
+import { getDeviceType, getResponsiveSpacing } from '../../utils/responsive';
 import { useSidebar } from '../../contexts/SidebarContext';
+import { Logo } from './Logo';
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -43,7 +44,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
       <View style={[styles.sidebar, { width: sidebarWidth }]}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            {!isCollapsed && <Text style={styles.logo}>Orderup</Text>}
+            <View style={styles.logoContainer}>
+              <Logo width={isCollapsed ? 24 : 32} height={isCollapsed ? 24 : 32} />
+              {!isCollapsed && <Text style={styles.logoText}>Orderup</Text>}
+            </View>
             <TouchableOpacity
               style={styles.collapseButton}
               onPress={() => setIsCollapsed(!isCollapsed)}
@@ -110,8 +114,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  logo: {
-    fontSize: 24,
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  },
+  logoText: {
+    fontSize: 20,
     fontWeight: 'bold',
     color: theme.colors.sidebar.activeText,
   },
@@ -138,7 +147,7 @@ const styles = StyleSheet.create({
   },
   menuText: {
     marginLeft: theme.spacing.md,
-    fontSize: 16,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.sidebar.text,
   },
   activeMenuText: {

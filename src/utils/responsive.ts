@@ -1,55 +1,38 @@
-
 import { Dimensions } from 'react-native';
 import { theme } from '../constants/theme';
 
-export const getScreenDimensions = () => {
-  const { width, height } = Dimensions.get('window');
-  return { width, height };
-};
-
 export const getDeviceType = () => {
-  const { width } = getScreenDimensions();
+  const { width } = Dimensions.get('window');
 
-  if (width < theme.breakpoints.mobile) {
-    return 'small-mobile';
-  } else if (width < theme.breakpoints.tablet) {
-    return 'mobile';
-  } else if (width < theme.breakpoints.desktop) {
+  if (width >= theme.breakpoints.desktop) {
+    return 'desktop';
+  } else if (width >= theme.breakpoints.tablet) {
     return 'tablet';
   } else {
-    return 'desktop';
+    return 'mobile';
   }
 };
 
-export const isTablet = () => {
+export const getResponsiveSpacing = (size: keyof typeof theme.spacing) => {
   const deviceType = getDeviceType();
-  return deviceType === 'tablet';
-};
-
-export const isMobile = () => {
-  const deviceType = getDeviceType();
-  return deviceType === 'mobile' || deviceType === 'small-mobile';
-};
-
-export const isDesktop = () => {
-  const deviceType = getDeviceType();
-  return deviceType === 'desktop';
-};
-
-export const getResponsiveSpacing = (baseSpacing: keyof typeof theme.spacing) => {
-  const deviceType = getDeviceType();
-  const base = theme.spacing[baseSpacing];
+  const baseSpacing = theme.spacing[size];
 
   switch (deviceType) {
-    case 'small-mobile':
-      return base * 0.8;
-    case 'mobile':
-      return base;
-    case 'tablet':
-      return base * 1.2;
     case 'desktop':
-      return base * 1.4;
+      return baseSpacing * 1.2;
+    case 'tablet':
+      return baseSpacing * 1.1;
     default:
-      return base;
+      return baseSpacing;
   }
+};
+
+export const getResponsiveWidth = (percentage: number) => {
+  const { width } = Dimensions.get('window');
+  return (width * percentage) / 100;
+};
+
+export const getResponsiveHeight = (percentage: number) => {
+  const { height } = Dimensions.get('window');
+  return (height * percentage) / 100;
 };
