@@ -25,7 +25,7 @@ export const LoginScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.form}>
           <View style={styles.inputGroup}>

@@ -45,14 +45,6 @@ export interface Theme {
     tablet: number;
     desktop: number;
   };
-  typography: {
-    xs: number;
-    sm: number;
-    md: number;
-    lg: number;
-    xl: number;
-    xxl: number;
-  };
 }
 
 export const lightTheme: Theme = {
@@ -102,14 +94,6 @@ export const lightTheme: Theme = {
     tablet: 768,
     desktop: 1024,
   },
-  typography: {
-    xs: 12,
-    sm: 14,
-    md: 16,
-    lg: 18,
-    xl: 20,
-    xxl: 24,
-  },
 };
 
 export const darkTheme: Theme = {
@@ -158,14 +142,6 @@ export const darkTheme: Theme = {
     mobile: 480,
     tablet: 768,
     desktop: 1024,
-  },
-  typography: {
-    xs: 12,
-    sm: 14,
-    md: 16,
-    lg: 18,
-    xl: 20,
-    xxl: 24,
   },
 };
 

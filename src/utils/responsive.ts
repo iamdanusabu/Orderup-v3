@@ -2,35 +2,71 @@
 import { Dimensions } from 'react-native';
 import { theme } from '../constants/theme';
 
-export type DeviceType = 'phone' | 'tablet';
-
-export const getDeviceType = (width?: number): DeviceType => {
-  const screenWidth = width || Dimensions.get('window').width;
-  return screenWidth >= 768 ? 'tablet' : 'phone';
+export const getScreenDimensions = () => {
+  const { width, height } = Dimensions.get('window');
+  return { width, height };
 };
 
-export const getResponsiveSpacing = (baseSpacing: number, width?: number): number => {
-  const deviceType = getDeviceType(width);
-  return deviceType === 'tablet' ? baseSpacing * 1.2 : baseSpacing;
+export const getDeviceType = () => {
+  const { width } = getScreenDimensions();
+  
+  if (width < theme.breakpoints.mobile) {
+    return 'small-mobile';
+  } else if (width < theme.breakpoints.tablet) {
+    return 'mobile';
+  } else if (width < theme.breakpoints.desktop) {
+    return 'tablet';
+  } else {
+    return 'desktop';
+  }
 };
 
-export const getResponsiveFontSize = (baseFontSize: number, width?: number): number => {
-  const deviceType = getDeviceType(width);
-  return deviceType === 'tablet' ? baseFontSize * 1.1 : baseFontSize;
+export const isTablet = () => {
+  const deviceType = getDeviceType();
+  return deviceType === 'tablet';
 };
 
-// Hook versions for use in components
-export const useResponsiveSpacing = (baseSpacing: number): number => {
-  const { width } = require('react-native').useWindowDimensions();
-  return getResponsiveSpacing(baseSpacing, width);
+export const isMobile = () => {
+  const deviceType = getDeviceType();
+  return deviceType === 'mobile' || deviceType === 'small-mobile';
 };
 
-export const useResponsiveFontSize = (baseFontSize: number): number => {
-  const { width } = require('react-native').useWindowDimensions();
-  return getResponsiveFontSize(baseFontSize, width);
+export const isDesktop = () => {
+  const deviceType = getDeviceType();
+  return deviceType === 'desktop';
 };
 
-export const useDeviceType = (): DeviceType => {
-  const { width } = require('react-native').useWindowDimensions();
-  return getDeviceType(width);
+export const getResponsiveSpacing = (baseSpacing: keyof typeof theme.spacing) => {
+  const deviceType = getDeviceType();
+  const base = theme.spacing[baseSpacing];
+  
+  switch (deviceType) {
+    case 'small-mobile':
+      return base * 0.8;
+    case 'mobile':
+      return base;
+    case 'tablet':
+      return base * 1.2;
+    case 'desktop':
+      return base * 1.4;
+    default:
+      return base;
+  }
+};
+
+export const getResponsiveFontSize = (baseFontSize: number) => {
+  const deviceType = getDeviceType();
+  
+  switch (deviceType) {
+    case 'small-mobile':
+      return baseFontSize * 0.9;
+    case 'mobile':
+      return baseFontSize;
+    case 'tablet':
+      return baseFontSize * 1.1;
+    case 'desktop':
+      return baseFontSize * 1.2;
+    default:
+      return baseFontSize;
+  }
 };

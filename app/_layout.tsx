@@ -1,5 +1,4 @@
 
-import React from 'react';
 import {
   DarkTheme,
   DefaultTheme,
@@ -26,10 +25,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
-        <StatusBar 
-          style={colorScheme === 'dark' ? 'light' : 'dark'}
-          backgroundColor={colorScheme === 'dark' ? '#000000' : '#ffffff'}
-        />
+        <StatusBar style="auto" />
       </SidebarProvider>
     </ThemeProvider>
   );
