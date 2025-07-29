@@ -1,18 +1,17 @@
+
 import React, { useState } from 'react';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
+  SafeAreaView,
   TouchableOpacity,
-  Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../components/common/Button';
 import { env } from '../../config/env';
 import { theme } from '../../constants/theme';
-import { StatusBar } from 'expo-status-bar';
 
 export const LoginScreen: React.FC = () => {
   const [domain, setDomain] = useState('');
@@ -26,8 +25,7 @@ export const LoginScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
-      <StatusBar style="dark" backgroundColor={theme.colors.background} translucent={false} />
+    <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.form}>
           <View style={styles.inputGroup}>
@@ -100,7 +98,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom: theme.spacing.xl * 2,
   },
   form: {
     backgroundColor: theme.colors.surface,

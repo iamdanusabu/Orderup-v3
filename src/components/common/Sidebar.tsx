@@ -10,7 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 import { theme } from '../../constants/theme';
-import { getDeviceType, getResponsiveSpacing } from '../../utils/responsive';
+import { getDeviceType, getResponsiveSpacing, getResponsiveFontSize } from '../../utils/responsive';
 import { useSidebar } from '../../contexts/SidebarContext';
 
 interface SidebarProps {
@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    paddingTop: theme.spacing.md,
   },
   sidebar: {
     backgroundColor: theme.colors.sidebar.background,
