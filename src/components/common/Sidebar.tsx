@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
+    paddingTop: theme.spacing.md,
   },
   sidebar: {
     backgroundColor: theme.colors.sidebar.background,
