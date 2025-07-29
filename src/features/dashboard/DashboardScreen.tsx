@@ -7,7 +7,6 @@ import {
   ScrollView,
   useWindowDimensions,
   FlatList,
-  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
@@ -155,10 +154,7 @@ export const DashboardScreen: React.FC = () => {
         showNotification={true}
         notificationCount={1}
       />
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false} contentContainerStyle={[
-          styles.scrollContent,
-          { paddingBottom: Platform.OS === 'android' ? theme.spacing.xl * 3 : theme.spacing.xl }
-        ]}>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {isLargeScreen ? (
           <View style={styles.gridContainer}>
             {/* Left Column */}
@@ -347,7 +343,4 @@ const styles = StyleSheet.create({
   successButton: {
     backgroundColor: '#FFFFFF',
   },
-  scrollContent: {
-
-  }
 });

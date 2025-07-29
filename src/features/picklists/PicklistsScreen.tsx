@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   View,
@@ -7,7 +8,6 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   FlatList,
-  Platform,
 } from 'react-native';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';

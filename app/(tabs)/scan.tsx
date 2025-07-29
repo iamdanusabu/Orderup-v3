@@ -1,6 +1,6 @@
+
 import React from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../src/components/common/Button';
 import { Sidebar } from '../../src/components/common/Sidebar';
@@ -26,7 +26,7 @@ export default function ScanScreen() {
             Scan customer QR codes to retrieve order details for quick fulfillment
           </Text>
         </View>
-
+        
         <Button
           title="Open Camera"
           onPress={handleScan}
@@ -36,14 +36,7 @@ export default function ScanScreen() {
     </View>
   );
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={[styles.content, { paddingBottom: Platform.OS === 'android' ? 80 : 20 }]}>
-        <Text style={styles.text}>Scan Screen</Text>
-        <Text style={styles.subtitle}>QR Code scanner will be implemented here</Text>
-      </View>
-    </SafeAreaView>
-  );
+  return <Sidebar>{content}</Sidebar>;
 }
 
 const styles = StyleSheet.create({
@@ -76,8 +69,5 @@ const styles = StyleSheet.create({
   },
   scanButton: {
     minWidth: 200,
-  },
-  text: {
-    fontSize: 20,
   },
 });

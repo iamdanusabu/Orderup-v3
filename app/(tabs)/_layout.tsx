@@ -2,7 +2,7 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { useWindowDimensions, Platform } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 
 export default function TabLayout() {
   const { width, height } = useWindowDimensions();
@@ -34,10 +34,9 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
           borderTopColor: '#E5E7EB',
-          height: isLandscape ? 50 : (Platform.OS === 'android' ? 75 : 60),
-          paddingBottom: isLandscape ? 4 : (Platform.OS === 'android' ? 20 : 8),
+          height: isLandscape ? 50 : 60,
+          paddingBottom: isLandscape ? 4 : 8,
           paddingTop: isLandscape ? 4 : 8,
-          marginBottom: Platform.OS === 'android' ? 0 : 0,
         },
       }}
     >
