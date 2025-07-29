@@ -122,7 +122,7 @@ export const OrderDetailsScreen: React.FC = () => {
         <StatusBadge status={mockOrderDetails.status} />
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContainer}>
         <View style={styles.row}>
           {/* Order Summary */}
           <Card style={styles.summaryCard}>
@@ -318,6 +318,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.md,
+  },
+  scrollContainer: {
+    paddingBottom: 100, // Add bottom padding to avoid navigation bar overlap
   },
   row: {
     flexDirection: 'row',
