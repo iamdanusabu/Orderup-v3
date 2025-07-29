@@ -5,8 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   useWindowDimensions,
-  SafeAreaView,
+  ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 import { theme } from '../../constants/theme';
@@ -28,7 +29,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const pathname = usePathname();
 
   if (!isLargeScreen) {
-    return <>{children}</>;
+    return (
+      <SafeAreaView style={styles.mobileContainer} edges={['left', 'right', 'bottom']}>
+        <ScrollView 
+          style={styles.mobileScrollView}
+          contentContainerStyle={styles.mobileScrollContent}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          {children}
+        </ScrollView>
+      </SafeAreaView>
+    );
   }
 
   const menuItems = [
@@ -40,7 +53,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const sidebarWidth = isCollapsed ? 80 : 240;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
       <View style={[styles.sidebar, { width: sidebarWidth }]}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -89,9 +102,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
         </View>
       </View>
       <View style={styles.content}>
-        {children}
+        <ScrollView 
+          style={styles.contentScrollView}
+          contentContainerStyle={styles.contentScrollContainer}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          {children}
+        </ScrollView>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -99,6 +120,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
+    backgroundColor: theme.colors.background,
+  },
+  mobileContainer: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+  mobileScrollView: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+  mobileScrollContent: {
+    flexGrow: 1,
+    paddingBottom: theme.spacing.xxl + theme.spacing.lg,
+    minHeight: '100%',
   },
   sidebar: {
     backgroundColor: theme.colors.sidebar.background,
@@ -156,5 +191,15 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+  contentScrollView: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+  contentScrollContainer: {
+    flexGrow: 1,
+    paddingBottom: theme.spacing.xxl + theme.spacing.lg,
+    minHeight: '100%',
   },
 });
