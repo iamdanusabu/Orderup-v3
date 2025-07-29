@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -55,6 +56,8 @@ const mockOrders = [
 
 export const PackingScreen: React.FC = () => {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const isLargeScreen = width >= 768;
   const [orders, setOrders] = useState(mockOrders);
   const [completedOrders, setCompletedOrders] = useState<string[]>([]);
 
@@ -89,12 +92,19 @@ export const PackingScreen: React.FC = () => {
 
       <ScrollView 
         style={styles.content}
-        contentContainerStyle={styles.scrollContainer}
+        contentContainerStyle={[
+          styles.scrollContainer,
+          isLargeScreen && styles.tabletScrollContainer
+        ]}
         showsVerticalScrollIndicator={false}
         bounces={false}
       >
-        {orders.map((order) => (
-          <Card key={order.id} style={styles.orderCard}>
+        <View style={isLargeScreen ? styles.tabletGrid : styles.mobileLayout}>
+          {orders.map((order) => (
+            <Card key={order.id} style={[
+              styles.orderCard,
+              isLargeScreen && styles.tabletOrderCard
+            ]}>
             <View style={styles.orderHeader}>
               <View style={styles.orderInfo}>
                 <Text style={styles.orderNumber}>{order.orderNumber}</Text>
@@ -134,8 +144,9 @@ export const PackingScreen: React.FC = () => {
                 style={styles.fulfillmentButton}
               />
             )}
-          </Card>
-        ))}
+            </Card>
+          ))}
+        </View>
       </ScrollView>
 
       {/* Bottom Actions */}
@@ -281,5 +292,22 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     flex: 1,
+  },
+  // Tablet-specific styles
+  tabletScrollContainer: {
+    paddingHorizontal: theme.spacing.xl,
+  },
+  tabletGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.spacing.lg,
+    justifyContent: 'space-between',
+  },
+  mobileLayout: {
+    flexDirection: 'column',
+  },
+  tabletOrderCard: {
+    width: '48%',
+    minWidth: 320,
   },
 });
