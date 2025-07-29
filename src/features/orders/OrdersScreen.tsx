@@ -418,7 +418,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    minWidth: 80,
+    minWidth: 100,
+    alignItems: 'center',
   },
   activeFilterTab: {
     backgroundColor: theme.colors.primary,

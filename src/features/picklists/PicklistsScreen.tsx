@@ -249,17 +249,21 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     borderWidth: 1,
     borderColor: theme.colors.border,
+    minWidth: 120,
+    alignItems: 'center',
   },
   activeFilterButton: {
     backgroundColor: theme.colors.primary,
     borderColor: theme.colors.primary,
   },
   filterButtonText: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.secondary,
     fontWeight: '500',
+    textAlign: 'center',
   },
   activeFilterButtonText: {
     color: '#FFFFFF',
+    textAlign: 'center',
   },
 });
