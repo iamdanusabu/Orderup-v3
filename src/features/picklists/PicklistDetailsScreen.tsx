@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'transparent',
     pointerEvents: 'box-none',
+    zIndex: 1000,
   },
   floatingButtonSafeArea: {
     backgroundColor: 'transparent',
@@ -272,6 +273,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
+    pointerEvents: 'auto',
   },
   floatingButton: {
     flex: 1,
