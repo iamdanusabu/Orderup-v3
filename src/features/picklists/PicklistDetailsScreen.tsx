@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
@@ -191,20 +192,22 @@ export const PicklistDetailsScreen: React.FC = () => {
       </ScrollView>
 
       {/* Bottom Actions */}
-      <View style={styles.bottomActions}>
-        <Button
-          title="Mark All Picked"
-          onPress={handleMarkAllPicked}
-          variant="secondary"
-          style={styles.actionButton}
-        />
-        <Button
-          title="Proceed to Fulfillment"
-          onPress={handleProceedToFulfillment}
-          variant="primary"
-          style={styles.actionButton}
-        />
-      </View>
+      <SafeAreaView style={styles.bottomSafeArea}>
+        <View style={styles.bottomActions}>
+          <Button
+            title="Mark All Picked"
+            onPress={handleMarkAllPicked}
+            variant="secondary"
+            style={styles.actionButton}
+          />
+          <Button
+            title="Proceed to Fulfillment"
+            onPress={handleProceedToFulfillment}
+            variant="primary"
+            style={styles.actionButton}
+          />
+        </View>
+      </SafeAreaView>
     </View>
   );
 
@@ -332,6 +335,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flex: 1,
     textAlign: 'center',
+  },
+  bottomSafeArea: {
+    backgroundColor: theme.colors.surface,
   },
   bottomActions: {
     flexDirection: 'row',

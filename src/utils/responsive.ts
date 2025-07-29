@@ -1,63 +1,43 @@
 
-import { useWindowDimensions } from 'react-native';
+import { Dimensions } from 'react-native';
 import { theme } from '../constants/theme';
 
-export type DeviceType = 'phone' | 'tablet' | 'desktop';
+export const getDeviceType = () => {
+  const { width } = Dimensions.get('window');
 
-export const getDeviceType = (): DeviceType => {
-  const { width } = useWindowDimensions();
-  
-  if (width < theme.breakpoints.tablet) {
-    return 'phone';
-  } else if (width < theme.breakpoints.desktop) {
+  if (width >= theme.breakpoints.desktop) {
+    return 'desktop';
+  } else if (width >= theme.breakpoints.tablet) {
     return 'tablet';
   } else {
-    return 'desktop';
+    return 'mobile';
   }
 };
 
-export const getResponsiveSpacing = (baseSpacing: number): number => {
+export const getResponsiveSpacing = (size: keyof typeof theme.spacing) => {
   const deviceType = getDeviceType();
-  
+  const baseSpacing = theme.spacing[size];
+
   switch (deviceType) {
-    case 'phone':
-      return baseSpacing;
-    case 'tablet':
+    case 'desktop':
       return baseSpacing * 1.2;
-    case 'desktop':
-      return baseSpacing * 1.4;
+    case 'tablet':
+      return baseSpacing * 1.1;
     default:
       return baseSpacing;
   }
 };
 
-export const getResponsiveColumns = (): number => {
-  const deviceType = getDeviceType();
-  
-  switch (deviceType) {
-    case 'phone':
-      return 1;
-    case 'tablet':
-      return 2;
-    case 'desktop':
-      return 3;
-    default:
-      return 1;
-  }
+export const getResponsiveWidth = (percentage: number) => {
+  const { width } = Dimensions.get('window');
+  return (width * percentage) / 100;
 };
 
-export const getResponsiveFontSize = (fontType: keyof typeof theme.typography) => {
-  const deviceType = getDeviceType();
-  const baseFontSize = theme.typography[fontType];
-  
-  switch (deviceType) {
-    case 'phone':
-      return baseFontSize;
-    case 'tablet':
-      return baseFontSize * 1.1;
-    case 'desktop':
-      return baseFontSize * 1.2;
-    default:
-      return baseFontSize;
-  }
+export const getResponsiveHeight = (percentage: number) => {
+  const { height } = Dimensions.get('window');
+  return (height * percentage) / 100;
+};
+
+export const getResponsiveFontSize = () => {
+  return 16;
 };
