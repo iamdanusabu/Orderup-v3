@@ -2,7 +2,7 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions, SafeAreaView, View, StyleSheet } from 'react-native';
 
 export default function TabLayout() {
   const { width, height } = useWindowDimensions();
@@ -12,70 +12,91 @@ export default function TabLayout() {
   if (isLargeScreen) {
     // For larger screens, we'll handle the sidebar in the individual screen components
     return (
-      <Tabs
-        screenOptions={{
-          tabBarStyle: { display: 'none' },
-          headerShown: false,
-        }}
-      >
-        <Tabs.Screen name="dashboard" />
-        <Tabs.Screen name="orders" />
-        <Tabs.Screen name="picklists" />
-        <Tabs.Screen name="scan" />
-      </Tabs>
+      <SafeAreaView style={styles.container}>
+        <Tabs
+          screenOptions={{
+            tabBarStyle: { display: 'none' },
+            headerShown: false,
+          }}
+        >
+          <Tabs.Screen name="dashboard" />
+          <Tabs.Screen name="orders" />
+          <Tabs.Screen name="picklists" />
+          <Tabs.Screen name="scan" />
+        </Tabs>
+      </SafeAreaView>
     );
   }
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: '#1B365D',
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopColor: '#E5E7EB',
-          height: isLandscape ? 50 : 60,
-          paddingBottom: isLandscape ? 4 : 8,
-          paddingTop: isLandscape ? 4 : 8,
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="dashboard"
-        options={{
-          title: 'Dashboard',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="orders"
-        options={{
-          title: 'Orders',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="picklists"
-        options={{
-          title: 'Picklists',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="checkmark-circle-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="scan"
-        options={{
-          title: 'Scan',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="qr-code-outline" size={size} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Tabs
+          screenOptions={{
+            tabBarActiveTintColor: '#1B365D',
+            headerShown: false,
+            tabBarStyle: {
+              backgroundColor: '#FFFFFF',
+              borderTopColor: '#E5E7EB',
+              height: isLandscape ? 50 : 60,
+              paddingBottom: isLandscape ? 4 : 8,
+              paddingTop: isLandscape ? 4 : 8,
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+            },
+          }}
+        >
+          <Tabs.Screen
+            name="dashboard"
+            options={{
+              title: 'Dashboard',
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="home-outline" size={size} color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="orders"
+            options={{
+              title: 'Orders',
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="list-outline" size={size} color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="picklists"
+            options={{
+              title: 'Picklists',
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="checkmark-circle-outline" size={size} color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="scan"
+            options={{
+              title: 'Scan',
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="qr-code-outline" size={size} color={color} />
+              ),
+            }}
+          />
+        </Tabs>
+      </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+  },
+  content: {
+    flex: 1,
+    paddingBottom: 70, // Add padding to prevent content overlap with tab bar
+  },
+});
