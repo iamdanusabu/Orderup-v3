@@ -33,6 +33,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           style={styles.mobileScrollView}
           contentContainerStyle={styles.mobileScrollContent}
           showsVerticalScrollIndicator={false}
+          bounces={false}
+          keyboardShouldPersistTaps="handled"
         >
           {children}
         </ScrollView>
@@ -105,6 +107,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             style={styles.contentScrollView}
             contentContainerStyle={styles.contentScrollContainer}
             showsVerticalScrollIndicator={false}
+            bounces={false}
+            keyboardShouldPersistTaps="handled"
           >
             {children}
           </ScrollView>
@@ -125,10 +129,12 @@ const styles = StyleSheet.create({
   },
   mobileScrollView: {
     flex: 1,
+    backgroundColor: theme.colors.background,
   },
   mobileScrollContent: {
     flexGrow: 1,
-    paddingBottom: theme.spacing.xl, // Extra padding to prevent overlap with navigation
+    paddingBottom: theme.spacing.xxl + theme.spacing.lg, // Extra padding to prevent overlap with navigation
+    minHeight: '100%',
   },
   sidebar: {
     backgroundColor: theme.colors.sidebar.background,
@@ -195,9 +201,11 @@ const styles = StyleSheet.create({
   },
   contentScrollView: {
     flex: 1,
+    backgroundColor: theme.colors.background,
   },
   contentScrollContainer: {
     flexGrow: 1,
-    paddingBottom: theme.spacing.xl, // Ensure content doesn't get cut off by navigation
+    paddingBottom: theme.spacing.xxl + theme.spacing.lg, // Ensure content doesn't get cut off by navigation
+    minHeight: '100%',
   },
 });
