@@ -7,7 +7,7 @@ import {
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme as useNativeColorScheme } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 import { SidebarProvider } from '../src/contexts/SidebarContext';
 
 // Create a simple useColorScheme hook since the original is missing
@@ -19,16 +19,14 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <SafeAreaProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <SidebarProvider>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="dark" backgroundColor="#ffffff" translucent={false} />
-        </SidebarProvider>
-      </ThemeProvider>
-    </SafeAreaProvider>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <SidebarProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+      </SidebarProvider>
+    </ThemeProvider>
   );
 }

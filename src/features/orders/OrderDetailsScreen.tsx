@@ -7,7 +7,6 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -105,7 +104,7 @@ export const OrderDetailsScreen: React.FC = () => {
   };
 
   const content = (
-    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+    <View style={styles.container}>
       <Toolbar 
         title="Order Details" 
         showBack={true}
@@ -123,13 +122,7 @@ export const OrderDetailsScreen: React.FC = () => {
         <StatusBadge status={mockOrderDetails.status} />
       </View>
 
-      <ScrollView 
-        style={styles.content} 
-        contentContainerStyle={styles.scrollContainer}
-        contentInsetAdjustmentBehavior="automatic"
-        showsVerticalScrollIndicator={false}
-        bounces={false}
-      >
+      <ScrollView style={styles.content}>
         <View style={styles.row}>
           {/* Order Summary */}
           <Card style={styles.summaryCard}>
@@ -288,7 +281,7 @@ export const OrderDetailsScreen: React.FC = () => {
           </Card>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -325,10 +318,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.md,
-  },
-  scrollContainer: {
-    paddingBottom: theme.spacing.lg, // Reduced padding since SafeAreaView handles bottom insets
-    flexGrow: 1,
   },
   row: {
     flexDirection: 'row',

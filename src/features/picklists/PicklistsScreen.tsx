@@ -8,7 +8,6 @@ import {
   useWindowDimensions,
   FlatList,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -110,7 +109,7 @@ export const PicklistsScreen: React.FC = () => {
   );
 
   const content = (
-    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+    <View style={styles.container}>
       <Toolbar 
         title="Picklists" 
         showBack={false}
@@ -144,19 +143,14 @@ export const PicklistsScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView 
-        style={styles.content}
-        contentContainerStyle={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}
-        bounces={false}
-      >
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {filteredPicklists.map((picklist) => (
           <View key={picklist.id}>
             {renderPicklistCard({ item: picklist })}
           </View>
         ))}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -170,10 +164,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
-  },
-  scrollContainer: {
-    paddingBottom: theme.spacing.lg,
-    flexGrow: 1,
   },
   picklistCard: {
     marginBottom: theme.spacing.lg,

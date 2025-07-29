@@ -6,9 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  useWindowDimensions,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
@@ -56,8 +54,6 @@ const mockOrders = [
 
 export const PackingScreen: React.FC = () => {
   const router = useRouter();
-  const { width } = useWindowDimensions();
-  const isLargeScreen = width >= 768;
   const [orders, setOrders] = useState(mockOrders);
   const [completedOrders, setCompletedOrders] = useState<string[]>([]);
 
@@ -78,96 +74,79 @@ export const PackingScreen: React.FC = () => {
 
   const content = (
     <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea} edges={['top']}>
-        <Toolbar 
-          title="Packing" 
-          showBack={true}
-          onBackPress={() => router.push('/picklist-details')}
-        />
-        
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>6 Orders selected for fulfillment</Text>
-          <Text style={styles.headerSubtitle}>Store: Fly LLC   ID: 1</Text>
-        </View>
-      </SafeAreaView>
+      <Toolbar 
+        title="Packing" 
+        showBack={true}
+        onBackPress={() => router.push('/picklist-details')}
+      />
+      
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>6 Orders selected for fulfillment</Text>
+        <Text style={styles.headerSubtitle}>Store: Fly LLC   ID: 1</Text>
+      </View>
 
-      <ScrollView 
-        style={styles.content}
-        contentContainerStyle={[
-          styles.scrollContainer,
-          isLargeScreen && styles.tabletScrollContainer
-        ]}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={isLargeScreen ? styles.tabletGrid : styles.mobileLayout}>
-          {orders.map((order) => (
-            <Card key={order.id} style={[
-              styles.orderCard,
-              isLargeScreen && styles.tabletOrderCard
-            ]}>
-              <View style={styles.orderHeader}>
-                <View style={styles.orderInfo}>
-                  <Text style={styles.orderNumber}>{order.orderNumber}</Text>
-                  <StatusBadge status={order.status} />
-                </View>
-                <Text style={styles.orderTotal}>{order.total}</Text>
+      <ScrollView style={styles.content}>
+        {orders.map((order) => (
+          <Card key={order.id} style={styles.orderCard}>
+            <View style={styles.orderHeader}>
+              <View style={styles.orderInfo}>
+                <Text style={styles.orderNumber}>{order.orderNumber}</Text>
+                <StatusBadge status={order.status} />
               </View>
+              <Text style={styles.orderTotal}>{order.total}</Text>
+            </View>
+            
+            <Text style={styles.customerInfo}>
+              {order.customer}   {order.location}
+            </Text>
+            <Text style={styles.orderDetails}>
+              External ID: {order.externalId}   Source: {order.source}   Date: {order.date}
+            </Text>
+            
+            <View style={styles.itemsSection}>
+              <Text style={styles.itemsTitle}>Items({order.items.length + order.moreItems})</Text>
+              <Text style={styles.moreItems}>+{order.moreItems} more items (tap to view all)</Text>
               
-              <Text style={styles.customerInfo}>
-                {order.customer}   {order.location}
-              </Text>
-              <Text style={styles.orderDetails}>
-                External ID: {order.externalId}   Source: {order.source}   Date: {order.date}
-              </Text>
-              
-              <View style={styles.itemsSection}>
-                <Text style={styles.itemsTitle}>Items({order.items.length + order.moreItems})</Text>
-                <Text style={styles.moreItems}>+{order.moreItems} more items (tap to view all)</Text>
-                
-                {order.items.map((item, index) => (
-                  <View key={index} style={styles.itemRow}>
-                    <Text style={styles.itemName}>{item.name}</Text>
-                    <Text style={styles.itemQuantity}>Qty:{item.quantity}</Text>
-                  </View>
-                ))}
-              </View>
-              
-              {completedOrders.includes(order.id) ? (
-                <View style={styles.completedBadge}>
-                  <Ionicons name="checkmark-circle" size={20} color={theme.colors.success} />
-                  <Text style={styles.completedText}>Completed</Text>
+              {order.items.map((item, index) => (
+                <View key={index} style={styles.itemRow}>
+                  <Text style={styles.itemName}>{item.name}</Text>
+                  <Text style={styles.itemQuantity}>Qty:{item.quantity}</Text>
                 </View>
-              ) : (
-                <Button
-                  title="Proceed to Fulfillment"
-                  onPress={() => handleProceedToFulfillment(order.id)}
-                  style={styles.fulfillmentButton}
-                />
-              )}
-            </Card>
-          ))}
-        </View>
+              ))}
+            </View>
+            
+            {completedOrders.includes(order.id) ? (
+              <View style={styles.completedBadge}>
+                <Ionicons name="checkmark-circle" size={20} color={theme.colors.success} />
+                <Text style={styles.completedText}>Completed</Text>
+              </View>
+            ) : (
+              <Button
+                title="Proceed to Fulfillment"
+                onPress={() => handleProceedToFulfillment(order.id)}
+                style={styles.fulfillmentButton}
+              />
+            )}
+          </Card>
+        ))}
       </ScrollView>
 
       {/* Bottom Actions */}
-      <SafeAreaView style={styles.bottomContainer} edges={['bottom']}>
-        <View style={styles.bottomActions}>
-          <Button
-            title="Return Home"
-            onPress={handleReturnHome}
-            variant="secondary"
-            style={styles.actionButton}
-          />
-          <Button
-            title="Finalize Order"
-            onPress={handleFinalizeOrder}
-            variant="primary"
-            style={styles.actionButton}
-          />
-        </View>
-      </SafeAreaView>
+      <View style={styles.bottomActions}>
+        <Button
+          title="Return Home"
+          onPress={handleReturnHome}
+          variant="secondary"
+          style={styles.actionButton}
+        />
+        <Button
+          title="Finalize Order"
+          onPress={handleFinalizeOrder}
+          variant="primary"
+          style={styles.actionButton}
+        />
+      </View>
     </View>
   );
 
@@ -179,15 +158,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  safeArea: {
-    backgroundColor: theme.colors.background,
-  },
   header: {
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
-    backgroundColor: theme.colors.background,
   },
   headerTitle: {
     fontSize: 18,
@@ -201,12 +176,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-  },
-  scrollContainer: {
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.md,
-    paddingBottom: theme.spacing.xl,
-    flexGrow: 1,
   },
   orderCard: {
     marginBottom: theme.spacing.md,
@@ -289,35 +260,15 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.success,
   },
-  bottomContainer: {
-    backgroundColor: theme.colors.surface,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
-  },
   bottomActions: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.lg,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
     gap: theme.spacing.md,
   },
   actionButton: {
     flex: 1,
-  },
-  // Tablet-specific styles
-  tabletScrollContainer: {
-    paddingHorizontal: theme.spacing.xl,
-  },
-  tabletGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.lg,
-    justifyContent: 'space-between',
-  },
-  mobileLayout: {
-    flexDirection: 'column',
-  },
-  tabletOrderCard: {
-    width: '48%',
-    minWidth: 320,
   },
 });

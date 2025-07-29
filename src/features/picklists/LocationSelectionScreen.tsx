@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
@@ -83,7 +82,7 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
   };
 
   const content = (
-    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+    <View style={styles.container}>
       <Toolbar 
         title="Location Selection" 
         showBack={true}
@@ -110,12 +109,7 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
         </TouchableOpacity>
       </View>
 
-      <ScrollView 
-        style={styles.content}
-        contentContainerStyle={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}
-        bounces={false}
-      >
+      <ScrollView style={styles.content}>
         {/* Location List */}
         {mockLocations.map((location) => (
           <Card key={location.id} style={styles.locationCard}>
@@ -206,7 +200,7 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
           style={styles.actionButton}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -249,10 +243,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.lg,
-  },
-  scrollContainer: {
-    paddingBottom: theme.spacing.lg,
-    flexGrow: 1,
   },
   locationCard: {
     marginBottom: theme.spacing.md,
