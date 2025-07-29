@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
@@ -104,7 +105,7 @@ export const OrderDetailsScreen: React.FC = () => {
   };
 
   const content = (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Toolbar 
         title="Order Details" 
         showBack={true}
@@ -122,7 +123,12 @@ export const OrderDetailsScreen: React.FC = () => {
         <StatusBadge status={mockOrderDetails.status} />
       </View>
 
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContainer}>
+      <ScrollView 
+        style={styles.content} 
+        contentContainerStyle={styles.scrollContainer}
+        contentInsetAdjustmentBehavior="automatic"
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.row}>
           {/* Order Summary */}
           <Card style={styles.summaryCard}>
@@ -281,7 +287,7 @@ export const OrderDetailsScreen: React.FC = () => {
           </Card>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -320,7 +326,7 @@ const styles = StyleSheet.create({
     paddingTop: theme.spacing.md,
   },
   scrollContainer: {
-    paddingBottom: 100, // Add bottom padding to avoid navigation bar overlap
+    paddingBottom: 120, // Increased bottom padding to avoid navigation bar overlap
   },
   row: {
     flexDirection: 'row',
