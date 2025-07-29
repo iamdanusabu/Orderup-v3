@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
 import { Card } from '../../components/common/Card';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { Sidebar } from '../../components/common/Sidebar';
@@ -96,10 +95,12 @@ const statusOptions = ['Ready', 'Processing', 'Completed', 'Cancelled', 'On Hold
 export const OrderDetailsScreen: React.FC = () => {
   const router = useRouter();
   const { orderId } = useLocalSearchParams();
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(mockOrderDetails.updateStatus.currentStatus);
 
   const handleUpdateStatus = (newStatus: string) => {
     setCurrentStatus(newStatus);
+    setShowStatusDropdown(false);
     console.log('Update status to:', newStatus);
   };
 
@@ -241,22 +242,40 @@ export const OrderDetailsScreen: React.FC = () => {
             <View style={styles.statusUpdateContainer}>
               <Text style={styles.summaryLabel}>Order Status</Text>
               <View style={styles.statusRow}>
-                <View style={styles.pickerContainer}>
-                  <Picker
-                    selectedValue={currentStatus}
-                    style={styles.picker}
-                    onValueChange={(itemValue) => handleUpdateStatus(itemValue)}
-                    itemStyle={styles.pickerItem}
+                <View style={styles.dropdownContainer}>
+                  <TouchableOpacity 
+                    style={styles.statusDropdown}
+                    onPress={() => setShowStatusDropdown(!showStatusDropdown)}
                   >
-                    {statusOptions.map((status) => (
-                      <Picker.Item
-                        key={status}
-                        label={status}
-                        value={status}
-                        color={theme.colors.text.primary}
-                      />
-                    ))}
-                  </Picker>
+                    <Text style={styles.statusDropdownText}>{currentStatus}</Text>
+                    <Ionicons 
+                      name={showStatusDropdown ? "chevron-up" : "chevron-down"} 
+                      size={16} 
+                      color={theme.colors.text.secondary} 
+                    />
+                  </TouchableOpacity>
+                  
+                  {showStatusDropdown && (
+                    <View style={styles.dropdownOptions}>
+                      {statusOptions.map((status) => (
+                        <TouchableOpacity
+                          key={status}
+                          style={[
+                            styles.dropdownOption,
+                            status === currentStatus && styles.selectedOption
+                          ]}
+                          onPress={() => handleUpdateStatus(status)}
+                        >
+                          <Text style={[
+                            styles.dropdownOptionText,
+                            status === currentStatus && styles.selectedOptionText
+                          ]}>
+                            {status}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  )}
                 </View>
                 <TouchableOpacity 
                   style={styles.updateButton}
@@ -411,22 +430,64 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
     alignItems: 'flex-start',
   },
-  pickerContainer: {
+  dropdownContainer: {
     flex: 1,
+    position: 'relative',
+  },
+  statusDropdown: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: theme.colors.border,
     borderRadius: theme.borderRadius.md,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
     backgroundColor: theme.colors.surface,
-    overflow: 'hidden',
   },
-  picker: {
-    height: 50,
-    width: '100%',
-    color: theme.colors.text.primary,
-  },
-  pickerItem: {
+  statusDropdownText: {
     fontSize: theme.typography.fontSize,
     color: theme.colors.text.primary,
+  },
+  dropdownOptions: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.borderRadius.md,
+    borderTopWidth: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    maxHeight: 200,
+    zIndex: 1000,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  dropdownOption: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+  },
+  selectedOption: {
+    backgroundColor: theme.colors.primary + '10',
+  },
+  dropdownOptionText: {
+    fontSize: theme.typography.fontSize,
+    color: theme.colors.text.primary,
+  },
+  selectedOptionText: {
+    color: theme.colors.primary,
+    fontWeight: '600',
   },
   updateButton: {
     backgroundColor: theme.colors.primary,

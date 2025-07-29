@@ -26,7 +26,7 @@ export default function RootLayout() {
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
           </Stack>
-          <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+          <StatusBar style="auto" />
         </SidebarProvider>
       </ThemeProvider>
     </SafeAreaProvider>

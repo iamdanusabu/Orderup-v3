@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   useWindowDimensions,
-  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -28,20 +27,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
 
   if (!isLargeScreen) {
     return (
-      <View style={styles.mobileWrapper}>
-        <SafeAreaView style={styles.mobileContainer} edges={['top']}>
-          <ScrollView 
-            style={styles.mobileScrollView}
-            contentContainerStyle={styles.mobileScrollContent}
-            showsVerticalScrollIndicator={false}
-            bounces={false}
-            keyboardShouldPersistTaps="handled"
-          >
-            {children}
-          </ScrollView>
-        </SafeAreaView>
-        <SafeAreaView style={styles.mobileBottomSafeArea} edges={['bottom']} />
-      </View>
+      <SafeAreaView style={styles.mobileContainer} edges={['top', 'bottom']}>
+        {children}
+      </SafeAreaView>
     );
   }
 
@@ -56,8 +44,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   return (
     <View style={styles.container}>
       <View style={[styles.sidebar, { width: sidebarWidth }]}>
-        <SafeAreaView style={styles.sidebarTopSafeArea} edges={['top']} />
-        <View style={styles.sidebarContent}>
+        <SafeAreaView style={styles.sidebarContent} edges={['top', 'bottom']}>
           <View style={styles.header}>
             <View style={styles.headerContent}>
               <View style={styles.logoContainer}>
@@ -103,21 +90,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               </TouchableOpacity>
             ))}
           </View>
-        </View>
-        <SafeAreaView style={styles.sidebarBottomSafeArea} edges={['bottom']} />
+        </SafeAreaView>
       </View>
       <View style={styles.content}>
-        <SafeAreaView style={styles.contentTopSafeArea} edges={['top']} />
-        <ScrollView 
-          style={styles.contentScrollView}
-          contentContainerStyle={styles.contentScrollContainer}
-          showsVerticalScrollIndicator={false}
-          bounces={false}
-          keyboardShouldPersistTaps="handled"
-        >
+        <SafeAreaView style={styles.contentArea} edges={['top', 'bottom']}>
           {children}
-        </ScrollView>
-        <SafeAreaView style={styles.contentBottomSafeArea} edges={['bottom']} />
+        </SafeAreaView>
       </View>
     </View>
   );
@@ -127,42 +105,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#fff',
-  },
-  mobileWrapper: {
-    flex: 1,
-    backgroundColor: '#fff',
   },
   mobileContainer: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  mobileBottomSafeArea: {
-    backgroundColor: '#fff',
-  },
-  mobileScrollView: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  mobileScrollContent: {
-    flexGrow: 1,
-    backgroundColor: '#fff',
-    minHeight: '100%',
   },
   sidebar: {
     backgroundColor: theme.colors.sidebar.background,
     borderRightWidth: 1,
     borderRightColor: theme.colors.sidebar.border,
   },
-  sidebarTopSafeArea: {
-    backgroundColor: '#fff',
-  },
-  sidebarBottomSafeArea: {
-    backgroundColor: theme.colors.sidebar.background,
-  },
   sidebarContent: {
     flex: 1,
-    backgroundColor: theme.colors.sidebar.background,
   },
   header: {
     padding: theme.spacing.lg,
@@ -214,21 +168,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    backgroundColor: '#fff',
   },
-  contentTopSafeArea: {
-    backgroundColor: '#fff',
-  },
-  contentBottomSafeArea: {
-    backgroundColor: '#fff',
-  },
-  contentScrollView: {
+  contentArea: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  contentScrollContainer: {
-    flexGrow: 1,
-    backgroundColor: '#fff',
-    minHeight: '100%',
   },
 });
