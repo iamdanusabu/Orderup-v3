@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { ScreenWrapper } from '../../components/common/ScreenWrapper';
 import { Sidebar } from '../../components/common/Sidebar';
 import { Toolbar } from '../../components/common/Toolbar';
 import { theme } from '../../constants/theme';
@@ -73,81 +74,83 @@ export const PackingScreen: React.FC = () => {
   };
 
   const content = (
-    <View style={styles.container}>
-      <Toolbar 
-        title="Packing" 
-        showBack={true}
-        onBackPress={() => router.push('/picklist-details')}
-      />
-      
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>6 Orders selected for fulfillment</Text>
-        <Text style={styles.headerSubtitle}>Store: Fly LLC   ID: 1</Text>
-      </View>
+    <ScreenWrapper scrollable={false} keyboardAvoiding={false}>
+      <View style={styles.container}>
+        <Toolbar 
+          title="Packing" 
+          showBack={true}
+          onBackPress={() => router.push('/picklist-details')}
+        />
+        
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>6 Orders selected for fulfillment</Text>
+          <Text style={styles.headerSubtitle}>Store: Fly LLC   ID: 1</Text>
+        </View>
 
-      <ScrollView style={styles.content}>
-        {orders.map((order) => (
-          <Card key={order.id} style={styles.orderCard}>
-            <View style={styles.orderHeader}>
-              <View style={styles.orderInfo}>
-                <Text style={styles.orderNumber}>{order.orderNumber}</Text>
-                <StatusBadge status={order.status} />
-              </View>
-              <Text style={styles.orderTotal}>{order.total}</Text>
-            </View>
-            
-            <Text style={styles.customerInfo}>
-              {order.customer}   {order.location}
-            </Text>
-            <Text style={styles.orderDetails}>
-              External ID: {order.externalId}   Source: {order.source}   Date: {order.date}
-            </Text>
-            
-            <View style={styles.itemsSection}>
-              <Text style={styles.itemsTitle}>Items({order.items.length + order.moreItems})</Text>
-              <Text style={styles.moreItems}>+{order.moreItems} more items (tap to view all)</Text>
-              
-              {order.items.map((item, index) => (
-                <View key={index} style={styles.itemRow}>
-                  <Text style={styles.itemName}>{item.name}</Text>
-                  <Text style={styles.itemQuantity}>Qty:{item.quantity}</Text>
+        <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+          {orders.map((order) => (
+            <Card key={order.id} style={styles.orderCard}>
+              <View style={styles.orderHeader}>
+                <View style={styles.orderInfo}>
+                  <Text style={styles.orderNumber}>{order.orderNumber}</Text>
+                  <StatusBadge status={order.status} />
                 </View>
-              ))}
-            </View>
-            
-            {completedOrders.includes(order.id) ? (
-              <View style={styles.completedBadge}>
-                <Ionicons name="checkmark-circle" size={20} color={theme.colors.success} />
-                <Text style={styles.completedText}>Completed</Text>
+                <Text style={styles.orderTotal}>{order.total}</Text>
               </View>
-            ) : (
-              <Button
-                title="Proceed to Fulfillment"
-                onPress={() => handleProceedToFulfillment(order.id)}
-                style={styles.fulfillmentButton}
-              />
-            )}
-          </Card>
-        ))}
-      </ScrollView>
+              
+              <Text style={styles.customerInfo}>
+                {order.customer}   {order.location}
+              </Text>
+              <Text style={styles.orderDetails}>
+                External ID: {order.externalId}   Source: {order.source}   Date: {order.date}
+              </Text>
+              
+              <View style={styles.itemsSection}>
+                <Text style={styles.itemsTitle}>Items({order.items.length + order.moreItems})</Text>
+                <Text style={styles.moreItems}>+{order.moreItems} more items (tap to view all)</Text>
+                
+                {order.items.map((item, index) => (
+                  <View key={index} style={styles.itemRow}>
+                    <Text style={styles.itemName}>{item.name}</Text>
+                    <Text style={styles.itemQuantity}>Qty:{item.quantity}</Text>
+                  </View>
+                ))}
+              </View>
+              
+              {completedOrders.includes(order.id) ? (
+                <View style={styles.completedBadge}>
+                  <Ionicons name="checkmark-circle" size={20} color={theme.colors.success} />
+                  <Text style={styles.completedText}>Completed</Text>
+                </View>
+              ) : (
+                <Button
+                  title="Proceed to Fulfillment"
+                  onPress={() => handleProceedToFulfillment(order.id)}
+                  style={styles.fulfillmentButton}
+                />
+              )}
+            </Card>
+          ))}
+        </ScrollView>
 
-      {/* Bottom Actions */}
-      <View style={styles.bottomActions}>
-        <Button
-          title="Return Home"
-          onPress={handleReturnHome}
-          variant="secondary"
-          style={styles.actionButton}
-        />
-        <Button
-          title="Finalize Order"
-          onPress={handleFinalizeOrder}
-          variant="primary"
-          style={styles.actionButton}
-        />
+        {/* Bottom Actions */}
+        <View style={styles.bottomActions}>
+          <Button
+            title="Return Home"
+            onPress={handleReturnHome}
+            variant="secondary"
+            style={styles.actionButton}
+          />
+          <Button
+            title="Finalize Order"
+            onPress={handleFinalizeOrder}
+            variant="primary"
+            style={styles.actionButton}
+          />
+        </View>
       </View>
-    </View>
+    </ScreenWrapper>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -178,6 +181,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.md,
+  },
+  scrollContent: {
+    paddingBottom: theme.spacing.xl,
   },
   orderCard: {
     marginBottom: theme.spacing.md,

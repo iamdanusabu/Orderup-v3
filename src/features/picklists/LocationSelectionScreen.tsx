@@ -9,6 +9,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
+import { ScreenWrapper } from '../../components/common/ScreenWrapper';
 import { Sidebar } from '../../components/common/Sidebar';
 import { Toolbar } from '../../components/common/Toolbar';
 import { theme } from '../../constants/theme';
@@ -82,125 +83,127 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
   };
 
   const content = (
-    <View style={styles.container}>
-      <Toolbar 
-        title="Location Selection" 
-        showBack={true}
-        onBackPress={() => router.push('/orders')}
-      />
+    <ScreenWrapper scrollable={false} keyboardAvoiding={false}>
+      <View style={styles.container}>
+        <Toolbar 
+          title="Location Selection" 
+          showBack={true}
+          onBackPress={() => router.push('/orders')}
+        />
 
-      {/* Tab Navigation */}
-      <View style={styles.tabContainer}>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === 'Store' && styles.activeTab]}
-          onPress={() => setActiveTab('Store')}
-        >
-          <Text style={[styles.tabText, activeTab === 'Store' && styles.activeTabText]}>
-            Store
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === 'Warehouse' && styles.activeTab]}
-          onPress={() => setActiveTab('Warehouse')}
-        >
-          <Text style={[styles.tabText, activeTab === 'Warehouse' && styles.activeTabText]}>
-            Warehouse
-          </Text>
-        </TouchableOpacity>
-      </View>
+        {/* Tab Navigation */}
+        <View style={styles.tabContainer}>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'Store' && styles.activeTab]}
+            onPress={() => setActiveTab('Store')}
+          >
+            <Text style={[styles.tabText, activeTab === 'Store' && styles.activeTabText]}>
+              Store
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'Warehouse' && styles.activeTab]}
+            onPress={() => setActiveTab('Warehouse')}
+          >
+            <Text style={[styles.tabText, activeTab === 'Warehouse' && styles.activeTabText]}>
+              Warehouse
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-      <ScrollView style={styles.content}>
-        {/* Location List */}
-        {mockLocations.map((location) => (
-          <Card key={location.id} style={styles.locationCard}>
-            <TouchableOpacity
-              style={styles.locationContent}
-              onPress={() => handleLocationSelect(location.id)}
-            >
-              <View style={styles.radioContainer}>
-                <View style={[
-                  styles.radioButton,
-                  selectedLocation === location.id && styles.radioButtonSelected
-                ]}>
-                  {selectedLocation === location.id && (
-                    <View style={styles.radioButtonInner} />
-                  )}
+        <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+          {/* Location List */}
+          {mockLocations.map((location) => (
+            <Card key={location.id} style={styles.locationCard}>
+              <TouchableOpacity
+                style={styles.locationContent}
+                onPress={() => handleLocationSelect(location.id)}
+              >
+                <View style={styles.radioContainer}>
+                  <View style={[
+                    styles.radioButton,
+                    selectedLocation === location.id && styles.radioButtonSelected
+                  ]}>
+                    {selectedLocation === location.id && (
+                      <View style={styles.radioButtonInner} />
+                    )}
+                  </View>
                 </View>
-              </View>
-              <View style={styles.locationInfo}>
-                <Text style={styles.locationName}>{location.name}</Text>
-                <Text style={styles.locationId}>ID: {location.idNumber}</Text>
-              </View>
-            </TouchableOpacity>
-          </Card>
-        ))}
+                <View style={styles.locationInfo}>
+                  <Text style={styles.locationName}>{location.name}</Text>
+                  <Text style={styles.locationId}>ID: {location.idNumber}</Text>
+                </View>
+              </TouchableOpacity>
+            </Card>
+          ))}
 
-        {/* User Assignment Section */}
-        <View style={styles.assignmentSection}>
-          <Text style={styles.sectionTitle}>Assign Picklist (Optional)</Text>
-          <View style={{ position: 'relative' }}>
-            <TouchableOpacity
-              style={styles.userDropdownButton}
-              onPress={() => setShowUserDropdown(!showUserDropdown)}
-            >
-              <Text style={styles.userDropdownText}>
-                {assignedUser ? mockUsers.find(u => u.id === assignedUser)?.name : 'Select User'}
-              </Text>
-              <Ionicons 
-                name={showUserDropdown ? "chevron-up-outline" : "chevron-down-outline"} 
-                size={20} 
-                color={theme.colors.text.secondary} 
-              />
-            </TouchableOpacity>
+          {/* User Assignment Section */}
+          <View style={styles.assignmentSection}>
+            <Text style={styles.sectionTitle}>Assign Picklist (Optional)</Text>
+            <View style={{ position: 'relative' }}>
+              <TouchableOpacity
+                style={styles.userDropdownButton}
+                onPress={() => setShowUserDropdown(!showUserDropdown)}
+              >
+                <Text style={styles.userDropdownText}>
+                  {assignedUser ? mockUsers.find(u => u.id === assignedUser)?.name : 'Select User'}
+                </Text>
+                <Ionicons 
+                  name={showUserDropdown ? "chevron-up-outline" : "chevron-down-outline"} 
+                  size={20} 
+                  color={theme.colors.text.secondary} 
+                />
+              </TouchableOpacity>
 
-            {showUserDropdown && (
-              <View style={styles.userDropdown}>
-                <TouchableOpacity
-                  style={[styles.userOption, { borderBottomWidth: 1 }]}
-                  onPress={() => {
-                    setAssignedUser(null);
-                    setShowUserDropdown(false);
-                  }}
-                >
-                  <Text style={styles.userOptionText}>Unassigned</Text>
-                </TouchableOpacity>
-                {mockUsers.map((user, index) => (
+              {showUserDropdown && (
+                <View style={styles.userDropdown}>
                   <TouchableOpacity
-                    key={user.id}
-                    style={[
-                      styles.userOption,
-                      { borderBottomWidth: index === mockUsers.length - 1 ? 0 : 1 }
-                    ]}
+                    style={[styles.userOption, { borderBottomWidth: 1 }]}
                     onPress={() => {
-                      setAssignedUser(user.id);
+                      setAssignedUser(null);
                       setShowUserDropdown(false);
                     }}
                   >
-                    <Text style={styles.userOptionText}>{user.name}</Text>
+                    <Text style={styles.userOptionText}>Unassigned</Text>
                   </TouchableOpacity>
-                ))}
-              </View>
-            )}
+                  {mockUsers.map((user, index) => (
+                    <TouchableOpacity
+                      key={user.id}
+                      style={[
+                        styles.userOption,
+                        { borderBottomWidth: index === mockUsers.length - 1 ? 0 : 1 }
+                      ]}
+                      onPress={() => {
+                        setAssignedUser(user.id);
+                        setShowUserDropdown(false);
+                      }}
+                    >
+                      <Text style={styles.userOptionText}>{user.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
 
-      {/* Bottom Actions */}
-      <View style={styles.bottomActions}>
-        <Button
-          title="Return Home"
-          onPress={handleReturnHome}
-          variant="secondary"
-          style={styles.actionButton}
-        />
-        <Button
-          title="Create Picklist"
-          onPress={handleCreatePicklist}
-          variant="primary"
-          style={styles.actionButton}
-        />
+        {/* Bottom Actions */}
+        <View style={styles.bottomActions}>
+          <Button
+            title="Return Home"
+            onPress={handleReturnHome}
+            variant="secondary"
+            style={styles.actionButton}
+          />
+          <Button
+            title="Create Picklist"
+            onPress={handleCreatePicklist}
+            variant="primary"
+            style={styles.actionButton}
+          />
+        </View>
       </View>
-    </View>
+    </ScreenWrapper>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -243,6 +246,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.lg,
+  },
+  scrollContent: {
+    paddingBottom: theme.spacing.xl,
   },
   locationCard: {
     marginBottom: theme.spacing.md,

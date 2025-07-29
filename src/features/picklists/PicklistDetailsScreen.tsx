@@ -9,6 +9,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
+import { ScreenWrapper } from '../../components/common/ScreenWrapper';
 import { Sidebar } from '../../components/common/Sidebar';
 import { Toolbar } from '../../components/common/Toolbar';
 import { theme } from '../../constants/theme';
@@ -115,97 +116,99 @@ export const PicklistDetailsScreen: React.FC = () => {
   };
 
   const content = (
-    <View style={styles.container}>
-      <Toolbar 
-        title="Picklist" 
-        showBack={true}
-        onBackPress={() => router.push('/location-selection')}
-      />
+    <ScreenWrapper scrollable={false} keyboardAvoiding={false}>
+      <View style={styles.container}>
+        <Toolbar 
+          title="Picklist" 
+          showBack={true}
+          onBackPress={() => router.push('/location-selection')}
+        />
 
-      {/* Header Info */}
-      <View style={styles.headerInfo}>
-        <Text style={styles.headerText}>
-          Orders: 11  Items: 9  Store: Fly LLC  ID: 1
-        </Text>
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View 
-              style={[
-                styles.progressFill, 
-                { width: `${(pickedItems / totalItems) * 100}%` }
-              ]} 
-            />
-          </View>
-          <Text style={styles.progressText}>
-            {pickedItems} of {totalItems} items picked
+        {/* Header Info */}
+        <View style={styles.headerInfo}>
+          <Text style={styles.headerText}>
+            Orders: 11  Items: 9  Store: Fly LLC  ID: 1
           </Text>
-        </View>
-      </View>
-
-      {/* Unassigned Bin Header */}
-      <View style={styles.binHeader}>
-        <View style={styles.binInfo}>
-          <Ionicons name="cube-outline" size={20} color={theme.colors.text.primary} />
-          <Text style={styles.binText}>Unassigned Bin</Text>
-        </View>
-      </View>
-
-      <ScrollView style={styles.content}>
-        {items.map((item) => (
-          <Card key={item.id} style={styles.itemCard}>
-            <View style={styles.itemContent}>
-              <View style={styles.itemInfo}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemSku}>SKU: {item.sku}</Text>
-                <Text style={styles.itemAvailability}>
-                  Available: {item.available} | QOH: {item.qoh}
-                </Text>
-              </View>
-
-              <View style={styles.quantityDisplay}>
-                
-                  <TouchableOpacity
-                    style={styles.decrementButton}
-                    onPress={() => handleQuantityChange(item.id, -1)}
-                    disabled={item.picked <= 0}
-                  >
-                    <Ionicons name="remove" size={16} color="#FFFFFF" />
-                  </TouchableOpacity>
-                
-                <Text style={styles.quantityDisplayText}>
-                  {item.picked}/{item.needed}
-                </Text>
-                
-                  <TouchableOpacity
-                    style={styles.incrementButton}
-                    onPress={() => handleQuantityChange(item.id, 1)}
-                    disabled={item.picked >= item.needed}
-                  >
-                    <Ionicons name="add" size={16} color="#FFFFFF" />
-                  </TouchableOpacity>
-                
-              </View>
+          <View style={styles.progressContainer}>
+            <View style={styles.progressBar}>
+              <View 
+                style={[
+                  styles.progressFill, 
+                  { width: `${(pickedItems / totalItems) * 100}%` }
+                ]} 
+              />
             </View>
-          </Card>
-        ))}
-      </ScrollView>
+            <Text style={styles.progressText}>
+              {pickedItems} of {totalItems} items picked
+            </Text>
+          </View>
+        </View>
 
-      {/* Bottom Actions */}
-      <View style={styles.bottomActions}>
-        <Button
-          title="Mark All Picked"
-          onPress={handleMarkAllPicked}
-          variant="secondary"
-          style={styles.actionButton}
-        />
-        <Button
-          title="Proceed to Fulfillment"
-          onPress={handleProceedToFulfillment}
-          variant="primary"
-          style={styles.actionButton}
-        />
+        {/* Unassigned Bin Header */}
+        <View style={styles.binHeader}>
+          <View style={styles.binInfo}>
+            <Ionicons name="cube-outline" size={20} color={theme.colors.text.primary} />
+            <Text style={styles.binText}>Unassigned Bin</Text>
+          </View>
+        </View>
+
+        <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+          {items.map((item) => (
+            <Card key={item.id} style={styles.itemCard}>
+              <View style={styles.itemContent}>
+                <View style={styles.itemInfo}>
+                  <Text style={styles.itemName}>{item.name}</Text>
+                  <Text style={styles.itemSku}>SKU: {item.sku}</Text>
+                  <Text style={styles.itemAvailability}>
+                    Available: {item.available} | QOH: {item.qoh}
+                  </Text>
+                </View>
+
+                <View style={styles.quantityDisplay}>
+                  
+                    <TouchableOpacity
+                      style={styles.decrementButton}
+                      onPress={() => handleQuantityChange(item.id, -1)}
+                      disabled={item.picked <= 0}
+                    >
+                      <Ionicons name="remove" size={16} color="#FFFFFF" />
+                    </TouchableOpacity>
+                  
+                  <Text style={styles.quantityDisplayText}>
+                    {item.picked}/{item.needed}
+                  </Text>
+                  
+                    <TouchableOpacity
+                      style={styles.incrementButton}
+                      onPress={() => handleQuantityChange(item.id, 1)}
+                      disabled={item.picked >= item.needed}
+                    >
+                      <Ionicons name="add" size={16} color="#FFFFFF" />
+                    </TouchableOpacity>
+                  
+                </View>
+              </View>
+            </Card>
+          ))}
+        </ScrollView>
+
+        {/* Bottom Actions */}
+        <View style={styles.bottomActions}>
+          <Button
+            title="Mark All Picked"
+            onPress={handleMarkAllPicked}
+            variant="secondary"
+            style={styles.actionButton}
+          />
+          <Button
+            title="Proceed to Fulfillment"
+            onPress={handleProceedToFulfillment}
+            variant="primary"
+            style={styles.actionButton}
+          />
+        </View>
       </View>
-    </View>
+    </ScreenWrapper>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -269,6 +272,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.md,
+  },
+  scrollContent: {
+    paddingBottom: theme.spacing.xl,
   },
   itemCard: {
     marginBottom: theme.spacing.sm,
