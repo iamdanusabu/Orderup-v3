@@ -116,40 +116,42 @@ export const PicklistDetailsScreen: React.FC = () => {
   };
 
   const content = (
-    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <Toolbar 
-        title="Picklist" 
-        showBack={true}
-        onBackPress={() => router.push('/location-selection')}
-      />
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeAreaTop} edges={['top']}>
+        <Toolbar 
+          title="Picklist" 
+          showBack={true}
+          onBackPress={() => router.push('/location-selection')}
+        />
 
-      {/* Header Info */}
-      <View style={styles.headerInfo}>
-        <Text style={styles.headerText}>
-          Orders: 11  Items: 9  Store: Fly LLC  ID: 1
-        </Text>
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View 
-              style={[
-                styles.progressFill, 
-                { width: `${(pickedItems / totalItems) * 100}%` }
-              ]} 
-            />
-          </View>
-          <Text style={styles.progressText}>
-            {pickedItems} of {totalItems} items picked
+        {/* Header Info */}
+        <View style={styles.headerInfo}>
+          <Text style={styles.headerText}>
+            Orders: 11  Items: 9  Store: Fly LLC  ID: 1
           </Text>
+          <View style={styles.progressContainer}>
+            <View style={styles.progressBar}>
+              <View 
+                style={[
+                  styles.progressFill, 
+                  { width: `${(pickedItems / totalItems) * 100}%` }
+                ]} 
+              />
+            </View>
+            <Text style={styles.progressText}>
+              {pickedItems} of {totalItems} items picked
+            </Text>
+          </View>
         </View>
-      </View>
 
-      {/* Unassigned Bin Header */}
-      <View style={styles.binHeader}>
-        <View style={styles.binInfo}>
-          <Ionicons name="cube-outline" size={20} color={theme.colors.text.primary} />
-          <Text style={styles.binText}>Unassigned Bin</Text>
+        {/* Unassigned Bin Header */}
+        <View style={styles.binHeader}>
+          <View style={styles.binInfo}>
+            <Ionicons name="cube-outline" size={20} color={theme.colors.text.primary} />
+            <Text style={styles.binText}>Unassigned Bin</Text>
+          </View>
         </View>
-      </View>
+      </SafeAreaView>
 
       <ScrollView 
         style={styles.content}
@@ -197,21 +199,23 @@ export const PicklistDetailsScreen: React.FC = () => {
       </ScrollView>
 
       {/* Bottom Actions */}
-      <View style={styles.bottomActions}>
-        <Button
-          title="Mark All Picked"
-          onPress={handleMarkAllPicked}
-          variant="secondary"
-          style={styles.actionButton}
-        />
-        <Button
-          title="Proceed to Fulfillment"
-          onPress={handleProceedToFulfillment}
-          variant="primary"
-          style={styles.actionButton}
-        />
-      </View>
-    </SafeAreaView>
+      <SafeAreaView style={styles.safeAreaBottom} edges={['bottom']}>
+        <View style={styles.bottomActions}>
+          <Button
+            title="Mark All Picked"
+            onPress={handleMarkAllPicked}
+            variant="secondary"
+            style={styles.actionButton}
+          />
+          <Button
+            title="Proceed to Fulfillment"
+            onPress={handleProceedToFulfillment}
+            variant="primary"
+            style={styles.actionButton}
+          />
+        </View>
+      </SafeAreaView>
+    </View>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -221,6 +225,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
+  },
+  safeAreaTop: {
+    backgroundColor: theme.colors.background,
+  },
+  safeAreaBottom: {
+    backgroundColor: theme.colors.surface,
   },
   headerInfo: {
     paddingHorizontal: theme.spacing.lg,
@@ -277,7 +287,7 @@ const styles = StyleSheet.create({
     paddingTop: theme.spacing.md,
   },
   scrollContainer: {
-    paddingBottom: theme.spacing.lg,
+    paddingBottom: theme.spacing.xl,
     flexGrow: 1,
   },
   itemCard: {
@@ -346,7 +356,8 @@ const styles = StyleSheet.create({
   bottomActions: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.xl,
+    paddingTop: theme.spacing.lg,
+    paddingBottom: theme.spacing.md,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
     backgroundColor: theme.colors.surface,
