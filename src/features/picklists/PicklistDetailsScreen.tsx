@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   View,
@@ -160,41 +161,52 @@ export const PicklistDetailsScreen: React.FC = () => {
         bounces={false}
       >
         {items.map((item) => (
-          <Card key={item.id} style={styles.itemCard}>
+          <View key={item.id} style={styles.itemCard}>
             <View style={styles.itemContent}>
               <View style={styles.itemInfo}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemSku}>SKU: {item.sku}</Text>
                 <Text style={styles.itemAvailability}>
-                  Available: {item.available} | QOH: {item.qoh}
+                  Available: {item.available}  QOH: {item.qoh}
                 </Text>
               </View>
 
-              <View style={styles.quantityDisplay}>
-                
+              <View style={styles.rightSection}>
+                <View style={styles.quantitySection}>
                   <TouchableOpacity
-                    style={styles.decrementButton}
+                    style={styles.quantityButton}
                     onPress={() => handleQuantityChange(item.id, -1)}
                     disabled={item.picked <= 0}
                   >
-                    <Ionicons name="remove" size={16} color="#FFFFFF" />
+                    <Ionicons name="remove" size={16} color={theme.colors.primary} />
                   </TouchableOpacity>
-                
-                <Text style={styles.quantityDisplayText}>
-                  {item.picked}/{item.needed}
-                </Text>
-                
+                  
+                  <Text style={styles.quantityText}>
+                    {item.picked}/{item.needed}
+                  </Text>
+                  
                   <TouchableOpacity
-                    style={styles.incrementButton}
+                    style={styles.quantityButton}
                     onPress={() => handleQuantityChange(item.id, 1)}
                     disabled={item.picked >= item.needed}
                   >
-                    <Ionicons name="add" size={16} color="#FFFFFF" />
+                    <Ionicons name="add" size={16} color={theme.colors.primary} />
                   </TouchableOpacity>
-                
+                </View>
+
+                {item.status === 'picked' ? (
+                  <Text style={styles.pickedText}>Picked</Text>
+                ) : (
+                  <TouchableOpacity 
+                    style={styles.pickButton}
+                    onPress={() => handleItemPick(item.id)}
+                  >
+                    <Text style={styles.pickButtonText}>Pick</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
-          </Card>
+          </View>
         ))}
       </ScrollView>
 
@@ -291,9 +303,13 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   itemCard: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.md,
     marginBottom: theme.spacing.sm,
-    paddingVertical: theme.spacing.md,
+    paddingVertical: theme.spacing.lg,
     paddingHorizontal: theme.spacing.lg,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   itemContent: {
     flexDirection: 'row',
@@ -307,51 +323,59 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text.primary,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   itemSku: {
     fontSize: 14,
     color: theme.colors.text.secondary,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   itemAvailability: {
     fontSize: 12,
     color: theme.colors.text.tertiary,
   },
-  quantityDisplay: {
+  rightSection: {
+    alignItems: 'flex-end',
+    gap: theme.spacing.sm,
+  },
+  quantitySection: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.primary,
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-    minWidth: 80,
+    gap: theme.spacing.sm,
   },
-
-  decrementButton: {
-    width: 28,
-    height: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 14,
+  quantityButton: {
+    width: 32,
+    height: 32,
+    backgroundColor: '#F3F4F6',
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
+    borderWidth: 1,
+    borderColor: '#D1D5DB',
   },
-  incrementButton: {
-    width: 28,
-    height: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 8,
-  },
-  quantityDisplayText: {
-    color: '#FFFFFF',
-    fontWeight: '600',
+  quantityText: {
     fontSize: 16,
-    flex: 1,
+    fontWeight: '600',
+    color: theme.colors.text.primary,
+    minWidth: 40,
     textAlign: 'center',
+  },
+  pickButton: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+    backgroundColor: 'transparent',
+  },
+  pickButtonText: {
+    color: theme.colors.primary,
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  pickedText: {
+    color: theme.colors.text.secondary,
+    fontWeight: '600',
+    fontSize: 14,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
   },
   bottomActions: {
     flexDirection: 'row',
