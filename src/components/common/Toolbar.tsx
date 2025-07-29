@@ -66,6 +66,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: theme.colors.toolbar.background,
+    paddingTop: Platform.OS === 'android' ? 25 : 0,
   },
   toolbar: {
     backgroundColor: theme.colors.toolbar.background,

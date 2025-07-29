@@ -6,7 +6,7 @@ import {
 } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useColorScheme as useNativeColorScheme } from 'react-native';
+import { useColorScheme as useNativeColorScheme, Platform } from 'react-native';
 
 import { SidebarProvider } from '../src/contexts/SidebarContext';
 
@@ -25,7 +25,11 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
-        <StatusBar style="auto" />
+        <StatusBar 
+          style={colorScheme === 'dark' ? 'light' : 'dark'} 
+          backgroundColor={colorScheme === 'dark' ? '#111827' : '#F9FAFB'}
+          translucent={false}
+        />
       </SidebarProvider>
     </ThemeProvider>
   );
