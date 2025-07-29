@@ -376,4 +376,20 @@ const styles = StyleSheet.create({
   actionButton: {
     flex: 1,
   },
+  actionButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: theme.spacing.lg,
+    paddingBottom: theme.spacing.lg,
+    gap: theme.spacing.md,
+    marginTop: theme.spacing.md,
+  },
+  returnButton: {
+    flex: 1,
+    marginRight: theme.spacing.sm,
+  },
+  createButton: {
+    flex: 1,
+    marginLeft: theme.spacing.sm,
+  },
 });
