@@ -210,23 +210,25 @@ export const PicklistDetailsScreen: React.FC = () => {
         ))}
       </ScrollView>
 
-      {/* Bottom Actions */}
-      <SafeAreaView style={styles.safeAreaBottom} edges={['bottom']}>
-        <View style={styles.bottomActions}>
-          <Button
-            title="Mark All Picked"
-            onPress={handleMarkAllPicked}
-            variant="secondary"
-            style={styles.actionButton}
-          />
-          <Button
-            title="Proceed to Fulfillment"
-            onPress={handleProceedToFulfillment}
-            variant="primary"
-            style={styles.actionButton}
-          />
-        </View>
-      </SafeAreaView>
+      {/* Floating Action Buttons */}
+      <View style={styles.floatingButtonContainer}>
+        <SafeAreaView style={styles.floatingButtonSafeArea} edges={['bottom']}>
+          <View style={styles.floatingButtons}>
+            <Button
+              title="Mark All Picked"
+              onPress={handleMarkAllPicked}
+              variant="secondary"
+              style={styles.floatingButton}
+            />
+            <Button
+              title="Proceed to Fulfillment"
+              onPress={handleProceedToFulfillment}
+              variant="primary"
+              style={styles.floatingButton}
+            />
+          </View>
+        </SafeAreaView>
+      </View>
     </View>
   );
 
@@ -241,8 +243,39 @@ const styles = StyleSheet.create({
   safeAreaTop: {
     backgroundColor: theme.colors.background,
   },
-  safeAreaBottom: {
+  floatingButtonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'transparent',
+    pointerEvents: 'box-none',
+  },
+  floatingButtonSafeArea: {
+    backgroundColor: 'transparent',
+    pointerEvents: 'box-none',
+  },
+  floatingButtons: {
+    flexDirection: 'row',
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.lg,
+    paddingBottom: theme.spacing.md,
     backgroundColor: theme.colors.surface,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+    gap: theme.spacing.lg,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  floatingButton: {
+    flex: 1,
+    minHeight: 56,
   },
   headerInfo: {
     paddingHorizontal: theme.spacing.lg,
@@ -299,7 +332,7 @@ const styles = StyleSheet.create({
     paddingTop: theme.spacing.md,
   },
   scrollContainer: {
-    paddingBottom: theme.spacing.xl,
+    paddingBottom: theme.spacing.xxl + 100, // Extra padding to prevent overlap with floating buttons
     flexGrow: 1,
   },
   itemCard: {
@@ -377,18 +410,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
   },
-  bottomActions: {
-    flexDirection: 'row',
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
-    backgroundColor: theme.colors.surface,
-    gap: theme.spacing.lg,
-  },
-  actionButton: {
-    flex: 1,
-    minHeight: 56,
-  },
+  
 });
