@@ -54,6 +54,34 @@ export const getResponsiveSpacing = (baseSpacing: keyof typeof theme.spacing) =>
   }
 };
 
+export const getResponsiveFontSize = (fontType: 'small' | 'body' | 'h1' | 'h2' | 'h3') => {
+  const deviceType = getDeviceType();
+  
+  // Base font sizes
+  const baseFontSizes = {
+    small: 12,
+    body: 16,
+    h1: 24,
+    h2: 20,
+    h3: 18,
+  };
+  
+  const baseFontSize = baseFontSizes[fontType];
+  
+  switch (deviceType) {
+    case 'small-mobile':
+      return baseFontSize * 0.9;
+    case 'mobile':
+      return baseFontSize;
+    case 'tablet':
+      return baseFontSize * 1.1;
+    case 'desktop':
+      return baseFontSize * 1.2;
+    default:
+      return baseFontSize;
+  }
+};
+
 export const getResponsiveFontSize = (fontType: keyof typeof theme.typography) => {
   const deviceType = getDeviceType();
   const baseFontSize = theme.typography[fontType];
