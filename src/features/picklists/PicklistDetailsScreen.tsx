@@ -5,8 +5,8 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
@@ -116,7 +116,7 @@ export const PicklistDetailsScreen: React.FC = () => {
   };
 
   const content = (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <Toolbar 
         title="Picklist" 
         showBack={true}
@@ -151,7 +151,12 @@ export const PicklistDetailsScreen: React.FC = () => {
         </View>
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView 
+        style={styles.content}
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+      >
         {items.map((item) => (
           <Card key={item.id} style={styles.itemCard}>
             <View style={styles.itemContent}>
@@ -192,23 +197,21 @@ export const PicklistDetailsScreen: React.FC = () => {
       </ScrollView>
 
       {/* Bottom Actions */}
-      <SafeAreaView style={styles.bottomSafeArea}>
-        <View style={styles.bottomActions}>
-          <Button
-            title="Mark All Picked"
-            onPress={handleMarkAllPicked}
-            variant="secondary"
-            style={styles.actionButton}
-          />
-          <Button
-            title="Proceed to Fulfillment"
-            onPress={handleProceedToFulfillment}
-            variant="primary"
-            style={styles.actionButton}
-          />
-        </View>
-      </SafeAreaView>
-    </View>
+      <View style={styles.bottomActions}>
+        <Button
+          title="Mark All Picked"
+          onPress={handleMarkAllPicked}
+          variant="secondary"
+          style={styles.actionButton}
+        />
+        <Button
+          title="Proceed to Fulfillment"
+          onPress={handleProceedToFulfillment}
+          variant="primary"
+          style={styles.actionButton}
+        />
+      </View>
+    </SafeAreaView>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -273,6 +276,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.md,
   },
+  scrollContainer: {
+    paddingBottom: theme.spacing.lg,
+    flexGrow: 1,
+  },
   itemCard: {
     marginBottom: theme.spacing.sm,
     paddingVertical: theme.spacing.md,
@@ -335,9 +342,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flex: 1,
     textAlign: 'center',
-  },
-  bottomSafeArea: {
-    backgroundColor: theme.colors.surface,
   },
   bottomActions: {
     flexDirection: 'row',

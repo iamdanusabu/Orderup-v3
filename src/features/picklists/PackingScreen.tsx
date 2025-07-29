@@ -6,8 +6,8 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
@@ -74,7 +74,7 @@ export const PackingScreen: React.FC = () => {
   };
 
   const content = (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <Toolbar 
         title="Packing" 
         showBack={true}
@@ -87,7 +87,12 @@ export const PackingScreen: React.FC = () => {
         <Text style={styles.headerSubtitle}>Store: Fly LLC   ID: 1</Text>
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView 
+        style={styles.content}
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+      >
         {orders.map((order) => (
           <Card key={order.id} style={styles.orderCard}>
             <View style={styles.orderHeader}>
@@ -134,23 +139,21 @@ export const PackingScreen: React.FC = () => {
       </ScrollView>
 
       {/* Bottom Actions */}
-      <SafeAreaView style={styles.bottomSafeArea}>
-        <View style={styles.bottomActions}>
-          <Button
-            title="Return Home"
-            onPress={handleReturnHome}
-            variant="secondary"
-            style={styles.actionButton}
-          />
-          <Button
-            title="Finalize Order"
-            onPress={handleFinalizeOrder}
-            variant="primary"
-            style={styles.actionButton}
-          />
-        </View>
-      </SafeAreaView>
-    </View>
+      <View style={styles.bottomActions}>
+        <Button
+          title="Return Home"
+          onPress={handleReturnHome}
+          variant="secondary"
+          style={styles.actionButton}
+        />
+        <Button
+          title="Finalize Order"
+          onPress={handleFinalizeOrder}
+          variant="primary"
+          style={styles.actionButton}
+        />
+      </View>
+    </SafeAreaView>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -181,6 +184,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.md,
+  },
+  scrollContainer: {
+    paddingBottom: theme.spacing.lg,
+    flexGrow: 1,
   },
   orderCard: {
     marginBottom: theme.spacing.md,
@@ -263,15 +270,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.success,
   },
-  bottomSafeArea: {
-    backgroundColor: theme.colors.surface,
-  },
   bottomActions: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.lg,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
+    backgroundColor: theme.colors.surface,
     gap: theme.spacing.md,
   },
   actionButton: {

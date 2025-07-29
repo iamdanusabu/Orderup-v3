@@ -9,6 +9,7 @@ import {
   useWindowDimensions,
   FlatList,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -134,7 +135,7 @@ export const OrdersScreen: React.FC = () => {
   );
 
   const content = (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <Toolbar 
         title="Orders" 
         onScanPress={handleScan}
@@ -280,8 +281,10 @@ export const OrdersScreen: React.FC = () => {
       </View>
 
       <ScrollView 
-        style={styles.content} 
+        style={styles.content}
+        contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
+        bounces={false}
       >
         {filteredOrders.map((order) => (
           <View key={order.id}>
@@ -289,7 +292,7 @@ export const OrdersScreen: React.FC = () => {
           </View>
         ))}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -458,6 +461,10 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: getResponsiveSpacing('lg'),
+  },
+  scrollContainer: {
+    paddingBottom: getResponsiveSpacing('lg'),
+    flexGrow: 1,
   },
   orderCard: {
     marginBottom: getResponsiveSpacing('md'),

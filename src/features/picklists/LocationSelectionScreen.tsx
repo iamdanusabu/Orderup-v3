@@ -5,8 +5,8 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
@@ -83,7 +83,7 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
   };
 
   const content = (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <Toolbar 
         title="Location Selection" 
         showBack={true}
@@ -110,7 +110,12 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView 
+        style={styles.content}
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+      >
         {/* Location List */}
         {mockLocations.map((location) => (
           <Card key={location.id} style={styles.locationCard}>
@@ -187,23 +192,21 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
       </ScrollView>
 
       {/* Bottom Actions */}
-      <SafeAreaView style={styles.bottomSafeArea}>
-        <View style={styles.bottomActions}>
-          <Button
-            title="Return Home"
-            onPress={handleReturnHome}
-            variant="secondary"
-            style={styles.actionButton}
-          />
-          <Button
-            title="Create Picklist"
-            onPress={handleCreatePicklist}
-            variant="primary"
-            style={styles.actionButton}
-          />
-        </View>
-      </SafeAreaView>
-    </View>
+      <View style={styles.bottomActions}>
+        <Button
+          title="Return Home"
+          onPress={handleReturnHome}
+          variant="secondary"
+          style={styles.actionButton}
+        />
+        <Button
+          title="Create Picklist"
+          onPress={handleCreatePicklist}
+          variant="primary"
+          style={styles.actionButton}
+        />
+      </View>
+    </SafeAreaView>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -246,6 +249,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.lg,
+  },
+  scrollContainer: {
+    paddingBottom: theme.spacing.lg,
+    flexGrow: 1,
   },
   locationCard: {
     marginBottom: theme.spacing.md,
@@ -366,9 +373,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.text.primary,
     fontWeight: '500',
-  },
-  bottomSafeArea: {
-    backgroundColor: theme.colors.surface,
   },
   bottomActions: {
     flexDirection: 'row',
