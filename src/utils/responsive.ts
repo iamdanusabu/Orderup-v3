@@ -4,7 +4,7 @@ import { theme } from '../constants/theme';
 
 export const getDeviceType = () => {
   const { width } = Dimensions.get('window');
-  
+
   if (width >= theme.breakpoints.desktop) {
     return 'desktop';
   } else if (width >= theme.breakpoints.tablet) {
@@ -14,17 +14,17 @@ export const getDeviceType = () => {
   }
 };
 
-export const getResponsiveSpacing = (baseSpacing: keyof typeof theme.spacing) => {
+export const getResponsiveSpacing = (size: keyof typeof theme.spacing) => {
   const deviceType = getDeviceType();
-  const baseValue = theme.spacing[baseSpacing];
-  
+  const baseSpacing = theme.spacing[size];
+
   switch (deviceType) {
     case 'desktop':
-      return baseValue * 1.2;
+      return baseSpacing * 1.2;
     case 'tablet':
-      return baseValue * 1.1;
+      return baseSpacing * 1.1;
     default:
-      return baseValue;
+      return baseSpacing;
   }
 };
 
@@ -38,15 +38,6 @@ export const getResponsiveHeight = (percentage: number) => {
   return (height * percentage) / 100;
 };
 
-export const getResponsiveFontSize = (baseSize: number = 16) => {
-  const deviceType = getDeviceType();
-  
-  switch (deviceType) {
-    case 'desktop':
-      return baseSize * 1.1;
-    case 'tablet':
-      return baseSize * 1.05;
-    default:
-      return baseSize;
-  }
+export const getResponsiveFontSize = () => {
+  return 16;
 };

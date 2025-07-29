@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
@@ -187,22 +186,20 @@ export const LocationSelectionScreen: React.FC<LocationSelectionScreenProps> = (
       </ScrollView>
 
       {/* Bottom Actions */}
-      <SafeAreaView style={styles.bottomSafeArea}>
-        <View style={styles.bottomActions}>
-          <Button
-            title="Return Home"
-            onPress={handleReturnHome}
-            variant="secondary"
-            style={styles.actionButton}
-          />
-          <Button
-            title="Create Picklist"
-            onPress={handleCreatePicklist}
-            variant="primary"
-            style={styles.actionButton}
-          />
-        </View>
-      </SafeAreaView>
+      <View style={styles.bottomActions}>
+        <Button
+          title="Return Home"
+          onPress={handleReturnHome}
+          variant="secondary"
+          style={styles.actionButton}
+        />
+        <Button
+          title="Create Picklist"
+          onPress={handleCreatePicklist}
+          variant="primary"
+          style={styles.actionButton}
+        />
+      </View>
     </View>
   );
 
@@ -366,9 +363,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.text.primary,
     fontWeight: '500',
-  },
-  bottomSafeArea: {
-    backgroundColor: theme.colors.surface,
   },
   bottomActions: {
     flexDirection: 'row',
