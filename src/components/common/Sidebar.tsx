@@ -45,7 +45,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.logoContainer}>
-              <Logo width={isCollapsed ? 24 : 32} height={isCollapsed ? 24 : 32} />
+              <Logo variant="light" size="large" />
               {!isCollapsed && <Text style={styles.logoText}>Orderup</Text>}
             </View>
             <TouchableOpacity

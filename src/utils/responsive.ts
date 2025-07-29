@@ -2,42 +2,51 @@
 import { Dimensions } from 'react-native';
 import { theme } from '../constants/theme';
 
-export const getDeviceType = () => {
-  const { width } = Dimensions.get('window');
+export interface DeviceType {
+  width: number;
+  height: number;
+  isSmallScreen: boolean;
+  isTablet: boolean;
+  isLargeScreen: boolean;
+}
 
-  if (width >= theme.breakpoints.desktop) {
-    return 'desktop';
-  } else if (width >= theme.breakpoints.tablet) {
-    return 'tablet';
-  } else {
-    return 'mobile';
-  }
+export const getDeviceType = (): DeviceType => {
+  const { width, height } = Dimensions.get('window');
+  
+  return {
+    width,
+    height,
+    isSmallScreen: width < 400,
+    isTablet: width >= 768 && width < 1024,
+    isLargeScreen: width >= 1024,
+  };
 };
 
-export const getResponsiveSpacing = (size: keyof typeof theme.spacing) => {
+export const getResponsiveSpacing = (baseSpacing: number): number => {
   const deviceType = getDeviceType();
-  const baseSpacing = theme.spacing[size];
-
-  switch (deviceType) {
-    case 'desktop':
-      return baseSpacing * 1.2;
-    case 'tablet':
-      return baseSpacing * 1.1;
-    default:
-      return baseSpacing;
+  
+  if (deviceType.isSmallScreen) {
+    return baseSpacing * 0.8;
+  } else if (deviceType.isTablet) {
+    return baseSpacing * 1.2;
+  } else if (deviceType.isLargeScreen) {
+    return baseSpacing * 1.4;
   }
+  
+  return baseSpacing;
 };
 
-export const getResponsiveWidth = (percentage: number) => {
-  const { width } = Dimensions.get('window');
-  return (width * percentage) / 100;
-};
-
-export const getResponsiveHeight = (percentage: number) => {
-  const { height } = Dimensions.get('window');
-  return (height * percentage) / 100;
-};
-
-export const getResponsiveFontSize = () => {
-  return 16;
+export const getResponsiveFontSize = (fontType: keyof typeof theme.typography): number => {
+  const deviceType = getDeviceType();
+  const baseFontSize = theme.typography[fontType];
+  
+  if (deviceType.isSmallScreen) {
+    return baseFontSize * 0.9;
+  } else if (deviceType.isTablet) {
+    return baseFontSize * 1.1;
+  } else if (deviceType.isLargeScreen) {
+    return baseFontSize * 1.2;
+  }
+  
+  return baseFontSize;
 };
