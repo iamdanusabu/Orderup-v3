@@ -192,7 +192,12 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             </TouchableOpacity>
           </View>
 
-          <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+          <ScrollView 
+            style={styles.scrollContent} 
+            contentContainerStyle={styles.scrollContentContainer}
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}
+          >
             {/* Date Range */}
             {renderFilterSection(
               'Date Range',
@@ -253,7 +258,8 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 500,
     maxHeight: '80%',
-    overflow: 'hidden',
+    minHeight: 400,
+    flex: 1,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -275,6 +281,10 @@ const styles = StyleSheet.create({
   scrollContent: {
     flex: 1,
     paddingHorizontal: theme.spacing.lg,
+  },
+  scrollContentContainer: {
+    paddingBottom: theme.spacing.lg,
+    flexGrow: 1,
   },
   filterSection: {
     marginVertical: theme.spacing.md,
