@@ -6,8 +6,8 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -105,7 +105,7 @@ export const OrderDetailsScreen: React.FC = () => {
   };
 
   const content = (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <Toolbar 
         title="Order Details" 
         showBack={true}
@@ -128,6 +128,7 @@ export const OrderDetailsScreen: React.FC = () => {
         contentContainerStyle={styles.scrollContainer}
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
+        bounces={false}
       >
         <View style={styles.row}>
           {/* Order Summary */}
@@ -326,7 +327,8 @@ const styles = StyleSheet.create({
     paddingTop: theme.spacing.md,
   },
   scrollContainer: {
-    paddingBottom: 120, // Increased bottom padding to avoid navigation bar overlap
+    paddingBottom: theme.spacing.lg, // Reduced padding since SafeAreaView handles bottom insets
+    flexGrow: 1,
   },
   row: {
     flexDirection: 'row',

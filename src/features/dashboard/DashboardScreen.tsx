@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   ScrollView,
   useWindowDimensions,
   FlatList,
-} from "react-native";
+} from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import { Card } from "../../components/common/Card";
 import { Button } from "../../components/common/Button";
@@ -14,7 +14,7 @@ import { StatusBadge } from "../../components/common/StatusBadge";
 import { Sidebar } from "../../components/common/Sidebar";
 import { Toolbar } from "../../components/common/Toolbar";
 import { theme } from "../../constants/theme";
-import { SafeAreaView } from "react-native-safe-area-context"; // make sure it's from safe-area-context
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Mock data
 const mockNewOrders = [
