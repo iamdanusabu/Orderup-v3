@@ -1,3 +1,4 @@
+
 export interface Theme {
   colors: {
     primary: string;
@@ -44,6 +45,10 @@ export interface Theme {
     mobile: number;
     tablet: number;
     desktop: number;
+  };
+  typography: {
+    fontSize: number;
+    fontFamily: string;
   };
 }
 
@@ -94,6 +99,10 @@ export const lightTheme: Theme = {
     tablet: 768,
     desktop: 1024,
   },
+  typography: {
+    fontSize: 16,
+    fontFamily: 'System',
+  },
 };
 
 export const darkTheme: Theme = {
@@ -142,6 +151,10 @@ export const darkTheme: Theme = {
     mobile: 480,
     tablet: 768,
     desktop: 1024,
+  },
+  typography: {
+    fontSize: 16,
+    fontFamily: 'System',
   },
 };
 

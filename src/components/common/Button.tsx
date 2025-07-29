@@ -132,12 +132,12 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   smallText: {
-    fontSize: 12,
+    fontSize: theme.typography.fontSize,
   },
   mediumText: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
   },
   largeText: {
-    fontSize: 16,
+    fontSize: theme.typography.fontSize,
   },
 });

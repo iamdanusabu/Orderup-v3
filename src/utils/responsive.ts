@@ -1,4 +1,3 @@
-
 import { Dimensions } from 'react-native';
 import { theme } from '../constants/theme';
 
@@ -9,7 +8,7 @@ export const getScreenDimensions = () => {
 
 export const getDeviceType = () => {
   const { width } = getScreenDimensions();
-  
+
   if (width < theme.breakpoints.mobile) {
     return 'small-mobile';
   } else if (width < theme.breakpoints.tablet) {
@@ -39,7 +38,7 @@ export const isDesktop = () => {
 export const getResponsiveSpacing = (baseSpacing: keyof typeof theme.spacing) => {
   const deviceType = getDeviceType();
   const base = theme.spacing[baseSpacing];
-  
+
   switch (deviceType) {
     case 'small-mobile':
       return base * 0.8;
@@ -51,22 +50,5 @@ export const getResponsiveSpacing = (baseSpacing: keyof typeof theme.spacing) =>
       return base * 1.4;
     default:
       return base;
-  }
-};
-
-export const getResponsiveFontSize = (baseFontSize: number) => {
-  const deviceType = getDeviceType();
-  
-  switch (deviceType) {
-    case 'small-mobile':
-      return baseFontSize * 0.9;
-    case 'mobile':
-      return baseFontSize;
-    case 'tablet':
-      return baseFontSize * 1.1;
-    case 'desktop':
-      return baseFontSize * 1.2;
-    default:
-      return baseFontSize;
   }
 };

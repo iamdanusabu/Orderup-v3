@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.lg,
   },
   label: {
-    fontSize: 16,
+    fontSize: theme.typography.fontSize,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.sm,
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.md,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.md,
-    fontSize: 16,
+    fontSize: theme.typography.fontSize,
     backgroundColor: theme.colors.surface,
     color: theme.colors.text.primary,
   },
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   version: {
     textAlign: 'center',
     color: theme.colors.text.secondary,
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
     marginTop: theme.spacing.xl,
   },
 });
