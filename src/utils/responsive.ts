@@ -4,7 +4,7 @@ import { theme } from '../constants/theme';
 
 export type DeviceType = 'phone' | 'tablet' | 'desktop';
 
-export const useDeviceType = (): DeviceType => {
+export const getDeviceType = (): DeviceType => {
   const { width } = useWindowDimensions();
   
   if (width < theme.breakpoints.tablet) {
@@ -16,17 +16,9 @@ export const useDeviceType = (): DeviceType => {
   }
 };
 
-export const getDeviceType = (width: number): DeviceType => {
-  if (width < theme.breakpoints.tablet) {
-    return 'phone';
-  } else if (width < theme.breakpoints.desktop) {
-    return 'tablet';
-  } else {
-    return 'desktop';
-  }
-};
-
-export const getResponsiveSpacing = (baseSpacing: number, deviceType: DeviceType): number => {
+export const getResponsiveSpacing = (baseSpacing: number): number => {
+  const deviceType = getDeviceType();
+  
   switch (deviceType) {
     case 'phone':
       return baseSpacing;
@@ -39,7 +31,9 @@ export const getResponsiveSpacing = (baseSpacing: number, deviceType: DeviceType
   }
 };
 
-export const getResponsiveColumns = (deviceType: DeviceType): number => {
+export const getResponsiveColumns = (): number => {
+  const deviceType = getDeviceType();
+  
   switch (deviceType) {
     case 'phone':
       return 1;
@@ -52,7 +46,8 @@ export const getResponsiveColumns = (deviceType: DeviceType): number => {
   }
 };
 
-export const getResponsiveFontSize = (fontType: keyof typeof theme.typography, deviceType: DeviceType): number => {
+export const getResponsiveFontSize = (fontType: keyof typeof theme.typography) => {
+  const deviceType = getDeviceType();
   const baseFontSize = theme.typography[fontType];
   
   switch (deviceType) {
