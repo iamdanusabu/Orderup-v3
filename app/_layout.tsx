@@ -27,7 +27,7 @@ export default function RootLayout() {
         </Stack>
         <StatusBar 
           style={colorScheme === 'dark' ? 'light' : 'dark'} 
-          backgroundColor="transparent"
+          backgroundColor={colorScheme === 'dark' ? '#000000' : '#ffffff'}
           translucent={false}
         />
       </SidebarProvider>
