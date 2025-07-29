@@ -28,6 +28,7 @@ export const fetchWithToken = async <T = any>(
     // Setup headers
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
+      'Accept-encoding': 'gzip',
       ...fetchOptions.headers,
     };
     
