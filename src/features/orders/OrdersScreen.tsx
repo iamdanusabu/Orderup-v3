@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   View,
@@ -8,6 +7,7 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   FlatList,
+  Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
@@ -17,6 +17,7 @@ import { Toolbar } from '../../components/common/Toolbar';
 import { theme } from '../../constants/theme';
 import { getDeviceType, getResponsiveSpacing, getResponsiveFontSize } from '../../utils/responsive';
 import { useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Mock data with updated structure to match design
 const mockOrders = [
@@ -134,154 +135,19 @@ export const OrdersScreen: React.FC = () => {
   );
 
   const content = (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <Toolbar 
         title="Orders" 
         onScanPress={handleScan}
+        showNotification={true}
+        notificationCount={3}
       />
-      
-      {/* Top Actions Bar */}
-      <View style={styles.actionsBar}>
-        <TouchableOpacity 
-          style={[
-            styles.selectOrdersButton,
-            isSelectionMode && styles.selectOrdersButtonActive
-          ]}
-          onPress={() => {
-            setIsSelectionMode(!isSelectionMode);
-            if (isSelectionMode) {
-              // Clear all selections when exiting selection mode
-              setOrders(prevOrders => 
-                prevOrders.map(order => ({ ...order, selected: false }))
-              );
-              setSelectedCount(0);
-            }
-          }}
-        >
-          <Text style={[
-            styles.selectOrdersText,
-            isSelectionMode && styles.selectOrdersTextActive
-          ]}>
-            {isSelectionMode ? 'Cancel Selection' : 'Select Orders'}
-          </Text>
-        </TouchableOpacity>
-
-        {/* Selection Info and Action - shown when orders are selected */}
-        {isSelectionMode && selectedCount > 0 && (
-          <View style={styles.selectionInfo}>
-            <Text style={styles.selectionCountText}>{selectedCount} selected</Text>
-            <TouchableOpacity 
-              style={styles.createPicklistButton}
-              onPress={() => {
-                const selectedOrders = orders.filter(o => o.selected);
-                console.log('Create picklist with selected orders:', selectedOrders);
-                // Navigate to location selection screen
-                router.push('/location-selection');
-                // Reset selection mode after creating picklist
-                setIsSelectionMode(false);
-                setOrders(prevOrders => 
-                  prevOrders.map(order => ({ ...order, selected: false }))
-                );
-                setSelectedCount(0);
-              }}
-            >
-              <Text style={styles.createPicklistText}>Create Picklist</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {/* Filter - only shown when not in selection mode with selections */}
-        {!(isSelectionMode && selectedCount > 0) && (
-          <View style={styles.filterContainer}>
-            <TouchableOpacity 
-              style={styles.filterButton}
-              onPress={() => setShowFilterDropdown(!showFilterDropdown)}
-            >
-              <Ionicons name="filter-outline" size={16} color={theme.colors.text.secondary} />
-              <Text style={styles.filterText}>Filter</Text>
-              <Ionicons 
-                name={showFilterDropdown ? "chevron-up-outline" : "chevron-down-outline"} 
-                size={16} 
-                color={theme.colors.text.secondary} 
-              />
-            </TouchableOpacity>
-            
-            {showFilterDropdown && (
-              <View style={styles.filterDropdown}>
-                <TouchableOpacity 
-                  style={styles.filterOption}
-                  onPress={() => {
-                    setActiveFilter('All');
-                    setShowFilterDropdown(false);
-                  }}
-                >
-                  <Text style={[styles.filterOptionText, activeFilter === 'All' && styles.activeFilterOptionText]}>
-                    All Orders
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={styles.filterOption}
-                  onPress={() => {
-                    setActiveFilter('Initiated');
-                    setShowFilterDropdown(false);
-                  }}
-                >
-                  <Text style={[styles.filterOptionText, activeFilter === 'Initiated' && styles.activeFilterOptionText]}>
-                    Initiated
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={styles.filterOption}
-                  onPress={() => {
-                    setActiveFilter('Processing');
-                    setShowFilterDropdown(false);
-                  }}
-                >
-                  <Text style={[styles.filterOptionText, activeFilter === 'Processing' && styles.activeFilterOptionText]}>
-                    Processing
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={styles.filterOption}
-                  onPress={() => {
-                    setActiveFilter('Ready');
-                    setShowFilterDropdown(false);
-                  }}
-                >
-                  <Text style={[styles.filterOptionText, activeFilter === 'Ready' && styles.activeFilterOptionText]}>
-                    Ready
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
-        )}
-      </View>
-
-      {/* Filter Tabs */}
-      <View style={styles.filterTabs}>
-        {['All', 'Initiated', 'Processing'].map((filter) => (
-          <TouchableOpacity
-            key={filter}
-            style={[
-              styles.filterTab,
-              activeFilter === filter && styles.activeFilterTab
-            ]}
-            onPress={() => setActiveFilter(filter)}
-          >
-            <Text style={[
-              styles.filterTabText,
-              activeFilter === filter && styles.activeFilterTabText
-            ]}>
-              {filter}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
       <ScrollView 
-        style={styles.content} 
-        showsVerticalScrollIndicator={false}
+        style={styles.scrollView} 
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: Platform.OS === 'android' ? theme.spacing.xl * 3 : theme.spacing.xl }
+        ]}
       >
         {filteredOrders.map((order) => (
           <View key={order.id}>
@@ -289,7 +155,7 @@ export const OrdersScreen: React.FC = () => {
           </View>
         ))}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 
   return <Sidebar>{content}</Sidebar>;
@@ -501,5 +367,11 @@ const styles = StyleSheet.create({
     fontSize: getResponsiveFontSize(16),
     fontWeight: '600',
     color: theme.colors.text.primary,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: theme.spacing.xl,
   },
 });
