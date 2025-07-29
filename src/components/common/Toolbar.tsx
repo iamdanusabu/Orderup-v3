@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../constants/theme';
-import { getResponsiveFontSize } from '../../utils/responsive';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ToolbarProps {

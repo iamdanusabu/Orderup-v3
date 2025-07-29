@@ -12,7 +12,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../components/common/Button';
 import { env } from '../../config/env';
 import { theme } from '../../constants/theme';
-import { getResponsiveFontSize } from '../../utils/responsive';
 import { StatusBar } from 'expo-status-bar';
 
 export const LoginScreen: React.FC = () => {
@@ -114,7 +113,7 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.lg,
   },
   label: {
-    fontSize: getResponsiveFontSize('body'),
+    fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.sm,
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.md,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.md,
-    fontSize: getResponsiveFontSize('body'),
+    fontSize: 16,
     backgroundColor: theme.colors.surface,
     color: theme.colors.text.primary,
   },
@@ -146,7 +145,7 @@ const styles = StyleSheet.create({
   version: {
     textAlign: 'center',
     color: theme.colors.text.secondary,
-    fontSize: getResponsiveFontSize('caption'),
+    fontSize: 14,
     marginTop: theme.spacing.xl,
   },
 });

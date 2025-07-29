@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   View,
@@ -139,7 +138,7 @@ export const OrdersScreen: React.FC = () => {
         title="Orders" 
         onScanPress={handleScan}
       />
-      
+
       {/* Top Actions Bar */}
       <View style={styles.actionsBar}>
         <TouchableOpacity 
@@ -205,7 +204,7 @@ export const OrdersScreen: React.FC = () => {
                 color={theme.colors.text.secondary} 
               />
             </TouchableOpacity>
-            
+
             {showFilterDropdown && (
               <View style={styles.filterDropdown}>
                 <TouchableOpacity 
@@ -425,7 +424,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.primary,
   },
   filterTabText: {
-    fontSize: getResponsiveFontSize(14),
+    fontSize: 14,
     color: theme.colors.text.secondary,
     fontWeight: '500',
     textAlign: 'center',
@@ -474,23 +473,23 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   orderNumber: {
-    fontSize: getResponsiveFontSize(16),
+    fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: getResponsiveSpacing('xs'),
   },
   customerName: {
-    fontSize: getResponsiveFontSize(14),
+    fontSize: 14,
     color: theme.colors.text.secondary,
     marginBottom: getResponsiveSpacing('xs'),
   },
   datetime: {
-    fontSize: getResponsiveFontSize(12),
+    fontSize: 12,
     color: theme.colors.text.tertiary,
     marginBottom: getResponsiveSpacing('xs'),
   },
   itemCount: {
-    fontSize: getResponsiveFontSize(12),
+    fontSize: 12,
     color: theme.colors.text.tertiary,
   },
   rightSection: {
@@ -498,7 +497,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
   },
   price: {
-    fontSize: getResponsiveFontSize(16),
+    fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text.primary,
   },

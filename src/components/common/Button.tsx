@@ -1,7 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { theme } from '../../constants/theme';
-import { getResponsiveFontSize } from '../../utils/responsive';
 
 interface ButtonProps {
   title: string;
