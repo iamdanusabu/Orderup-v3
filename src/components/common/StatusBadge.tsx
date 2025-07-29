@@ -1,6 +1,7 @@
-
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { theme } from '../../constants/theme';
+import { getResponsiveFontSize } from '../../utils/responsive';
 
 interface StatusBadgeProps {
   status: string;
@@ -41,9 +42,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   text: {
-    color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: getResponsiveFontSize('small'),
     fontWeight: '600',
-    textTransform: 'capitalize',
+    textAlign: 'center',
   },
 });

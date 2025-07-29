@@ -1,3 +1,4 @@
+
 export interface Theme {
   colors: {
     primary: string;
@@ -26,6 +27,14 @@ export interface Theme {
       text: string;
       border: string;
     };
+  };
+  typography: {
+    h1: number;
+    h2: number;
+    h3: number;
+    body: number;
+    caption: number;
+    small: number;
   };
   spacing: {
     xs: number;
@@ -76,6 +85,14 @@ export const lightTheme: Theme = {
       border: '#E5E7EB',
     },
   },
+  typography: {
+    h1: 24,
+    h2: 20,
+    h3: 18,
+    body: 16,
+    caption: 14,
+    small: 12,
+  },
   spacing: {
     xs: 2,
     sm: 6,
@@ -124,6 +141,14 @@ export const darkTheme: Theme = {
       text: '#1F2937',
       border: '#E5E7EB',
     },
+  },
+  typography: {
+    h1: 24,
+    h2: 20,
+    h3: 18,
+    body: 16,
+    caption: 14,
+    small: 12,
   },
   spacing: {
     xs: 2,

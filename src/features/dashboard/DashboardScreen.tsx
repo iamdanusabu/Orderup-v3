@@ -14,6 +14,7 @@ import { StatusBadge } from '../../components/common/StatusBadge';
 import { Sidebar } from '../../components/common/Sidebar';
 import { Toolbar } from '../../components/common/Toolbar';
 import { theme } from '../../constants/theme';
+import { getResponsiveFontSize } from '../../utils/responsive';
 
 // Mock data
 const mockNewOrders = [
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
     marginVertical: theme.spacing.md,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: getResponsiveFontSize('h3'),
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.md,
@@ -285,22 +286,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   orderNumber: {
-    fontSize: 16,
+    fontSize: getResponsiveFontSize('body'),
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.xs,
   },
   customerName: {
-    fontSize: 14,
+    fontSize: getResponsiveFontSize('caption'),
     color: theme.colors.text.secondary,
     marginBottom: theme.spacing.xs,
   },
   orderDetails: {
-    fontSize: 12,
+    fontSize: getResponsiveFontSize('small'),
     color: theme.colors.text.tertiary,
   },
   picklistProgress: {
-    fontSize: 14,
+    fontSize: getResponsiveFontSize('caption'),
     color: theme.colors.text.secondary,
     marginBottom: theme.spacing.sm,
   },
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   progressText: {
-    fontSize: 12,
+    fontSize: getResponsiveFontSize('small'),
     color: theme.colors.text.secondary,
     fontWeight: '600',
     minWidth: 35,
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pickupTime: {
-    fontSize: 12,
+    fontSize: getResponsiveFontSize('small'),
     color: theme.colors.text.secondary,
     marginLeft: theme.spacing.xs,
   },

@@ -54,8 +54,9 @@ export const getResponsiveSpacing = (baseSpacing: keyof typeof theme.spacing) =>
   }
 };
 
-export const getResponsiveFontSize = (baseFontSize: number) => {
+export const getResponsiveFontSize = (fontType: keyof typeof theme.typography) => {
   const deviceType = getDeviceType();
+  const baseFontSize = theme.typography[fontType];
   
   switch (deviceType) {
     case 'small-mobile':

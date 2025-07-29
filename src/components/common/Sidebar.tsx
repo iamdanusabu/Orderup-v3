@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   },
   menuText: {
     marginLeft: theme.spacing.md,
-    fontSize: 16,
+    fontSize: getResponsiveFontSize('body'),
     color: theme.colors.sidebar.text,
   },
   activeMenuText: {

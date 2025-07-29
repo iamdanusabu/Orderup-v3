@@ -1,13 +1,7 @@
-
 import React from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { theme } from '../../constants/theme';
+import { getResponsiveFontSize } from '../../utils/responsive';
 
 interface ButtonProps {
   title: string;
@@ -30,7 +24,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   const getButtonStyle = () => {
     const baseStyle = [styles.button, styles[size]];
-    
+
     switch (variant) {
       case 'secondary':
         baseStyle.push(styles.secondary);
@@ -44,27 +38,27 @@ export const Button: React.FC<ButtonProps> = ({
       default:
         baseStyle.push(styles.primary);
     }
-    
+
     if (disabled) {
       baseStyle.push(styles.disabled);
     }
-    
+
     return baseStyle;
   };
 
   const getTextStyle = () => {
     const baseStyle = [styles.text, styles[`${size}Text`]];
-    
+
     if (variant === 'secondary') {
       baseStyle.push(styles.secondaryText);
     } else {
       baseStyle.push(styles.primaryText);
     }
-    
+
     if (disabled) {
       baseStyle.push(styles.disabledText);
     }
-    
+
     return baseStyle;
   };
 
