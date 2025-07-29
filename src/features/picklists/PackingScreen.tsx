@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '../../components/common/Card';
@@ -133,20 +134,22 @@ export const PackingScreen: React.FC = () => {
       </ScrollView>
 
       {/* Bottom Actions */}
-      <View style={styles.bottomActions}>
-        <Button
-          title="Return Home"
-          onPress={handleReturnHome}
-          variant="secondary"
-          style={styles.actionButton}
-        />
-        <Button
-          title="Finalize Order"
-          onPress={handleFinalizeOrder}
-          variant="primary"
-          style={styles.actionButton}
-        />
-      </View>
+      <SafeAreaView style={styles.bottomSafeArea}>
+        <View style={styles.bottomActions}>
+          <Button
+            title="Return Home"
+            onPress={handleReturnHome}
+            variant="secondary"
+            style={styles.actionButton}
+          />
+          <Button
+            title="Finalize Order"
+            onPress={handleFinalizeOrder}
+            variant="primary"
+            style={styles.actionButton}
+          />
+        </View>
+      </SafeAreaView>
     </View>
   );
 
@@ -259,6 +262,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: theme.colors.success,
+  },
+  bottomSafeArea: {
+    backgroundColor: theme.colors.surface,
   },
   bottomActions: {
     flexDirection: 'row',
