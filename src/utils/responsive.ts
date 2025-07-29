@@ -1,72 +1,47 @@
-
-import { Dimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import { theme } from '../constants/theme';
 
-export const getScreenDimensions = () => {
-  const { width, height } = Dimensions.get('window');
-  return { width, height };
-};
+export type DeviceType = 'mobile' | 'tablet' | 'desktop';
 
-export const getDeviceType = () => {
-  const { width } = getScreenDimensions();
-  
+export const getDeviceType = (): DeviceType => {
+  const { width } = useWindowDimensions();
+
   if (width < theme.breakpoints.mobile) {
-    return 'small-mobile';
-  } else if (width < theme.breakpoints.tablet) {
     return 'mobile';
-  } else if (width < theme.breakpoints.desktop) {
+  } else if (width < theme.breakpoints.tablet) {
     return 'tablet';
   } else {
     return 'desktop';
   }
 };
 
-export const isTablet = () => {
+export const getResponsiveSpacing = (spacing: keyof typeof theme.spacing) => {
   const deviceType = getDeviceType();
-  return deviceType === 'tablet';
-};
+  const baseSpacing = theme.spacing[spacing];
 
-export const isMobile = () => {
-  const deviceType = getDeviceType();
-  return deviceType === 'mobile' || deviceType === 'small-mobile';
-};
-
-export const isDesktop = () => {
-  const deviceType = getDeviceType();
-  return deviceType === 'desktop';
-};
-
-export const getResponsiveSpacing = (baseSpacing: keyof typeof theme.spacing) => {
-  const deviceType = getDeviceType();
-  const base = theme.spacing[baseSpacing];
-  
   switch (deviceType) {
-    case 'small-mobile':
-      return base * 0.8;
     case 'mobile':
-      return base;
+      return baseSpacing;
     case 'tablet':
-      return base * 1.2;
+      return baseSpacing * 1.2;
     case 'desktop':
-      return base * 1.4;
+      return baseSpacing * 1.4;
     default:
-      return base;
+      return baseSpacing;
   }
 };
 
-export const getResponsiveFontSize = (baseFontSize: number) => {
+export const getResponsiveFontSize = (baseSize: number) => {
   const deviceType = getDeviceType();
-  
+
   switch (deviceType) {
-    case 'small-mobile':
-      return baseFontSize * 0.9;
     case 'mobile':
-      return baseFontSize;
+      return baseSize;
     case 'tablet':
-      return baseFontSize * 1.1;
+      return baseSize * 1.1;
     case 'desktop':
-      return baseFontSize * 1.2;
+      return baseSize * 1.2;
     default:
-      return baseFontSize;
+      return baseSize;
   }
 };
