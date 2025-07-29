@@ -1,47 +1,27 @@
 import { useWindowDimensions } from 'react-native';
 import { theme } from '../constants/theme';
 
-export type DeviceType = 'mobile' | 'tablet' | 'desktop';
+export type DeviceType = 'phone' | 'tablet';
 
 export const getDeviceType = (): DeviceType => {
   const { width } = useWindowDimensions();
-
-  if (width < theme.breakpoints.mobile) {
-    return 'mobile';
-  } else if (width < theme.breakpoints.tablet) {
-    return 'tablet';
-  } else {
-    return 'desktop';
-  }
+  return width >= 768 ? 'tablet' : 'phone';
 };
 
-export const getResponsiveSpacing = (spacing: keyof typeof theme.spacing) => {
+export const getResponsiveSpacing = (baseSpacing: number): number => {
   const deviceType = getDeviceType();
-  const baseSpacing = theme.spacing[spacing];
-
-  switch (deviceType) {
-    case 'mobile':
-      return baseSpacing;
-    case 'tablet':
-      return baseSpacing * 1.2;
-    case 'desktop':
-      return baseSpacing * 1.4;
-    default:
-      return baseSpacing;
-  }
+  return deviceType === 'tablet' ? baseSpacing * 1.2 : baseSpacing;
 };
 
-export const getResponsiveFontSize = (baseSize: number) => {
+export const getResponsiveFontSize = (fontType: keyof typeof theme.typography) => {
   const deviceType = getDeviceType();
+  const baseFontSize = theme.typography[fontType];
 
   switch (deviceType) {
-    case 'mobile':
-      return baseSize;
     case 'tablet':
-      return baseSize * 1.1;
-    case 'desktop':
-      return baseSize * 1.2;
+      return baseFontSize * 1.1;
+    case 'phone':
     default:
-      return baseSize;
+      return baseFontSize;
   }
 };

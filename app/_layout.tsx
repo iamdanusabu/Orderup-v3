@@ -7,8 +7,7 @@ import {
 } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useColorScheme as useNativeColorScheme, Platform } from 'react-native';
-import * as SystemUI from 'expo-system-ui';
+import { useColorScheme as useNativeColorScheme } from 'react-native';
 
 import { SidebarProvider } from '../src/contexts/SidebarContext';
 
@@ -20,13 +19,6 @@ const useColorScheme = () => {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
-  // Set the status bar background color for Android
-  React.useEffect(() => {
-    if (Platform.OS === 'android') {
-      SystemUI.setBackgroundColorAsync(colorScheme === 'dark' ? '#000000' : '#ffffff');
-    }
-  }, [colorScheme]);
-
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <SidebarProvider>
@@ -36,6 +28,7 @@ export default function RootLayout() {
         </Stack>
         <StatusBar 
           style={colorScheme === 'dark' ? 'light' : 'dark'}
+          backgroundColor={colorScheme === 'dark' ? '#000000' : '#ffffff'}
         />
       </SidebarProvider>
     </ThemeProvider>
