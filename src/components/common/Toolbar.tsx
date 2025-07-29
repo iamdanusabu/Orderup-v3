@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     padding: theme.spacing.sm,
   },
   title: {
-    fontSize: 18,
+    fontSize: theme.typography.fontSize,
     fontWeight: '600',
     color: theme.colors.toolbar.text,
   },
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: theme.typography.fontSize,
     fontWeight: 'bold',
   },
 });

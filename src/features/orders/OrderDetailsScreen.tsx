@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
   },
   statusDropdownText: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.primary,
   },
   dropdownOptions: {
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary + '10',
   },
   dropdownOptionText: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.primary,
   },
   selectedOptionText: {
@@ -487,6 +487,6 @@ const styles = StyleSheet.create({
   updateButtonText: {
     color: '#FFFFFF',
     fontWeight: '600',
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
   },
 });

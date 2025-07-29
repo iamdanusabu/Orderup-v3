@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   progressText: {
-    fontSize: 12,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.secondary,
     fontWeight: '600',
     minWidth: 35,
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pickupTime: {
-    fontSize: 12,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.secondary,
     marginLeft: theme.spacing.xs,
   },

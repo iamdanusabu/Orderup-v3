@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.border,
   },
   filterOptionText: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.primary,
     fontWeight: '500',
   },
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   filterText: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.secondary,
     fontWeight: '500',
   },
@@ -480,17 +480,17 @@ const styles = StyleSheet.create({
     marginBottom: getResponsiveSpacing('xs'),
   },
   customerName: {
-    fontSize: getResponsiveFontSize(14),
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.secondary,
     marginBottom: getResponsiveSpacing('xs'),
   },
   datetime: {
-    fontSize: getResponsiveFontSize(12),
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.tertiary,
     marginBottom: getResponsiveSpacing('xs'),
   },
   itemCount: {
-    fontSize: getResponsiveFontSize(12),
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.tertiary,
   },
   rightSection: {
@@ -498,7 +498,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
   },
   price: {
-    fontSize: getResponsiveFontSize(16),
+    fontSize: theme.typography.fontSize,
     fontWeight: '600',
     color: theme.colors.text.primary,
   },

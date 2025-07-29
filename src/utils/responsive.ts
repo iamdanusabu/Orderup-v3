@@ -1,3 +1,4 @@
+
 import { Dimensions } from 'react-native';
 import { theme } from '../constants/theme';
 
