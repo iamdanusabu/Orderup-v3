@@ -10,6 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../constants/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getResponsiveFontSize } from '../../utils/responsive';
 
 interface ToolbarProps {
   title: string;
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     padding: theme.spacing.sm,
   },
   title: {
-    fontSize: getResponsiveFontSize('h3'),
+    fontSize: 18,
     fontWeight: '600',
     color: theme.colors.toolbar.text,
   },
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: '#FFFFFF',
-    fontSize: getResponsiveFontSize('small'),
+    fontSize: 12,
     fontWeight: 'bold',
   },
 });
