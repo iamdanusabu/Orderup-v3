@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     marginVertical: theme.spacing.md,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: theme.typography.fontSize,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.md,
@@ -286,22 +286,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   orderNumber: {
-    fontSize: 16,
+    fontSize: theme.typography.fontSize,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.xs,
   },
   customerName: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.secondary,
     marginBottom: theme.spacing.xs,
   },
   orderDetails: {
-    fontSize: 12,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.tertiary,
   },
   picklistProgress: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.secondary,
     marginBottom: theme.spacing.sm,
   },

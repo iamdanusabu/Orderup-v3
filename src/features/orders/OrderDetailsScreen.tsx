@@ -305,13 +305,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   orderNumber: {
-    fontSize: 18,
+    fontSize: theme.typography.fontSize,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.xs,
   },
   orderMeta: {
-    fontSize: 12,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.tertiary,
   },
   content: {
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.lg,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: theme.typography.fontSize,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.md,
@@ -345,11 +345,11 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.sm,
   },
   summaryLabel: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.secondary,
   },
   summaryValue: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.primary,
     fontWeight: '500',
   },
@@ -360,12 +360,12 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
   },
   totalLabel: {
-    fontSize: 16,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.primary,
     fontWeight: '600',
   },
   totalValue: {
-    fontSize: 16,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.primary,
     fontWeight: '700',
   },
@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.xs,
   },
   itemName: {
-    fontSize: 16,
+    fontSize: theme.typography.fontSize,
     fontWeight: '600',
     color: theme.colors.text.primary,
   },
@@ -398,16 +398,16 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   itemStatusText: {
-    fontSize: 12,
+    fontSize: theme.typography.fontSize,
     color: '#1976D2',
     fontWeight: '500',
   },
   itemDetails: {
-    fontSize: 12,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.tertiary,
   },
   itemTotal: {
-    fontSize: 16,
+    fontSize: theme.typography.fontSize,
     fontWeight: '600',
     color: theme.colors.text.primary,
   },

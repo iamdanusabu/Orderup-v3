@@ -15,7 +15,7 @@ import { StatusBadge } from '../../components/common/StatusBadge';
 import { Sidebar } from '../../components/common/Sidebar';
 import { Toolbar } from '../../components/common/Toolbar';
 import { theme } from '../../constants/theme';
-import { getDeviceType, getResponsiveSpacing, getResponsiveFontSize } from '../../utils/responsive';
+import { getDeviceType, getResponsiveSpacing } from '../../utils/responsive';
 import { useRouter } from 'expo-router';
 
 // Mock data with updated structure to match design
@@ -425,7 +425,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.primary,
   },
   filterTabText: {
-    fontSize: getResponsiveFontSize(14),
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.secondary,
     fontWeight: '500',
     textAlign: 'center',
@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   orderNumber: {
-    fontSize: getResponsiveFontSize(16),
+    fontSize: theme.typography.fontSize,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: getResponsiveSpacing('xs'),

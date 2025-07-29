@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   View,
@@ -180,13 +179,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   picklistName: {
-    fontSize: 18,
+    fontSize: theme.typography.fontSize,
     fontWeight: '600',
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.xs,
   },
   assignedTo: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize,
     color: theme.colors.text.secondary,
     marginBottom: theme.spacing.xs,
   },
